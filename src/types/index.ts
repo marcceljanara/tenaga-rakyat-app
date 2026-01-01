@@ -220,7 +220,7 @@ export interface UserPhoto {
 export type WalletStatus = 'ACTIVE' | 'SUSPENDED' | 'CLOSED';
 export type TransactionType = 'FUNDING' | 'WITHDRAWAL' | 'ESCROW_RELEASE' | 'ESCROW_HOLD' | 'REFUND';
 export type TransactionStatus = 'PENDING' | 'COMPLETED' | 'FAILED' | 'CANCELLED';
-export type WithdrawMethod = 'BANK_TRANSFER' | 'E_WALLET';
+export type WithdrawMethod = 'BANK_TRANSFER' | 'EWALLET';
 export type WithdrawStatus = 'PENDING' | 'PROCESSING' | 'APPROVED' | 'REJECTED' | 'SENT';
 
 export interface Wallet {

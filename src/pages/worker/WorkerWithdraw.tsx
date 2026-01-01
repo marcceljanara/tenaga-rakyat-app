@@ -5,32 +5,22 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { walletsService } from '../../api';
-import { Card, CardContent, Button, Input, Select, Skeleton, Modal } from '../../components/ui';
+import { Card, CardContent, Button, Input, Skeleton } from '../../components/ui';
 import { ArrowLeft, Wallet, AlertCircle } from 'lucide-react';
 import { formatCurrency } from '../../utils';
 import toast from 'react-hot-toast';
-import type { WithdrawMethodData, CreateWithdrawMethodData } from '../../types';
-import { BANK_PROVIDERS, EWALLET_PROVIDERS } from '../../types';
+import type { WithdrawMethodData } from '../../types';
 
 const withdrawSchema = z.object({
     amount: z.number().min(10000, 'Minimum penarikan Rp 10.000'),
     method_id: z.number().min(1, 'Pilih metode penarikan'),
 });
 
-const methodSchema = z.object({
-    method: z.enum(['BANK_TRANSFER', 'E_WALLET'] as const),
-    provider: z.string().min(1, 'Pilih provider'),
-    account_name: z.string().min(3, 'Nama akun minimal 3 karakter'),
-    account_number: z.string().min(5, 'Nomor akun minimal 5 karakter'),
-});
-
 type WithdrawFormData = z.infer<typeof withdrawSchema>;
-type MethodFormData = z.infer<typeof methodSchema>;
 
 export const WorkerWithdraw: React.FC = () => {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
-    const [isAddMethodOpen, setIsAddMethodOpen] = useState(false);
     const [preview, setPreview] = useState<{ amount: number; fee: number; net: number; canWithdraw: boolean; reason: string } | null>(null);
 
     // Fetch wallet data
@@ -104,31 +94,6 @@ export const WorkerWithdraw: React.FC = () => {
         },
     });
 
-    // Add method form
-    const methodForm = useForm<MethodFormData>({
-        resolver: zodResolver(methodSchema),
-        defaultValues: {
-            method: 'BANK_TRANSFER',
-        },
-    });
-
-    const selectedMethod = methodForm.watch('method');
-
-    // Add method mutation
-    const addMethodMutation = useMutation({
-        mutationFn: (data: CreateWithdrawMethodData) => walletsService.addWithdrawMethod(data),
-        onSuccess: () => {
-            toast.success('Metode penarikan berhasil ditambahkan!');
-            queryClient.invalidateQueries({ queryKey: ['worker-withdraw-methods'] });
-            setIsAddMethodOpen(false);
-            methodForm.reset();
-        },
-        onError: (error: any) => {
-            const message = error.response?.data?.errors || 'Gagal menambahkan metode';
-            toast.error(message);
-        },
-    });
-
     const handlePreview = () => {
         if (amount >= 10000 && selectedMethodId) {
             previewMutation.mutate({ amount, methodId: selectedMethodId });
@@ -142,12 +107,6 @@ export const WorkerWithdraw: React.FC = () => {
         }
         withdrawMutation.mutate(data);
     };
-
-    const onSubmitMethod = (data: MethodFormData) => {
-        addMethodMutation.mutate(data);
-    };
-
-    const providers = selectedMethod === 'BANK_TRANSFER' ? BANK_PROVIDERS : EWALLET_PROVIDERS;
 
     if (walletLoading) {
         return (
@@ -192,28 +151,23 @@ export const WorkerWithdraw: React.FC = () => {
                     <form onSubmit={handleSubmit(onSubmitWithdraw)} className="space-y-5">
                         {/* Method Selection */}
                         <div>
-                            <div className="flex items-center justify-between mb-2">
-                                <label className="text-sm font-medium text-secondary-700">Metode Penarikan</label>
-                                <Button
-                                    type="button"
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={() => setIsAddMethodOpen(true)}
-                                >
-                                    + Tambah Baru
-                                </Button>
-                            </div>
+                            <label className="text-sm font-medium text-secondary-700 block mb-2">Metode Penarikan</label>
 
                             {methodsLoading ? (
                                 <Skeleton className="h-12 w-full rounded-xl" />
                             ) : methods.length === 0 ? (
                                 <div className="p-4 rounded-xl bg-warning-50 border border-warning-200">
-                                    <div className="flex items-center gap-3">
+                                    <div className="flex items-center gap-3 mb-3">
                                         <AlertCircle className="w-5 h-5 text-warning-600" />
                                         <p className="text-sm text-warning-800">
-                                            Belum ada metode penarikan. Tambahkan terlebih dahulu.
+                                            Belum ada metode penarikan.
                                         </p>
                                     </div>
+                                    <Link to="/worker/wallet/methods">
+                                        <Button size="sm" variant="secondary">
+                                            Tambah Metode Penarikan
+                                        </Button>
+                                    </Link>
                                 </div>
                             ) : (
                                 <select
@@ -290,59 +244,6 @@ export const WorkerWithdraw: React.FC = () => {
                     </form>
                 </CardContent>
             </Card>
-
-            {/* Add Method Modal */}
-            <Modal
-                isOpen={isAddMethodOpen}
-                onClose={() => setIsAddMethodOpen(false)}
-                title="Tambah Metode Penarikan"
-            >
-                <form onSubmit={methodForm.handleSubmit(onSubmitMethod)} className="space-y-4">
-                    <Select
-                        {...methodForm.register('method')}
-                        label="Tipe Metode"
-                        options={[
-                            { value: 'BANK_TRANSFER', label: 'Transfer Bank' },
-                            { value: 'E_WALLET', label: 'E-Wallet' },
-                        ]}
-                    />
-
-                    <Select
-                        {...methodForm.register('provider')}
-                        label="Provider"
-                        options={providers.map((p) => ({ value: p, label: p }))}
-                        error={methodForm.formState.errors.provider?.message}
-                    />
-
-                    <Input
-                        {...methodForm.register('account_name')}
-                        label="Nama Pemilik Akun"
-                        placeholder="Nama sesuai rekening"
-                        error={methodForm.formState.errors.account_name?.message}
-                    />
-
-                    <Input
-                        {...methodForm.register('account_number')}
-                        label="Nomor Rekening/Akun"
-                        placeholder="1234567890"
-                        error={methodForm.formState.errors.account_number?.message}
-                    />
-
-                    <div className="flex gap-3 pt-2">
-                        <Button
-                            type="button"
-                            variant="secondary"
-                            className="flex-1"
-                            onClick={() => setIsAddMethodOpen(false)}
-                        >
-                            Batal
-                        </Button>
-                        <Button type="submit" className="flex-1" isLoading={addMethodMutation.isPending}>
-                            Simpan
-                        </Button>
-                    </div>
-                </form>
-            </Modal>
         </div>
     );
 };
