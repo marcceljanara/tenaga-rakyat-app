@@ -7,6 +7,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { usersService } from '../../api';
 import { Card, CardContent, Button, Input, Textarea, Avatar } from '../../components/ui';
 import { Camera, Trash2, Save, User, Mail, Phone, Link as LinkIcon } from 'lucide-react';
+import { API_BASE_URL } from '../../api/axios';
 import toast from 'react-hot-toast';
 
 const profileSchema = z.object({
@@ -22,6 +23,7 @@ export const WorkerProfile: React.FC = () => {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
     const [isDeletingPhoto, setIsDeletingPhoto] = useState(false);
+    const [photoPreview, setPhotoPreview] = useState<string | null>(null);
 
     const {
         register,
@@ -74,6 +76,9 @@ export const WorkerProfile: React.FC = () => {
         setIsUploadingPhoto(true);
         try {
             await usersService.uploadProfilePicture(file);
+            // Set preview lokal agar foto langsung tampil tanpa reload
+            const previewUrl = URL.createObjectURL(file);
+            setPhotoPreview(previewUrl);
             toast.success('Foto profil berhasil diperbarui!');
             refreshUser();
         } catch (error: any) {
@@ -81,6 +86,10 @@ export const WorkerProfile: React.FC = () => {
             toast.error(message);
         } finally {
             setIsUploadingPhoto(false);
+            // Reset input file agar bisa upload file yang sama
+            if (fileInputRef.current) {
+                fileInputRef.current.value = '';
+            }
         }
     };
 
@@ -88,6 +97,8 @@ export const WorkerProfile: React.FC = () => {
         setIsDeletingPhoto(true);
         try {
             await usersService.deleteProfilePicture();
+            // Hapus preview lokal
+            setPhotoPreview(null);
             toast.success('Foto profil berhasil dihapus');
             refreshUser();
         } catch (error: any) {
@@ -106,7 +117,7 @@ export const WorkerProfile: React.FC = () => {
                     <h2 className="text-lg font-semibold text-secondary-900 mb-4">Foto Profil</h2>
                     <div className="flex items-center gap-6">
                         <div className="relative">
-                            <Avatar src={user?.profile_picture_url} size="xl" />
+                            <Avatar src={photoPreview || (user?.profile_picture_url ? API_BASE_URL + user.profile_picture_url : undefined)} size="xl" />
                             <input
                                 ref={fileInputRef}
                                 type="file"
