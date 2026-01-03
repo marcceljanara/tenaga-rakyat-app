@@ -299,6 +299,47 @@ export interface WithdrawRequest {
     updated_at: string;
 }
 
+// Admin-specific withdraw request type (matches admin API response)
+export interface AdminWithdrawRequest {
+    id: number;
+    user_id: string;
+    amount: string;
+    status: WithdrawStatus;
+    method: WithdrawMethod;
+    provider: string;
+    account_name: string;
+    account_number: string;
+    created_at: string;
+    admin_locked_by?: string | null;
+    admin_note?: string | null;
+}
+
+export interface AdminWithdrawRequestsResponse {
+    requests: AdminWithdrawRequest[];
+}
+
+// Detailed withdraw request for admin (from GET /api/wallets/withdraw-requests/{id})
+export interface WithdrawRequestDetail {
+    id: number;
+    amount: string;
+    fee_charged: string;
+    status: WithdrawStatus;
+    created_at: string;
+    admin_note: string | null;
+    transfer_receipt: string | null;
+    admin_locked_by: string | null;
+    admin_approved_by: string | null;
+    admin_rejected_by: string | null;
+    method: {
+        id: number;
+        method: WithdrawMethod;
+        provider: string;
+        account_name: string;
+        account_number: string;
+        is_active: boolean;
+    };
+}
+
 export interface CreateWithdrawRequestData {
     amount: number;
     method_id: number;
@@ -385,14 +426,20 @@ export interface UpdateAdminData {
     email?: string;
 }
 
+export interface AdminsResponse {
+    admins: Admin[];
+    total?: number;
+    page?: number;
+    limit?: number;
+}
+
 export interface UserStats {
     total_users: number;
-    total_workers: number;
-    total_employers: number;
-    verified_users: number;
+    email_verified_users: number;
     unverified_users: number;
-    suspended_users: number;
-    active_users: number;
+    full_verified_users: number;
+    workers: number;
+    job_providers: number;
 }
 
 export interface DashboardSummary {
@@ -426,6 +473,13 @@ export interface UserManagementParams {
     role?: string;
     verification_status?: VerificationStatus;
     search?: string;
+}
+
+export interface AdminUsersResponse {
+    users: User[];
+    total: number;
+    page: number;
+    limit: number;
 }
 
 export interface AdminWithdrawParams {

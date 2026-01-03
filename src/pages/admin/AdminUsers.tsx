@@ -1,16 +1,13 @@
 import React, { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import { adminService } from '../../api';
-import { Card, CardContent, Button, Badge, Skeleton, EmptyState, Modal } from '../../components/ui';
-import { Users, Eye, Ban, CheckCircle } from 'lucide-react';
-import toast from 'react-hot-toast';
-import type { User } from '../../types';
+import { Card, CardContent, Button, Badge, Skeleton, EmptyState } from '../../components/ui';
+import { Users, Eye } from 'lucide-react';
 
 export const AdminUsers: React.FC = () => {
+    const navigate = useNavigate();
     const [roleFilter, setRoleFilter] = useState<string>('');
-    const [selectedUser, setSelectedUser] = useState<User | null>(null);
-    const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
-    const queryClient = useQueryClient();
 
     const { data, isLoading } = useQuery({
         queryKey: ['admin-users', roleFilter],
@@ -22,37 +19,8 @@ export const AdminUsers: React.FC = () => {
         queryFn: () => adminService.getUserStats(),
     });
 
-    const users = (data?.data as User[]) || [];
+    const users = data?.data.users || [];
     const stats = statsData?.data;
-
-    const suspendMutation = useMutation({
-        mutationFn: (userId: string) => adminService.suspendAccount(userId),
-        onSuccess: () => {
-            toast.success('Akun berhasil ditangguhkan');
-            queryClient.invalidateQueries({ queryKey: ['admin-users'] });
-            setIsDetailModalOpen(false);
-        },
-        onError: (error: any) => {
-            toast.error(error.response?.data?.message || 'Gagal menangguhkan akun');
-        },
-    });
-
-    const activateMutation = useMutation({
-        mutationFn: (userId: string) => adminService.activateAccount(userId),
-        onSuccess: () => {
-            toast.success('Akun berhasil diaktifkan');
-            queryClient.invalidateQueries({ queryKey: ['admin-users'] });
-            setIsDetailModalOpen(false);
-        },
-        onError: (error: any) => {
-            toast.error(error.response?.data?.message || 'Gagal mengaktifkan akun');
-        },
-    });
-
-    const openDetail = (user: User) => {
-        setSelectedUser(user);
-        setIsDetailModalOpen(true);
-    };
 
     return (
         <div className="space-y-6 animate-fade-in">
@@ -62,11 +30,13 @@ export const AdminUsers: React.FC = () => {
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                <StatCard label="Total" value={stats?.total_users || 0} />
-                <StatCard label="Pekerja" value={stats?.total_workers || 0} />
-                <StatCard label="Pemberi Kerja" value={stats?.total_employers || 0} />
-                <StatCard label="Terverifikasi" value={stats?.verified_users || 0} />
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-4">
+                <StatCard label="Total Pengguna" value={stats?.total_users || 0} />
+                <StatCard label="Pekerja" value={stats?.workers || 0} />
+                <StatCard label="Pemberi Kerja" value={stats?.job_providers || 0} />
+                <StatCard label="Email Terverifikasi" value={stats?.email_verified_users || 0} />
+                <StatCard label="Belum Verifikasi" value={stats?.unverified_users || 0} />
+                <StatCard label="Full Verified" value={stats?.full_verified_users || 0} />
             </div>
 
             {/* Filters */}
@@ -140,17 +110,17 @@ export const AdminUsers: React.FC = () => {
                                         </td>
                                         <td className="px-6 py-4 text-secondary-600">{user.email}</td>
                                         <td className="px-6 py-4">
-                                            <Badge variant={user.role.name === 'PEKERJA' ? 'primary' : 'accent'}>
-                                                {user.role.name}
+                                            <Badge variant={user.role === 'PEKERJA' ? 'primary' : 'accent'}>
+                                                {user.role}
                                             </Badge>
                                         </td>
                                         <td className="px-6 py-4">
-                                            <Badge variant={user.is_active ? 'success' : 'danger'}>
-                                                {user.is_active ? 'Aktif' : 'Suspended'}
+                                            <Badge variant={user.is_suspended ? 'danger' : 'success'}>
+                                                {user.is_suspended ? 'Ditangguhkan' : 'Aktif'}
                                             </Badge>
                                         </td>
                                         <td className="px-6 py-4">
-                                            <Button variant="ghost" size="sm" leftIcon={Eye} onClick={() => openDetail(user)}>
+                                            <Button variant="ghost" size="sm" leftIcon={Eye} onClick={() => navigate(`/admin/users/${user.id}`)}>
                                                 Detail
                                             </Button>
                                         </td>
@@ -161,75 +131,6 @@ export const AdminUsers: React.FC = () => {
                     </table>
                 </div>
             </Card>
-
-            {/* User Detail Modal */}
-            <Modal
-                isOpen={isDetailModalOpen}
-                onClose={() => setIsDetailModalOpen(false)}
-                title="Detail Pengguna"
-                size="lg"
-            >
-                {selectedUser && (
-                    <div className="space-y-4">
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <p className="text-sm text-secondary-500">Nama</p>
-                                <p className="font-medium">{selectedUser.full_name}</p>
-                            </div>
-                            <div>
-                                <p className="text-sm text-secondary-500">Email</p>
-                                <p className="font-medium">{selectedUser.email}</p>
-                            </div>
-                            <div>
-                                <p className="text-sm text-secondary-500">Telepon</p>
-                                <p className="font-medium">{selectedUser.phone_number}</p>
-                            </div>
-                            <div>
-                                <p className="text-sm text-secondary-500">Role</p>
-                                <Badge variant={selectedUser.role.name === 'PEKERJA' ? 'primary' : 'accent'}>
-                                    {selectedUser.role.name}
-                                </Badge>
-                            </div>
-                            <div>
-                                <p className="text-sm text-secondary-500">Status Akun</p>
-                                <Badge variant={selectedUser.is_active ? 'success' : 'danger'}>
-                                    {selectedUser.is_active ? 'Aktif' : 'Suspended'}
-                                </Badge>
-                            </div>
-                            <div>
-                                <p className="text-sm text-secondary-500">Email Terverifikasi</p>
-                                <Badge variant={selectedUser.email_verified ? 'success' : 'warning'}>
-                                    {selectedUser.email_verified ? 'Terverifikasi' : 'Belum Verifikasi'}
-                                </Badge>
-                            </div>
-                        </div>
-
-                        <hr className="border-secondary-200" />
-
-                        <div className="flex gap-3">
-                            {selectedUser.is_active ? (
-                                <Button
-                                    variant="danger"
-                                    leftIcon={Ban}
-                                    onClick={() => suspendMutation.mutate(selectedUser.id)}
-                                    isLoading={suspendMutation.isPending}
-                                >
-                                    Tangguhkan Akun
-                                </Button>
-                            ) : (
-                                <Button
-                                    variant="primary"
-                                    leftIcon={CheckCircle}
-                                    onClick={() => activateMutation.mutate(selectedUser.id)}
-                                    isLoading={activateMutation.isPending}
-                                >
-                                    Aktifkan Akun
-                                </Button>
-                            )}
-                        </div>
-                    </div>
-                )}
-            </Modal>
         </div>
     );
 };

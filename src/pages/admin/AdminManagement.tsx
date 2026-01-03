@@ -56,7 +56,7 @@ export const AdminManagement: React.FC = () => {
     const [selectedAdmin, setSelectedAdmin] = useState<Admin | null>(null);
 
     // Only Super Admin can access this page
-    const isSuperAdmin = user?.role.name === 'SUPER_ADMIN';
+    const isSuperAdmin = user?.role === 'SUPER_ADMIN';
 
     // Fetch admins
     const { data, isLoading } = useQuery({
@@ -65,7 +65,7 @@ export const AdminManagement: React.FC = () => {
         enabled: isSuperAdmin,
     });
 
-    const admins = (data?.data as Admin[]) || [];
+    const admins = data?.data.admins || [];
 
     // Create form
     const createForm = useForm<CreateAdminFormData>({

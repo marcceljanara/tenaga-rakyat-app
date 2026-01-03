@@ -44,7 +44,7 @@ import {
 } from './pages/employer';
 
 // Admin Pages
-import { AdminDashboard, AdminUsers, AdminWithdrawals, AdminManagement } from './pages/admin';
+import { AdminDashboard, AdminUsers, AdminUserDetail, AdminWithdrawals, AdminWithdrawDetail, AdminManagement } from './pages/admin';
 
 // Create a client
 const queryClient = new QueryClient({
@@ -146,7 +146,9 @@ const App: React.FC = () => {
               <Route index element={<Navigate to="dashboard" replace />} />
               <Route path="dashboard" element={<AdminDashboard />} />
               <Route path="users" element={<AdminUsers />} />
+              <Route path="users/:userId" element={<AdminUserDetail />} />
               <Route path="withdrawals" element={<AdminWithdrawals />} />
+              <Route path="withdrawals/:withdrawId" element={<AdminWithdrawDetail />} />
               <Route path="admins" element={<AdminManagement />} />
             </Route>
 

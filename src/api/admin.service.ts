@@ -1,7 +1,6 @@
 import api from './axios';
 import type {
     ApiResponse,
-    PaginatedResponse,
     Admin,
     CreateAdminData,
     UpdateAdminData,
@@ -9,9 +8,13 @@ import type {
     UserStats,
     DashboardSummary,
     WithdrawRequest,
+    WithdrawRequestDetail,
     VerificationStatus,
     UserManagementParams,
     AdminWithdrawParams,
+    AdminUsersResponse,
+    AdminsResponse,
+    AdminWithdrawRequestsResponse,
 } from '../types';
 
 export const adminService = {
@@ -39,7 +42,7 @@ export const adminService = {
     },
 
     // Get all users with filtering and pagination
-    getUsers: async (params?: UserManagementParams): Promise<ApiResponse<User[]> | PaginatedResponse<User>> => {
+    getUsers: async (params?: UserManagementParams): Promise<ApiResponse<AdminUsersResponse>> => {
         const response = await api.get('/api/user-management', { params });
         return response.data;
     },
@@ -96,8 +99,14 @@ export const adminService = {
     // ========================================
 
     // Get all withdraw requests with filtering
-    getAllWithdrawRequests: async (params?: AdminWithdrawParams): Promise<ApiResponse<WithdrawRequest[]>> => {
+    getAllWithdrawRequests: async (params?: AdminWithdrawParams): Promise<ApiResponse<AdminWithdrawRequestsResponse>> => {
         const response = await api.get('/api/admin/withdraw-requests', { params });
+        return response.data;
+    },
+
+    // Get withdraw request detail
+    getWithdrawRequestDetail: async (requestId: number | string): Promise<ApiResponse<WithdrawRequestDetail>> => {
+        const response = await api.get(`/api/wallets/withdraw-requests/${requestId}`);
         return response.data;
     },
 
@@ -169,7 +178,7 @@ export const adminService = {
     // ========================================
 
     // Get all admins with pagination
-    getAdmins: async (page?: number, limit?: number): Promise<ApiResponse<Admin[]> | PaginatedResponse<Admin>> => {
+    getAdmins: async (page?: number, limit?: number): Promise<ApiResponse<AdminsResponse>> => {
         const response = await api.get('/api/admins', {
             params: { page, limit },
         });
