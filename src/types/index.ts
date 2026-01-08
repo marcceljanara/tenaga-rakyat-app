@@ -513,7 +513,7 @@ export interface ApiError {
 }
 
 // Email Verification Types
-export type EmailVerificationPurpose = 'REGISTRATION' | 'CHANGE_EMAIL';
+export type EmailVerificationPurpose = 'REGISTER' | 'CHANGE_EMAIL';
 
 export interface EmailVerificationResponse {
     success: boolean;

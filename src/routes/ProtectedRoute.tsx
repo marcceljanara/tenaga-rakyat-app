@@ -34,13 +34,14 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowe
     console.log('🔵 [ProtectedRoute] User role:', user?.role);
 
     // Check if user's email is verified
-    // Support both email_verified (boolean) and verification_status (enum)
-    const isEmailVerified = user?.email ||
+    // verification_status can be: UNVERIFIED, EMAIL_VERIFIED, FULL_VERIFIED
+    const isEmailVerified =
         user?.verification_status === 'EMAIL_VERIFIED' ||
         user?.verification_status === 'FULL_VERIFIED';
 
     if (user && !isEmailVerified) {
-        console.log('❌ [ProtectedRoute] Email not verified, redirecting...');
+        console.log('❌ [ProtectedRoute] Email not verified, redirecting to verification page...');
+        console.log('🔵 [ProtectedRoute] verification_status:', user?.verification_status);
         return <Navigate to="/verify-email-required" state={{ from: location }} replace />;
     }
 
@@ -78,7 +79,7 @@ export const PublicRoute: React.FC<{ children: React.ReactNode }> = ({ children 
     return <>{children}</>;
 };
 
-function getRedirectPath(role?:string): string {
+function getRedirectPath(role?: string): string {
     switch (role) {
         case 'PEKERJA':
             return '/worker/dashboard';

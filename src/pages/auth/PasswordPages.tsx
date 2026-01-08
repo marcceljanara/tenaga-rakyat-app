@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { authService } from '../../api';
+import { useAuth } from '../../contexts/AuthContext';
 import { Button, Input } from '../../components/ui';
-import { Briefcase, Mail, ArrowLeft, CheckCircle, XCircle, Lock } from 'lucide-react';
+import { Briefcase, Mail, ArrowLeft, CheckCircle, XCircle, Lock, Eye, EyeOff } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 // Forgot Password Schema
@@ -114,6 +115,8 @@ type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
 export const ResetPasswordPage: React.FC = () => {
     const [searchParams] = useSearchParams();
     const [isSuccess, setIsSuccess] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const token = searchParams.get('token');
 
     const {
@@ -198,26 +201,62 @@ export const ResetPasswordPage: React.FC = () => {
                 </p>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                    <div className="relative">
-                        <Lock className="absolute left-4 top-3.5 w-5 h-5 text-secondary-400" />
-                        <Input
-                            {...register('newPassword')}
-                            type="password"
-                            placeholder="Password Baru"
-                            className="pl-12"
-                            error={errors.newPassword?.message}
-                        />
+                    {/* Password Field */}
+                    <div className="space-y-1.5">
+                        <label className="block text-sm font-medium text-secondary-700">
+                            Password
+                        </label>
+                        <div className="relative">
+                            <Lock className="absolute left-4 top-3.5 w-5 h-5 text-secondary-400" />
+                            <Input
+                                {...register('newPassword')}
+                                type={showPassword ? 'text' : 'password'}
+                                placeholder="Masukkan password baru"
+                                className="pl-12 pr-12"
+                                error={errors.newPassword?.message}
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute right-4 top-3.5 text-secondary-400 hover:text-secondary-600 transition-colors"
+                                tabIndex={-1}
+                            >
+                                {showPassword ? (
+                                    <EyeOff className="w-5 h-5" />
+                                ) : (
+                                    <Eye className="w-5 h-5" />
+                                )}
+                            </button>
+                        </div>
                     </div>
 
-                    <div className="relative">
-                        <Lock className="absolute left-4 top-3.5 w-5 h-5 text-secondary-400" />
-                        <Input
-                            {...register('confirmNewPassword')}
-                            type="password"
-                            placeholder="Konfirmasi Password Baru"
-                            className="pl-12"
-                            error={errors.confirmNewPassword?.message}
-                        />
+                    {/* Confirm Password Field */}
+                    <div className="space-y-1.5">
+                        <label className="block text-sm font-medium text-secondary-700">
+                            Konfirmasi Password
+                        </label>
+                        <div className="relative">
+                            <Lock className="absolute left-4 top-3.5 w-5 h-5 text-secondary-400" />
+                            <Input
+                                {...register('confirmNewPassword')}
+                                type={showConfirmPassword ? 'text' : 'password'}
+                                placeholder="Konfirmasi password baru"
+                                className="pl-12 pr-12"
+                                error={errors.confirmNewPassword?.message}
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                className="absolute right-4 top-3.5 text-secondary-400 hover:text-secondary-600 transition-colors"
+                                tabIndex={-1}
+                            >
+                                {showConfirmPassword ? (
+                                    <EyeOff className="w-5 h-5" />
+                                ) : (
+                                    <Eye className="w-5 h-5" />
+                                )}
+                            </button>
+                        </div>
                     </div>
 
                     <Button type="submit" className="w-full" size="lg" isLoading={isSubmitting}>
@@ -304,40 +343,135 @@ export const VerifyEmailPage: React.FC = () => {
 // Verify Email Required Page
 export const VerifyEmailRequiredPage: React.FC = () => {
     const [isResending, setIsResending] = useState(false);
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
+    const [emailSent, setEmailSent] = useState(false);
+    const navigate = useNavigate();
+
+    // Get user info from auth context
+    const { user, logout, isAuthenticated } = useAuth();
+
+    // If not authenticated, redirect to login
+    useEffect(() => {
+        if (!isAuthenticated) {
+            navigate('/login', { replace: true });
+        }
+    }, [isAuthenticated, navigate]);
 
     const handleResend = async () => {
         setIsResending(true);
         try {
-            await authService.resendVerification('REGISTRATION');
+            // Use REGISTER purpose for new user email verification
+            await authService.resendVerification('REGISTER');
+            setEmailSent(true);
             toast.success('Email verifikasi telah dikirim ulang!');
         } catch (error: any) {
-            const message = error.response?.data?.message || 'Gagal mengirim email.';
+            const message = error.response?.data?.errors || error.response?.data?.message || 'Gagal mengirim email.';
             toast.error(message);
         } finally {
             setIsResending(false);
         }
     };
 
+    const handleLogout = async () => {
+        setIsLoggingOut(true);
+        try {
+            await logout();
+            navigate('/login', { replace: true });
+        } catch {
+            // Logout errors are handled in AuthContext
+        } finally {
+            setIsLoggingOut(false);
+        }
+    };
+
     return (
-        <div className="min-h-screen flex items-center justify-center px-4 bg-secondary-50">
-            <div className="max-w-md w-full text-center">
-                <div className="w-16 h-16 rounded-full bg-warning-100 flex items-center justify-center mx-auto mb-6">
-                    <Mail className="w-8 h-8 text-warning-600" />
+        <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-primary-50 via-white to-accent-50">
+            <div className="max-w-md w-full">
+                {/* Logo */}
+                <div className="flex items-center justify-center gap-2 mb-8">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center shadow-lg shadow-primary-500/25">
+                        <Briefcase className="w-6 h-6 text-white" />
+                    </div>
+                    <span className="text-2xl font-bold text-secondary-900">TenagaRakyat</span>
                 </div>
-                <h1 className="text-2xl font-bold text-secondary-900 mb-2">Verifikasi Email Diperlukan</h1>
-                <p className="text-secondary-600 mb-8">
-                    Anda perlu memverifikasi email terlebih dahulu untuk mengakses halaman ini.
-                    Silakan cek inbox email Anda.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <Button onClick={handleResend} isLoading={isResending}>
-                        Kirim Ulang Email
-                    </Button>
-                    <Link to="/login">
-                        <Button variant="secondary">Kembali ke Login</Button>
-                    </Link>
+
+                {/* Card */}
+                <div className="bg-white rounded-2xl shadow-xl border border-secondary-100 p-8 text-center">
+                    {/* Icon */}
+                    <div className="w-20 h-20 rounded-full bg-gradient-to-br from-warning-100 to-warning-200 flex items-center justify-center mx-auto mb-6">
+                        <Mail className="w-10 h-10 text-warning-600" />
+                    </div>
+
+                    {/* Title */}
+                    <h1 className="text-2xl font-bold text-secondary-900 mb-2">
+                        Verifikasi Email Diperlukan
+                    </h1>
+
+                    {/* Description */}
+                    <p className="text-secondary-600 mb-4">
+                        Untuk melanjutkan, Anda perlu memverifikasi alamat email Anda terlebih dahulu.
+                    </p>
+
+                    {/* User Email Display */}
+                    {user?.email && (
+                        <div className="bg-secondary-50 rounded-xl px-4 py-3 mb-6">
+                            <p className="text-sm text-secondary-500 mb-1">Email terdaftar:</p>
+                            <p className="font-medium text-secondary-900">{user.email}</p>
+                        </div>
+                    )}
+
+                    {/* Success message after resend */}
+                    {emailSent && (
+                        <div className="bg-success-50 border border-success-200 rounded-xl px-4 py-3 mb-6">
+                            <div className="flex items-center gap-2 text-success-700">
+                                <CheckCircle className="w-5 h-5 flex-shrink-0" />
+                                <p className="text-sm">
+                                    Email verifikasi telah dikirim! Silakan cek inbox atau folder spam Anda.
+                                </p>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Instructions */}
+                    <div className="bg-primary-50 rounded-xl px-4 py-3 mb-6 text-left">
+                        <p className="text-sm text-primary-800 font-medium mb-2">Langkah-langkah:</p>
+                        <ol className="text-sm text-primary-700 space-y-1 list-decimal list-inside">
+                            <li>Buka inbox email Anda</li>
+                            <li>Cari email dari TenagaRakyat</li>
+                            <li>Klik link verifikasi di email</li>
+                            <li>Kembali ke halaman ini dan refresh</li>
+                        </ol>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="space-y-3">
+                        <Button
+                            onClick={handleResend}
+                            isLoading={isResending}
+                            className="w-full"
+                            size="lg"
+                            disabled={isResending}
+                        >
+                            {emailSent ? 'Kirim Ulang Email' : 'Kirim Email Verifikasi'}
+                        </Button>
+
+                        <Button
+                            variant="secondary"
+                            onClick={handleLogout}
+                            isLoading={isLoggingOut}
+                            className="w-full"
+                        >
+                            Logout & Gunakan Email Lain
+                        </Button>
+                    </div>
+
+                    {/* Help text */}
+                    <p className="text-xs text-secondary-400 mt-6">
+                        Tidak menerima email? Cek folder spam atau hubungi support kami.
+                    </p>
                 </div>
             </div>
         </div>
     );
 };
+
