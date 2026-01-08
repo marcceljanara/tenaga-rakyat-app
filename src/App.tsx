@@ -42,6 +42,7 @@ import {
   CreateJob,
   EmployerWallet,
   EmployerTopUp,
+  EmployerProfile,
 } from './pages/employer';
 
 // Admin Pages
@@ -129,6 +130,7 @@ const App: React.FC = () => {
             >
               <Route index element={<Navigate to="dashboard" replace />} />
               <Route path="dashboard" element={<EmployerDashboard />} />
+              <Route path="profile" element={<EmployerProfile />} />
               <Route path="jobs" element={<EmployerJobs />} />
               <Route path="jobs/new" element={<CreateJob />} />
               <Route path="jobs/:id" element={<EmployerJobDetail />} />

@@ -8,7 +8,7 @@ import {
     X,
     Briefcase,
     LayoutDashboard,
-    User,
+    // User,
     Image,
     Search,
     FileText,
@@ -20,7 +20,7 @@ import {
 
 const workerNavItems = [
     { href: '/worker/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { href: '/worker/profile', label: 'Profil', icon: User },
+    // { href: '/worker/profile', label: 'Profil', icon: User },
     { href: '/worker/photos', label: 'Foto Pekerjaan', icon: Image },
     { href: '/worker/jobs', label: 'Cari Kerja', icon: Search },
     { href: '/worker/applications', label: 'Lamaran Saya', icon: FileText },
