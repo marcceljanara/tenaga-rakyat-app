@@ -31,6 +31,7 @@ import {
   WorkerWithdrawals,
   WorkerWithdrawalDetail,
   WorkerActiveJobs,
+  WorkerPhotos,
 } from './pages/worker';
 
 // Employer Pages
@@ -114,6 +115,7 @@ const App: React.FC = () => {
               <Route path="wallet/methods" element={<WorkerWithdrawMethods />} />
               <Route path="wallet/withdrawals" element={<WorkerWithdrawals />} />
               <Route path="wallet/withdrawals/:id" element={<WorkerWithdrawalDetail />} />
+              <Route path="photos" element={<WorkerPhotos />} />
             </Route>
 
             {/* Employer Routes */}

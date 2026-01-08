@@ -32,7 +32,7 @@ export const PublicNavbar: React.FC = () => {
 
     const getDashboardLink = () => {
         if (!user) return '/';
-        switch (user.role.name) {
+        switch (user.role) {
             case 'PEKERJA':
                 return '/worker/dashboard';
             case 'PEMBERI_KERJA':

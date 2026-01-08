@@ -8,3 +8,4 @@ export { WorkerWithdrawMethods } from './WorkerWithdrawMethods';
 export { WorkerWithdrawals } from './WorkerWithdrawals';
 export { WorkerWithdrawalDetail } from './WorkerWithdrawalDetail';
 export { WorkerActiveJobs } from './WorkerActiveJobs';
+export { WorkerPhotos } from './WorkerPhotos';

@@ -9,7 +9,7 @@ interface ModalProps {
     onClose: () => void;
     title?: string;
     children: React.ReactNode;
-    size?: 'sm' | 'md' | 'lg' | 'xl';
+    size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'full';
     showCloseButton?: boolean;
 }
 
@@ -58,12 +58,14 @@ export const Modal: React.FC<ModalProps> = ({
         md: 'max-w-md',
         lg: 'max-w-lg',
         xl: 'max-w-xl',
+        '2xl': 'max-w-2xl',
+        'full': 'max-w-4xl',
     };
 
     return createPortal(
         <div
             ref={overlayRef}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto"
             onClick={(e) => {
                 if (e.target === overlayRef.current) {
                     onClose();
@@ -76,18 +78,18 @@ export const Modal: React.FC<ModalProps> = ({
             {/* Modal */}
             <div
                 className={clsx(
-                    'relative w-full bg-white rounded-2xl shadow-2xl animate-scale-in',
+                    'relative w-full bg-white rounded-2xl shadow-2xl animate-scale-in my-auto max-h-[90vh] flex flex-col',
                     sizes[size]
                 )}
             >
                 {/* Header */}
                 {(title || showCloseButton) && (
-                    <div className="flex items-center justify-between px-6 py-4 border-b border-secondary-100">
+                    <div className="flex items-center justify-between px-6 py-4 border-b border-secondary-100 flex-shrink-0">
                         {title && <h2 className="text-lg font-semibold text-secondary-900">{title}</h2>}
                         {showCloseButton && (
                             <button
                                 onClick={onClose}
-                                className="p-1 rounded-lg text-secondary-400 hover:text-secondary-600 hover:bg-secondary-100 transition-colors"
+                                className="p-1 rounded-lg text-secondary-400 hover:text-secondary-600 hover:bg-secondary-100 transition-colors ml-auto"
                             >
                                 <X className="w-5 h-5" />
                             </button>
@@ -96,7 +98,7 @@ export const Modal: React.FC<ModalProps> = ({
                 )}
 
                 {/* Content */}
-                <div className="px-6 py-4">{children}</div>
+                <div className="px-6 py-4 overflow-y-auto flex-1">{children}</div>
             </div>
         </div>,
         document.body
