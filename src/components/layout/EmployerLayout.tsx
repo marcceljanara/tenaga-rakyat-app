@@ -15,6 +15,7 @@ import {
     Settings,
     ClipboardList,
 } from 'lucide-react';
+import { API_BASE_URL } from '../../api/axios';
 
 const employerNavItems = [
     { href: '/employer/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -53,7 +54,7 @@ export const EmployerLayout: React.FC = () => {
                         </div>
                         <span className="text-lg font-bold text-secondary-900">TenagaRakyat</span>
                     </Link>
-                    <Avatar src={user?.profile_picture_url} size="sm" />
+                    <Avatar src={API_BASE_URL +user?.profile_picture_url} size="sm" />
                 </div>
             </header>
 
@@ -92,7 +93,7 @@ export const EmployerLayout: React.FC = () => {
                 {/* User Info */}
                 <div className="px-4 py-4 border-b border-secondary-100">
                     <div className="flex items-center gap-3">
-                        <Avatar src={user?.profile_picture_url} size="lg" />
+                        <Avatar src={API_BASE_URL + user?.profile_picture_url} size="lg" />
                         <div className="flex-1 min-w-0">
                             <p className="font-medium text-secondary-900 truncate">{user?.full_name}</p>
                             <p className="text-sm text-secondary-500">Pemberi Kerja</p>
@@ -145,7 +146,7 @@ export const EmployerLayout: React.FC = () => {
                             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                             className="flex items-center gap-2 p-2 rounded-xl hover:bg-secondary-100 transition-colors"
                         >
-                            <Avatar src={user?.profile_picture_url} size="sm" />
+                            <Avatar src={API_BASE_URL + user?.profile_picture_url} size="sm" />
                             <span className="text-sm font-medium text-secondary-700">{user?.full_name}</span>
                             <ChevronDown className="w-4 h-4 text-secondary-400" />
                         </button>

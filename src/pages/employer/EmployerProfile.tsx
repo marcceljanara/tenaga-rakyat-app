@@ -123,7 +123,7 @@ export const EmployerProfile: React.FC = () => {
                     <h2 className="text-lg font-semibold text-secondary-900 mb-4">Foto Profil</h2>
                     <div className="flex items-center gap-6">
                         <div className="relative">
-                            <Avatar src={photoPreview || (user?.profile_picture_url ? API_BASE_URL + user.profile_picture_url : undefined)} size="xl" />
+                            <Avatar src={photoPreview || (API_BASE_URL + user?.profile_picture_url ? API_BASE_URL + user?.profile_picture_url : undefined)} size="xl" />
                             <input
                                 ref={fileInputRef}
                                 type="file"
@@ -141,7 +141,7 @@ export const EmployerProfile: React.FC = () => {
                             >
                                 Ubah Foto
                             </Button>
-                            {user?.profile_picture_url && (
+                            {API_BASE_URL + user?.profile_picture_url && (
                                 <Button
                                     variant="ghost"
                                     leftIcon={Trash2}

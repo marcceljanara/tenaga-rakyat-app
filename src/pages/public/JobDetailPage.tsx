@@ -10,6 +10,7 @@ import { Card, CardContent, Button, Badge, Skeleton, Textarea, Modal, Avatar, ge
 import { MapPin, Banknote, Clock, ArrowLeft, Briefcase, Send, CheckCircle } from 'lucide-react';
 import { formatCurrency, formatRelativeTime } from '../../utils';
 import toast from 'react-hot-toast';
+import { API_BASE_URL } from '../../api/axios';
 
 const applySchema = z.object({
     cover_letter: z.string().min(10, 'Cover letter minimal 10 karakter'),
@@ -115,8 +116,8 @@ export const JobDetailPage: React.FC = () => {
                         {/* Header */}
                         <div className="flex flex-col sm:flex-row gap-6 mb-8">
                             <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center flex-shrink-0">
-                                {job.provider.profile_picture_url ? (
-                                    <Avatar src={job.provider.profile_picture_url} size="xl" />
+                                {API_BASE_URL + job.provider.profile_picture_url ? (
+                                    <Avatar src={API_BASE_URL + job.provider.profile_picture_url} size="xl" />
                                 ) : (
                                     <Briefcase className="w-10 h-10 text-primary-600" />
                                 )}
@@ -200,13 +201,27 @@ export const JobDetailPage: React.FC = () => {
                 <Card className="mt-6">
                     <CardContent className="p-6">
                         <h2 className="text-lg font-semibold text-secondary-900 mb-4">Tentang Pemberi Kerja</h2>
-                        <div className="flex items-center gap-4">
-                            <Avatar src={job.provider.profile_picture_url} size="lg" />
-                            <div>
-                                <p className="font-medium text-secondary-900">{job.provider.full_name}</p>
-                                <p className="text-sm text-secondary-500">Pemberi Kerja</p>
+                        {isAuthenticated && hasRole(['PEKERJA']) ? (
+                            <Link
+                                to={`/worker/users/${job.provider.id}`}
+                                className="flex items-center gap-4 hover:opacity-80 transition-opacity cursor-pointer"
+                            >
+                                <Avatar src={API_BASE_URL + job.provider.profile_picture_url} size="lg" />
+                                <div>
+                                    <p className="font-medium text-secondary-900 hover:text-primary-600 transition-colors">{job.provider.full_name}</p>
+                                    <p className="text-sm text-secondary-500">Pemberi Kerja</p>
+                                    <p className="text-xs text-primary-500 mt-0.5">Klik untuk lihat profil</p>
+                                </div>
+                            </Link>
+                        ) : (
+                            <div className="flex items-center gap-4">
+                                <Avatar src={API_BASE_URL + job.provider.profile_picture_url} size="lg" />
+                                <div>
+                                    <p className="font-medium text-secondary-900">{job.provider.full_name}</p>
+                                    <p className="text-sm text-secondary-500">Pemberi Kerja</p>
+                                </div>
                             </div>
-                        </div>
+                        )}
                     </CardContent>
                 </Card>
             </div>

@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { formatCurrency, formatRelativeTime } from '../../utils';
 import toast from 'react-hot-toast';
+import { API_BASE_URL } from '../../api/axios';
 
 
 export const EmployerJobDetail: React.FC = () => {
@@ -201,13 +202,16 @@ export const EmployerJobDetail: React.FC = () => {
                     <CardContent className="p-6">
                         <h2 className="text-lg font-semibold text-secondary-900 mb-4">Pekerja Ditugaskan</h2>
                         <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-4">
-                                <Avatar src={job.worker.profile_picture_url} size="lg" />
+                            <Link
+                                to={`/employer/users/${job.worker.id}`}
+                                className="flex items-center gap-4 hover:opacity-80 transition-opacity cursor-pointer"
+                            >
+                                <Avatar src={API_BASE_URL + job.worker.profile_picture_url} size="lg" />
                                 <div>
-                                    <p className="font-medium text-secondary-900">{job.worker.full_name}</p>
-                                    <p className="text-sm text-secondary-500">Pekerja</p>
+                                    <p className="font-medium text-secondary-900 hover:text-primary-600 transition-colors">{job.worker.full_name}</p>
+                                    <p className="text-sm text-secondary-500">Pekerja · Klik untuk lihat profil</p>
                                 </div>
-                            </div>
+                            </Link>
 
                             {canApprove && (
                                 <div className="flex gap-2">
@@ -266,16 +270,22 @@ export const EmployerJobDetail: React.FC = () => {
                                         key={app.id}
                                         className="flex flex-col sm:flex-row sm:items-center gap-4 p-4 rounded-xl border border-secondary-200 hover:border-primary-200 transition-colors"
                                     >
-                                        <Avatar src={app.worker.profile_picture_url} size="lg" />
-                                        <div className="flex-1 min-w-0">
-                                            <p className="font-medium text-secondary-900">{app.worker.full_name}</p>
-                                            <p className="text-sm text-secondary-500">{app.worker.email}</p>
-                                            {app.cover_letter && (
-                                                <p className="text-sm text-secondary-600 mt-1 line-clamp-2">
-                                                    "{app.cover_letter}"
-                                                </p>
-                                            )}
-                                        </div>
+                                        <Link
+                                            to={`/employer/users/${app.worker.id}`}
+                                            className="flex items-center gap-4 hover:opacity-80 transition-opacity cursor-pointer"
+                                        >
+                                            <Avatar src={API_BASE_URL + app.worker.profile_picture_url} size="lg" />
+                                            <div className="flex-1 min-w-0">
+                                                <p className="font-medium text-secondary-900 hover:text-primary-600 transition-colors">{app.worker.full_name}</p>
+                                                <p className="text-sm text-secondary-500">{app.worker.email}</p>
+                                                <p className="text-xs text-primary-500 mt-0.5">Klik untuk lihat profil</p>
+                                            </div>
+                                        </Link>
+                                        {app.cover_letter && (
+                                            <p className="text-sm text-secondary-600 mt-1 line-clamp-2 flex-1">
+                                                "{app.cover_letter}"
+                                            </p>
+                                        )}
                                         <div className="flex items-center gap-2">
                                             <Badge variant={getStatusBadgeVariant(app.status)}>{app.status}</Badge>
                                             {app.status === 'PENDING' && (

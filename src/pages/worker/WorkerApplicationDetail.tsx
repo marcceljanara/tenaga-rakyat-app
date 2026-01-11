@@ -145,10 +145,14 @@ export const WorkerApplicationDetail: React.FC = () => {
                     <div className="space-y-4">
                         <div>
                             <h3 className="text-xl font-semibold text-secondary-900">{job?.title}</h3>
-                            <div className="flex items-center gap-2 text-secondary-600 mt-1">
+                            <Link
+                                to={`/worker/users/${job?.provider.id}`}
+                                className="inline-flex items-center gap-2 text-secondary-600 mt-1 hover:text-primary-600 transition-colors"
+                            >
                                 <User className="w-4 h-4" />
                                 <span>{job?.provider.full_name}</span>
-                            </div>
+                                <span className="text-xs text-primary-500">Klik untuk lihat profil</span>
+                            </Link>
                         </div>
 
                         <p className="text-secondary-700">{job?.description}</p>
@@ -201,10 +205,10 @@ export const WorkerApplicationDetail: React.FC = () => {
                     <CardContent className="p-6">
                         <div className="flex items-center gap-3 mb-4">
                             <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${job?.status === 'APPROVED'
-                                    ? 'bg-gradient-to-br from-success-100 to-success-200'
-                                    : job?.status === 'COMPLETED'
-                                        ? 'bg-gradient-to-br from-warning-100 to-warning-200'
-                                        : 'bg-gradient-to-br from-primary-100 to-primary-200'
+                                ? 'bg-gradient-to-br from-success-100 to-success-200'
+                                : job?.status === 'COMPLETED'
+                                    ? 'bg-gradient-to-br from-warning-100 to-warning-200'
+                                    : 'bg-gradient-to-br from-primary-100 to-primary-200'
                                 }`}>
                                 {job?.status === 'APPROVED' ? (
                                     <CheckCircle className="w-6 h-6 text-success-600" />

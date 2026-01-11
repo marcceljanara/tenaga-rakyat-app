@@ -12,6 +12,7 @@ import {
     Home,
 } from 'lucide-react';
 import { clsx } from '../../utils/clsx';
+import { API_BASE_URL } from '../../api/axios';
 
 export const PublicNavbar: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -86,7 +87,7 @@ export const PublicNavbar: React.FC = () => {
                                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                                     className="flex items-center gap-2 p-2 rounded-xl hover:bg-secondary-100 transition-colors"
                                 >
-                                    <Avatar src={user?.profile_picture_url} size="sm" />
+                                    <Avatar src={API_BASE_URL + user?.profile_picture_url} size="sm" />
                                     <span className="text-sm font-medium text-secondary-700 max-w-[150px] truncate">
                                         {user?.full_name}
                                     </span>

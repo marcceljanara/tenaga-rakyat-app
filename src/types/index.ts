@@ -216,6 +216,18 @@ export interface UserPhoto {
     updated_at: string;
 }
 
+// User Profile (Public view by ID)
+export interface UserProfile {
+    id: string;
+    full_name: string;
+    role: string;
+    profile_picture_url?: string | null;
+    verification_status?: VerificationStatus;
+    about?: string | null;
+    cv_url?: string | null;
+    photos?: UserPhoto[];
+}
+
 // Wallet Types
 export type WalletStatus = 'ACTIVE' | 'SUSPENDED' | 'CLOSED';
 export type TransactionType = 'FUNDING' | 'WITHDRAWAL' | 'ESCROW_RELEASE' | 'ESCROW_HOLD' | 'REFUND';

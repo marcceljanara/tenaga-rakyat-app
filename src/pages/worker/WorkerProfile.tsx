@@ -135,7 +135,7 @@ export const WorkerProfile: React.FC = () => {
                             >
                                 Ubah Foto
                             </Button>
-                            {user?.profile_picture_url && (
+                            {API_BASE_URL +user?.profile_picture_url && (
                                 <Button
                                     variant="ghost"
                                     leftIcon={Trash2}

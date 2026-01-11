@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { usersService } from '../../api';
 import { Card, CardContent, Badge, Skeleton, EmptyState, getStatusBadgeVariant } from '../../components/ui';
@@ -60,6 +60,7 @@ const getJobUrgency = (jobStatus: string): { level: 'high' | 'medium' | 'none'; 
 };
 
 export const WorkerApplications: React.FC = () => {
+    const navigate = useNavigate();
     const { data, isLoading } = useQuery({
         queryKey: ['worker-applications'],
         queryFn: () => usersService.getApplications(),
@@ -136,8 +137,8 @@ export const WorkerApplications: React.FC = () => {
 
                                     <div className="flex flex-col sm:flex-row gap-4">
                                         <div className={`w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0 ${urgency?.level === 'high'
-                                                ? urgency.bgColor
-                                                : 'bg-gradient-to-br from-primary-100 to-primary-200'
+                                            ? urgency.bgColor
+                                            : 'bg-gradient-to-br from-primary-100 to-primary-200'
                                             }`}>
                                             {urgency?.level === 'high' && UrgencyIcon ? (
                                                 <UrgencyIcon className={`w-7 h-7 ${urgency.color}`} />
@@ -150,7 +151,17 @@ export const WorkerApplications: React.FC = () => {
                                             <div className="flex items-start justify-between gap-4 mb-2 pr-24">
                                                 <div>
                                                     <h3 className="text-lg font-semibold text-secondary-900">{app.job.title}</h3>
-                                                    <p className="text-secondary-600">{app.job.provider.full_name}</p>
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            e.stopPropagation();
+                                                            navigate(`/worker/users/${app.job.provider.id}`);
+                                                        }}
+                                                        className="text-secondary-600 hover:text-primary-600 transition-colors text-left flex items-center gap-1"
+                                                    >
+                                                        <span>{app.job.provider.full_name}</span>
+                                                        <span className="text-xs text-primary-500">• Lihat profil</span>
+                                                    </button>
                                                 </div>
                                                 <Badge variant={getStatusBadgeVariant(app.status)}>{app.status}</Badge>
                                             </div>

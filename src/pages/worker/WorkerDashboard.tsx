@@ -6,6 +6,7 @@ import { usersService, walletsService } from '../../api';
 import { Card, CardContent, Badge, Button, Skeleton, Avatar } from '../../components/ui';
 import { Briefcase, FileText, Wallet, ArrowRight, Clock, CheckCircle, AlertCircle, RefreshCw } from 'lucide-react';
 import { formatCurrency, formatRelativeTime } from '../../utils';
+import { API_BASE_URL } from '../../api/axios';
 
 export const WorkerDashboard: React.FC = () => {
     const { user } = useAuth();
@@ -220,7 +221,7 @@ export const WorkerDashboard: React.FC = () => {
                     <Card>
                         <CardContent className="p-6">
                             <div className="flex items-center gap-4 mb-4">
-                                <Avatar src={user?.profile_picture_url} size="lg" />
+                                <Avatar src={API_BASE_URL + user?.profile_picture_url} size="lg" />
                                 <div className="flex-1 min-w-0">
                                     <p className="font-semibold text-secondary-900 truncate">{user?.full_name}</p>
                                     <p className="text-sm text-secondary-500 truncate">{user?.email}</p>

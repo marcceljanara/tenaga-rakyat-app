@@ -48,6 +48,9 @@ import {
 // Admin Pages
 import { AdminDashboard, AdminUsers, AdminUserDetail, AdminWithdrawals, AdminWithdrawDetail, AdminManagement } from './pages/admin';
 
+// Shared Pages
+import { UserProfilePage } from './pages/shared';
+
 // Create a client
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -117,6 +120,7 @@ const App: React.FC = () => {
               <Route path="wallet/withdrawals" element={<WorkerWithdrawals />} />
               <Route path="wallet/withdrawals/:id" element={<WorkerWithdrawalDetail />} />
               <Route path="photos" element={<WorkerPhotos />} />
+              <Route path="users/:userId" element={<UserProfilePage />} />
             </Route>
 
             {/* Employer Routes */}
@@ -136,6 +140,7 @@ const App: React.FC = () => {
               <Route path="jobs/:id" element={<EmployerJobDetail />} />
               <Route path="wallet" element={<EmployerWallet />} />
               <Route path="wallet/topup" element={<EmployerTopUp />} />
+              <Route path="users/:userId" element={<UserProfilePage />} />
             </Route>
 
             {/* Admin Routes */}

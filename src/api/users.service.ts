@@ -4,6 +4,7 @@ import type {
     User,
     UpdateProfileData,
     UserPhoto,
+    UserProfile,
     Application,
     ApplicationSearchParams,
     WorkerApplications,
@@ -17,6 +18,12 @@ export const usersService = {
     // Get current user profile with role, photos, and all details
     getProfile: async (): Promise<ApiResponse<User>> => {
         const response = await api.get('/api/users/profile');
+        return response.data;
+    },
+
+    // Get user profile by ID (public view)
+    getProfileById: async (id: string): Promise<ApiResponse<UserProfile>> => {
+        const response = await api.get(`/api/users/profile/${id}`);
         return response.data;
     },
 
