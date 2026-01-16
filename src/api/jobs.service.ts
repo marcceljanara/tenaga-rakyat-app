@@ -27,9 +27,18 @@ export const jobsService = {
         return response.data;
     },
 
-    // Get job detail - public endpoint
-    getById: async (jobId: number | string): Promise<ApiResponse<Job>> => {
-        const response = await api.get(`/api/jobs/${jobId}`);
+    // Get job detail - PUBLIC endpoint (for job listings, anyone can access)
+    // Does not include worker/provider contact info (email, phone)
+    getPublicDetail: async (jobId: number | string): Promise<ApiResponse<Job>> => {
+        const response = await api.get(`/api/jobs/${jobId}/public`);
+        return response.data;
+    },
+
+    // Get job detail - PRIVATE endpoint (for employer/worker involved in the job)
+    // Includes worker and provider contact info (email, phone_number)
+    // Only accessible by: job provider OR accepted worker
+    getPrivateDetail: async (jobId: number | string): Promise<ApiResponse<Job>> => {
+        const response = await api.get(`/api/jobs/${jobId}/private`);
         return response.data;
     },
 

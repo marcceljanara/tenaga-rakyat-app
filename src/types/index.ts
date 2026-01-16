@@ -50,6 +50,7 @@ export interface UpdateProfileData {
 
 // Job Types
 export type JobStatus = 'OPEN' | 'ASSIGNED' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED' | 'APPROVED' | 'REJECTED';
+export type PaymentMethod = 'ESCROW_SYSTEM' | 'CASH_OFFLINE';
 
 export interface Jobs {
     jobs: Job[]
@@ -64,20 +65,31 @@ export interface Job {
     description: string;
     location: string;
     compensation_amount: number;
+    payment_method: PaymentMethod;
     status: JobStatus;
     provider: {
         id: string;
         full_name: string;
         profile_picture_url?: string;
+        average_rating?: number | null;
+        email?: string;
+        phone_number?: string;
     };
     worker?: {
         id: string;
         full_name: string;
         profile_picture_url?: string;
+        average_rating?: number | null;
+        email?: string;
+        phone_number?: string;
     };
     posted_at?: string;
+    completed_at?: string;
     created_at: string;
     updated_at: string;
+    _count?: {
+        jobApplications: number;
+    };
 }
 
 export interface CreateJobData {
@@ -85,6 +97,7 @@ export interface CreateJobData {
     description: string;
     location: string;
     compensation_amount: number;
+    payment_method: PaymentMethod;
 }
 
 export interface UpdateJobData {
@@ -92,6 +105,7 @@ export interface UpdateJobData {
     description?: string;
     location?: string;
     compensation_amount?: number;
+    payment_method?: PaymentMethod;
 }
 
 export interface JobSearchParams {
@@ -149,6 +163,7 @@ export interface WorkerApplicationJob {
     description: string;
     location: string;
     compensation_amount: number;
+    payment_method: PaymentMethod;
     status: JobStatus;
     provider: {
         id: string;

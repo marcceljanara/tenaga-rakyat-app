@@ -5,7 +5,7 @@ import { jobsService, applicationsService } from '../../api';
 import { Card, CardContent, Badge, Button, Skeleton, Avatar, Modal, getStatusBadgeVariant } from '../../components/ui';
 import {
     MapPin, Banknote, Clock, ArrowLeft, Briefcase, Users,
-    CheckCircle, XCircle, Award, Trash2
+    CheckCircle, XCircle, Award, Trash2, Shield, AlertTriangle, Mail, Phone
 } from 'lucide-react';
 import { formatCurrency, formatRelativeTime } from '../../utils';
 import toast from 'react-hot-toast';
@@ -23,7 +23,7 @@ export const EmployerJobDetail: React.FC = () => {
     // Fetch job details
     const { data: jobData, isLoading: jobLoading, error: jobError } = useQuery({
         queryKey: ['job', id],
-        queryFn: () => jobsService.getById(id!),
+        queryFn: () => jobsService.getPrivateDetail(id!),
         enabled: !!id,
     });
 
@@ -188,6 +188,21 @@ export const EmployerJobDetail: React.FC = () => {
                                 </span>
                             </div>
 
+                            {/* Payment Method Badge */}
+                            <div className="mb-4">
+                                {job.payment_method === 'ESCROW_SYSTEM' ? (
+                                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-success-50 border border-success-200">
+                                        <Shield className="w-4 h-4 text-success-600" />
+                                        <span className="text-sm font-medium text-success-700">🛡️ Escrow - Aman & Dijamin</span>
+                                    </div>
+                                ) : (
+                                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-warning-50 border border-warning-200">
+                                        <AlertTriangle className="w-4 h-4 text-warning-600" />
+                                        <span className="text-sm font-medium text-warning-700">⚠️ Cash - Tanpa Perlindungan</span>
+                                    </div>
+                                )}
+                            </div>
+
                             <div className="prose prose-secondary max-w-none">
                                 <p className="text-secondary-600 whitespace-pre-wrap">{job.description}</p>
                             </div>
@@ -201,41 +216,67 @@ export const EmployerJobDetail: React.FC = () => {
                 <Card>
                     <CardContent className="p-6">
                         <h2 className="text-lg font-semibold text-secondary-900 mb-4">Pekerja Ditugaskan</h2>
-                        <div className="flex items-center justify-between">
-                            <Link
-                                to={`/employer/users/${job.worker.id}`}
-                                className="flex items-center gap-4 hover:opacity-80 transition-opacity cursor-pointer"
-                            >
-                                <Avatar src={API_BASE_URL + job.worker.profile_picture_url} size="lg" />
-                                <div>
-                                    <p className="font-medium text-secondary-900 hover:text-primary-600 transition-colors">{job.worker.full_name}</p>
-                                    <p className="text-sm text-secondary-500">Pekerja · Klik untuk lihat profil</p>
-                                </div>
-                            </Link>
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <div className="flex-1">
+                                <Link
+                                    to={`/employer/users/${job.worker.id}`}
+                                    className="flex items-center gap-4 hover:opacity-80 transition-opacity cursor-pointer"
+                                >
+                                    <Avatar src={API_BASE_URL + job.worker.profile_picture_url} size="lg" />
+                                    <div>
+                                        <p className="font-medium text-secondary-900 hover:text-primary-600 transition-colors">{job.worker.full_name}</p>
+                                        <p className="text-xs text-primary-500">Klik untuk lihat profil</p>
+                                    </div>
+                                </Link>
 
-                            {canApprove && (
-                                <div className="flex gap-2">
-                                    <Button
-                                        variant="ghost"
-                                        className="text-danger-600 hover:bg-danger-50"
-                                        onClick={() => handleStatusChange('REJECTED')}
-                                    >
-                                        <XCircle className="w-4 h-4 mr-2" />
-                                        Tolak
-                                    </Button>
-                                    <Button onClick={() => handleStatusChange('APPROVED')}>
-                                        <CheckCircle className="w-4 h-4 mr-2" />
-                                        Setujui & Bayar
-                                    </Button>
+                                {/* Contact Info */}
+                                <div className="mt-3 flex flex-wrap gap-4 text-sm">
+                                    {job.worker.email && (
+                                        <a
+                                            href={`mailto:${job.worker.email}`}
+                                            className="flex items-center gap-1.5 text-secondary-600 hover:text-primary-600 transition-colors"
+                                        >
+                                            <Mail className="w-4 h-4" />
+                                            {job.worker.email}
+                                        </a>
+                                    )}
+                                    {job.worker.phone_number && (
+                                        <a
+                                            href={`tel:${job.worker.phone_number}`}
+                                            className="flex items-center gap-1.5 text-secondary-600 hover:text-primary-600 transition-colors"
+                                        >
+                                            <Phone className="w-4 h-4" />
+                                            {job.worker.phone_number}
+                                        </a>
+                                    )}
                                 </div>
-                            )}
+                            </div>
 
-                            {job.status === 'APPROVED' && (
-                                <Badge variant="success">
-                                    <Award className="w-4 h-4 mr-1" />
-                                    Selesai
-                                </Badge>
-                            )}
+                            <div className="flex items-center gap-2">
+                                {canApprove && (
+                                    <div className="flex gap-2">
+                                        <Button
+                                            variant="ghost"
+                                            className="text-danger-600 hover:bg-danger-50"
+                                            onClick={() => handleStatusChange('REJECTED')}
+                                        >
+                                            <XCircle className="w-4 h-4 mr-2" />
+                                            Tolak
+                                        </Button>
+                                        <Button onClick={() => handleStatusChange('APPROVED')}>
+                                            <CheckCircle className="w-4 h-4 mr-2" />
+                                            Setujui & Bayar
+                                        </Button>
+                                    </div>
+                                )}
+
+                                {job.status === 'APPROVED' && (
+                                    <Badge variant="success">
+                                        <Award className="w-4 h-4 mr-1" />
+                                        Selesai
+                                    </Badge>
+                                )}
+                            </div>
                         </div>
                     </CardContent>
                 </Card>
@@ -277,7 +318,18 @@ export const EmployerJobDetail: React.FC = () => {
                                             <Avatar src={API_BASE_URL + app.worker.profile_picture_url} size="lg" />
                                             <div className="flex-1 min-w-0">
                                                 <p className="font-medium text-secondary-900 hover:text-primary-600 transition-colors">{app.worker.full_name}</p>
-                                                <p className="text-sm text-secondary-500">{app.worker.email}</p>
+                                                <div className="flex flex-wrap gap-3 text-sm text-secondary-500 mt-0.5">
+                                                    <span className="flex items-center gap-1">
+                                                        <Mail className="w-3.5 h-3.5" />
+                                                        {app.worker.email}
+                                                    </span>
+                                                    {app.worker.phone_number && (
+                                                        <span className="flex items-center gap-1">
+                                                            <Phone className="w-3.5 h-3.5" />
+                                                            {app.worker.phone_number}
+                                                        </span>
+                                                    )}
+                                                </div>
                                                 <p className="text-xs text-primary-500 mt-0.5">Klik untuk lihat profil</p>
                                             </div>
                                         </Link>

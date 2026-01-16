@@ -13,7 +13,11 @@ import {
     FileText,
     Play,
     CheckCircle,
-    AlertCircle
+    AlertCircle,
+    Shield,
+    AlertTriangle,
+    Mail,
+    Phone
 } from 'lucide-react';
 import { formatCurrency, formatRelativeTime } from '../../utils';
 import toast from 'react-hot-toast';
@@ -33,6 +37,16 @@ export const WorkerApplicationDetail: React.FC = () => {
 
     const application = data?.data;
     const job = application?.job;
+
+    // Fetch private job details for ACCEPTED applications to get provider contact info
+    const { data: privateJobData } = useQuery({
+        queryKey: ['job-private', job?.id],
+        queryFn: () => jobsService.getPrivateDetail(job!.id),
+        enabled: !!job?.id && application?.status === 'ACCEPTED',
+    });
+
+    // Use private job data for contact info if available (for accepted applications)
+    const providerContactInfo = privateJobData?.data?.provider;
 
     // Update job status mutation
     const statusMutation = useMutation({
@@ -153,6 +167,30 @@ export const WorkerApplicationDetail: React.FC = () => {
                                 <span>{job?.provider.full_name}</span>
                                 <span className="text-xs text-primary-500">Klik untuk lihat profil</span>
                             </Link>
+
+                            {/* Provider Contact Info - Only shown for ACCEPTED applications */}
+                            {application?.status === 'ACCEPTED' && providerContactInfo && (
+                                <div className="mt-2 flex flex-wrap gap-3 text-sm">
+                                    {providerContactInfo.email && (
+                                        <a
+                                            href={`mailto:${providerContactInfo.email}`}
+                                            className="flex items-center gap-1.5 text-secondary-600 hover:text-primary-600 transition-colors"
+                                        >
+                                            <Mail className="w-4 h-4" />
+                                            {providerContactInfo.email}
+                                        </a>
+                                    )}
+                                    {providerContactInfo.phone_number && (
+                                        <a
+                                            href={`tel:${providerContactInfo.phone_number}`}
+                                            className="flex items-center gap-1.5 text-secondary-600 hover:text-primary-600 transition-colors"
+                                        >
+                                            <Phone className="w-4 h-4" />
+                                            {providerContactInfo.phone_number}
+                                        </a>
+                                    )}
+                                </div>
+                            )}
                         </div>
 
                         <p className="text-secondary-700">{job?.description}</p>
@@ -175,6 +213,22 @@ export const WorkerApplicationDetail: React.FC = () => {
                         <div className="flex items-center gap-2">
                             <span className="text-sm text-secondary-500">Status Pekerjaan:</span>
                             <Badge variant={getStatusBadgeVariant(job?.status || '')}>{job?.status}</Badge>
+                        </div>
+
+                        {/* Payment Method Badge */}
+                        <div className="flex items-center gap-2">
+                            <span className="text-sm text-secondary-500">Metode Pembayaran:</span>
+                            {job?.payment_method === 'ESCROW_SYSTEM' ? (
+                                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-success-50 border border-success-200">
+                                    <Shield className="w-3.5 h-3.5 text-success-600" />
+                                    <span className="text-xs font-medium text-success-700">🛡️ Escrow</span>
+                                </div>
+                            ) : (
+                                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-warning-50 border border-warning-200">
+                                    <AlertTriangle className="w-3.5 h-3.5 text-warning-600" />
+                                    <span className="text-xs font-medium text-warning-700">⚠️ Cash</span>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </CardContent>
