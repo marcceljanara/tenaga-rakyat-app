@@ -158,7 +158,7 @@ const JobCard: React.FC<{ job: Job }> = ({ job }) => {
                         <div className="flex flex-wrap gap-4 text-sm text-secondary-500">
                             <span className="flex items-center gap-1.5">
                                 <MapPin className="w-4 h-4" />
-                                {job.location}
+                                {job.location_label || job.location}
                             </span>
                             <span className="flex items-center gap-1.5">
                                 <Banknote className="w-4 h-4" />

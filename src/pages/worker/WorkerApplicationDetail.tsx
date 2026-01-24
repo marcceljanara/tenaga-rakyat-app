@@ -17,7 +17,9 @@ import {
     Shield,
     AlertTriangle,
     Mail,
-    Phone
+    Phone,
+    Home,
+    Navigation
 } from 'lucide-react';
 import { formatCurrency, formatRelativeTime } from '../../utils';
 import toast from 'react-hot-toast';
@@ -198,7 +200,7 @@ export const WorkerApplicationDetail: React.FC = () => {
                         <div className="flex flex-wrap gap-4 text-sm">
                             <span className="flex items-center gap-1.5 text-secondary-600">
                                 <MapPin className="w-4 h-4" />
-                                {job?.location}
+                                {job?.location_label || job?.location}
                             </span>
                             <span className="flex items-center gap-1.5 text-success-600 font-medium">
                                 <Banknote className="w-4 h-4" />
@@ -208,7 +210,26 @@ export const WorkerApplicationDetail: React.FC = () => {
                                 <Clock className="w-4 h-4" />
                                 Dilamar {formatRelativeTime(application.created_at)}
                             </span>
+                            {application?.distance != null && (
+                                <span className="flex items-center gap-1.5 text-info-600">
+                                    <Navigation className="w-4 h-4" />
+                                    {application.distance.toFixed(2)} km dari Anda
+                                </span>
+                            )}
                         </div>
+
+                        {/* Address Detail - Only shown for ACCEPTED applications */}
+                        {application?.status === 'ACCEPTED' && job?.address_detail && (
+                            <div className="p-3 bg-secondary-50 rounded-xl border border-secondary-200">
+                                <div className="flex items-start gap-2">
+                                    <Home className="w-5 h-5 text-secondary-500 mt-0.5 flex-shrink-0" />
+                                    <div>
+                                        <p className="text-xs font-medium text-secondary-500 mb-1">Alamat Lengkap</p>
+                                        <p className="text-sm text-secondary-700">{job.address_detail}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
 
                         <div className="flex items-center gap-2">
                             <span className="text-sm text-secondary-500">Status Pekerjaan:</span>

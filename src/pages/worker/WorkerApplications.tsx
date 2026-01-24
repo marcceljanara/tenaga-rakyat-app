@@ -109,7 +109,8 @@ export const WorkerApplications: React.FC = () => {
             ) : (
                 <div className="space-y-4">
                     {applications.map((app) => {
-                        const urgency = getJobUrgency(app.job.status);
+                        // Only show job urgency for ACCEPTED applications (worker is actively working)
+                        const urgency = app.status === 'ACCEPTED' ? getJobUrgency(app.job.status) : null;
                         const UrgencyIcon = urgency?.icon;
 
                         return (
@@ -119,7 +120,7 @@ export const WorkerApplications: React.FC = () => {
                                     className={`p-6 relative overflow-hidden ${urgency ? `border-l-4 ${urgency.borderColor}` : ''
                                         } ${urgency?.level === 'high' ? 'ring-2 ring-offset-1 ring-opacity-50 ' + urgency.borderColor.replace('border-l-', 'ring-') : ''}`}
                                 >
-                                    {/* Urgency Banner for High Priority */}
+                                    {/* Urgency Banner for High Priority - Only for ACCEPTED applications */}
                                     {urgency?.level === 'high' && (
                                         <div className={`absolute top-0 right-0 ${urgency.bgColor} ${urgency.color} px-3 py-1 rounded-bl-lg flex items-center gap-1.5 text-xs font-semibold animate-pulse`}>
                                             {UrgencyIcon && <UrgencyIcon className="w-3.5 h-3.5" />}
@@ -127,7 +128,7 @@ export const WorkerApplications: React.FC = () => {
                                         </div>
                                     )}
 
-                                    {/* Approved Badge (more subtle) */}
+                                    {/* Approved Badge (more subtle) - Only for ACCEPTED applications */}
                                     {urgency?.level === 'medium' && (
                                         <div className={`absolute top-0 right-0 ${urgency.bgColor} ${urgency.color} px-3 py-1 rounded-bl-lg flex items-center gap-1.5 text-xs font-medium`}>
                                             {UrgencyIcon && <UrgencyIcon className="w-3.5 h-3.5" />}
@@ -135,13 +136,33 @@ export const WorkerApplications: React.FC = () => {
                                         </div>
                                     )}
 
+                                    {/* Application Rejected Banner */}
+                                    {app.status === 'REJECTED' && (
+                                        <div className="absolute top-0 right-0 bg-danger-50 text-danger-700 px-3 py-1 rounded-bl-lg flex items-center gap-1.5 text-xs font-medium">
+                                            <XCircle className="w-3.5 h-3.5" />
+                                            Lamaran Ditolak
+                                        </div>
+                                    )}
+
+                                    {/* Application Cancelled Banner */}
+                                    {app.status === 'CANCELLED' && (
+                                        <div className="absolute top-0 right-0 bg-secondary-100 text-secondary-700 px-3 py-1 rounded-bl-lg flex items-center gap-1.5 text-xs font-medium">
+                                            <XCircle className="w-3.5 h-3.5" />
+                                            Dibatalkan
+                                        </div>
+                                    )}
+
                                     <div className="flex flex-col sm:flex-row gap-4">
                                         <div className={`w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0 ${urgency?.level === 'high'
                                             ? urgency.bgColor
-                                            : 'bg-gradient-to-br from-primary-100 to-primary-200'
+                                            : app.status === 'REJECTED'
+                                                ? 'bg-danger-50'
+                                                : 'bg-gradient-to-br from-primary-100 to-primary-200'
                                             }`}>
                                             {urgency?.level === 'high' && UrgencyIcon ? (
                                                 <UrgencyIcon className={`w-7 h-7 ${urgency.color}`} />
+                                            ) : app.status === 'REJECTED' ? (
+                                                <XCircle className="w-7 h-7 text-danger-500" />
                                             ) : (
                                                 <Briefcase className="w-7 h-7 text-primary-600" />
                                             )}
@@ -169,7 +190,7 @@ export const WorkerApplications: React.FC = () => {
                                             <div className="flex flex-wrap gap-4 text-sm text-secondary-500">
                                                 <span className="flex items-center gap-1.5">
                                                     <MapPin className="w-4 h-4" />
-                                                    {app.job.location}
+                                                    {app.job.location_label || app.job.location}
                                                 </span>
                                                 <span className="flex items-center gap-1.5">
                                                     <Banknote className="w-4 h-4" />

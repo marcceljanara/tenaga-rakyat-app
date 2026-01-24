@@ -5,7 +5,7 @@ import { jobsService, applicationsService } from '../../api';
 import { Card, CardContent, Badge, Button, Skeleton, Avatar, Modal, getStatusBadgeVariant } from '../../components/ui';
 import {
     MapPin, Banknote, Clock, ArrowLeft, Briefcase, Users,
-    CheckCircle, XCircle, Award, Trash2, Shield, AlertTriangle, Mail, Phone
+    CheckCircle, XCircle, Award, Trash2, Shield, AlertTriangle, Mail, Phone, Home, Navigation
 } from 'lucide-react';
 import { formatCurrency, formatRelativeTime } from '../../utils';
 import toast from 'react-hot-toast';
@@ -176,7 +176,7 @@ export const EmployerJobDetail: React.FC = () => {
                             <div className="flex flex-wrap gap-6 text-secondary-600 mb-4">
                                 <span className="flex items-center gap-2">
                                     <MapPin className="w-5 h-5 text-primary-500" />
-                                    {job.location}
+                                    {job.location_label || job.location}
                                 </span>
                                 <span className="flex items-center gap-2">
                                     <Banknote className="w-5 h-5 text-success-500" />
@@ -186,7 +186,26 @@ export const EmployerJobDetail: React.FC = () => {
                                     <Clock className="w-5 h-5 text-secondary-400" />
                                     Diposting {formatRelativeTime(job.posted_at ?? '')}
                                 </span>
+                                {job.distance != null && (
+                                    <span className="flex items-center gap-2">
+                                        <Navigation className="w-5 h-5 text-info-500" />
+                                        {job.distance.toFixed(2)} km dari Anda
+                                    </span>
+                                )}
                             </div>
+
+                            {/* Address Detail Section - only shown in private view */}
+                            {job.address_detail && (
+                                <div className="mb-4 p-3 bg-secondary-50 rounded-xl border border-secondary-200">
+                                    <div className="flex items-start gap-2">
+                                        <Home className="w-5 h-5 text-secondary-500 mt-0.5 flex-shrink-0" />
+                                        <div>
+                                            <p className="text-xs font-medium text-secondary-500 mb-1">Alamat Lengkap</p>
+                                            <p className="text-sm text-secondary-700">{job.address_detail}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
 
                             {/* Payment Method Badge */}
                             <div className="mb-4">
@@ -327,6 +346,12 @@ export const EmployerJobDetail: React.FC = () => {
                                                         <span className="flex items-center gap-1">
                                                             <Phone className="w-3.5 h-3.5" />
                                                             {app.worker.phone_number}
+                                                        </span>
+                                                    )}
+                                                    {app.distance != null && (
+                                                        <span className="flex items-center gap-1 text-info-600">
+                                                            <Navigation className="w-3.5 h-3.5" />
+                                                            {app.distance.toFixed(2)} km
                                                         </span>
                                                     )}
                                                 </div>

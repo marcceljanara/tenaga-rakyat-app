@@ -77,10 +77,15 @@ export interface Job {
     id: number;
     title: string;
     description: string;
-    location: string;
+    location?: string; // deprecated, use location_label
+    location_label: string;
+    address_detail?: string; // only available in private endpoint
+    job_latitude?: string | number | null;
+    job_longitude?: string | number | null;
     compensation_amount: number;
     payment_method: PaymentMethod;
     status: JobStatus;
+    distance?: number | null; // distance in km, null if user has no coordinates
     provider: {
         id: string;
         full_name: string;
@@ -99,8 +104,8 @@ export interface Job {
     };
     posted_at?: string;
     completed_at?: string;
-    created_at: string;
-    updated_at: string;
+    created_at?: string;
+    updated_at?: string;
     _count?: {
         jobApplications: number;
     };
@@ -109,17 +114,23 @@ export interface Job {
 export interface CreateJobData {
     title: string;
     description: string;
-    location: string;
+    location_label: string;
+    address_detail: string;
     compensation_amount: number;
     payment_method: PaymentMethod;
+    job_latitude: number;
+    job_longitude: number;
 }
 
 export interface UpdateJobData {
     title?: string;
     description?: string;
-    location?: string;
+    location_label?: string;
+    address_detail?: string;
     compensation_amount?: number;
     payment_method?: PaymentMethod;
+    job_latitude?: number;
+    job_longitude?: number;
 }
 
 export interface JobSearchParams {
@@ -147,18 +158,23 @@ export type ApplicationStatus = 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'UNDER_REV
 
 export interface Application {
     id: number;
+    job_id?: number;
+    worker_id?: string;
     cover_letter: string;
     status: ApplicationStatus;
-    job: Job;
+    job?: Job;
     worker: {
         id: string;
         full_name: string;
         email: string;
         phone_number: string;
-        profile_picture_url?: string;
-        about?: string;
-        cv_url?: string;
+        profile_picture_url?: string | null;
+        about?: string | null;
+        cv_url?: string | null;
+        average_rating?: number | null;
+        verification_status?: string;
     };
+    distance?: number | null; // distance from worker to job location in km
     created_at: string;
     updated_at: string;
 }
@@ -175,7 +191,11 @@ export interface WorkerApplicationJob {
     id: number;
     title: string;
     description: string;
-    location: string;
+    location?: string; // deprecated, keep for backward compatibility
+    location_label: string;
+    address_detail?: string; // full address, only available in detail view
+    job_latitude?: string | number | null;
+    job_longitude?: string | number | null;
     compensation_amount: number;
     payment_method: PaymentMethod;
     status: JobStatus;
@@ -207,6 +227,7 @@ export interface WorkerApplications {
 
 // Worker application detail (includes worker info for detail view)
 export interface WorkerApplicationDetail extends WorkerApplication {
+    distance?: number | null; // distance from worker to job location in km
     worker: {
         id: string;
         full_name: string;

@@ -7,7 +7,7 @@ import { z } from 'zod';
 import { jobsService, applicationsService } from '../../api';
 import { useAuth } from '../../contexts/AuthContext';
 import { Card, CardContent, Button, Badge, Skeleton, Textarea, Modal, Avatar, getStatusBadgeVariant } from '../../components/ui';
-import { MapPin, Banknote, Clock, ArrowLeft, Briefcase, Send, CheckCircle, Shield, AlertTriangle } from 'lucide-react';
+import { MapPin, Banknote, Clock, ArrowLeft, Briefcase, Send, CheckCircle, Shield, AlertTriangle, Navigation, Lock, Users } from 'lucide-react';
 import { formatCurrency, formatRelativeTime } from '../../utils';
 import toast from 'react-hot-toast';
 import { API_BASE_URL } from '../../api/axios';
@@ -137,7 +137,7 @@ export const JobDetailPage: React.FC = () => {
                                 <div className="flex flex-wrap gap-4 text-secondary-600 mb-4">
                                     <span className="flex items-center gap-2">
                                         <MapPin className="w-5 h-5 text-primary-500" />
-                                        {job.location}
+                                        {job.location_label || job.location}
                                     </span>
                                     <span className="flex items-center gap-2">
                                         <Banknote className="w-5 h-5 text-success-500" />
@@ -147,6 +147,18 @@ export const JobDetailPage: React.FC = () => {
                                         <Clock className="w-5 h-5 text-secondary-400" />
                                         Diposting {formatRelativeTime(job.posted_at ?? '')}
                                     </span>
+                                    {job.distance != null && (
+                                        <span className="flex items-center gap-2">
+                                            <Navigation className="w-5 h-5 text-info-500" />
+                                            {job.distance.toFixed(2)} km dari Anda
+                                        </span>
+                                    )}
+                                    {job._count?.jobApplications != null && (
+                                        <span className="flex items-center gap-2">
+                                            <Users className="w-5 h-5 text-secondary-400" />
+                                            {job._count.jobApplications} Pelamar
+                                        </span>
+                                    )}
                                 </div>
 
                                 {/* Payment Method Badge */}
@@ -171,6 +183,29 @@ export const JobDetailPage: React.FC = () => {
                                 <p className="text-secondary-600 whitespace-pre-wrap">{job.description}</p>
                             </div>
                         </div>
+
+                        {/* Login prompt for full details */}
+                        {!isAuthenticated && (
+                            <div className="mb-6 p-4 bg-gradient-to-r from-primary-50 to-secondary-50 rounded-xl border border-primary-200">
+                                <div className="flex items-start gap-3">
+                                    <Lock className="w-5 h-5 text-primary-600 mt-0.5 flex-shrink-0" />
+                                    <div>
+                                        <p className="font-medium text-secondary-900 mb-1">Ingin melihat alamat lengkap?</p>
+                                        <p className="text-sm text-secondary-600 mb-3">
+                                            Login untuk melihat alamat lengkap lokasi pekerjaan dan informasi kontak pemberi kerja.
+                                        </p>
+                                        <div className="flex gap-2">
+                                            <Link to="/login">
+                                                <Button size="sm">Masuk</Button>
+                                            </Link>
+                                            <Link to="/register">
+                                                <Button size="sm" variant="secondary">Daftar</Button>
+                                            </Link>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
 
                         {/* Action Buttons */}
                         <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-secondary-100">
