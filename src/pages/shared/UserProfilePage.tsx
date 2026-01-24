@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { usersService } from '../../api';
-import { Card, CardContent, Badge, Button, Skeleton } from '../../components/ui';
+import { Card, CardContent, Badge, Button, Skeleton, LocationDisplay } from '../../components/ui';
 import type { UserPhoto } from '../../types';
 import {
     ArrowLeft,
@@ -18,6 +18,7 @@ import {
     ChevronLeft,
     ChevronRight,
     ZoomIn,
+    MapPin,
 } from 'lucide-react';
 import { API_BASE_URL } from '../../api/axios';
 
@@ -204,6 +205,30 @@ export const UserProfilePage: React.FC = () => {
                                 <ExternalLink className="w-4 h-4" />
                             </a>
                         </div>
+                    </CardContent>
+                </Card>
+            )}
+
+            {/* Location Section */}
+            {profile.latitude && profile.longitude && (
+                <Card>
+                    <CardContent className="p-6">
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center">
+                                <MapPin className="w-6 h-6 text-primary-600" />
+                            </div>
+                            <div>
+                                <h3 className="font-semibold text-secondary-900">Lokasi</h3>
+                                {profile.location_label && (
+                                    <p className="text-sm text-secondary-500">{profile.location_label}</p>
+                                )}
+                            </div>
+                        </div>
+                        <LocationDisplay
+                            latitude={profile.latitude}
+                            longitude={profile.longitude}
+                            label={profile.location_label || undefined}
+                        />
                     </CardContent>
                 </Card>
             )}

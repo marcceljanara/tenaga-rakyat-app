@@ -16,6 +16,9 @@ export interface User {
     profile_picture_url?: string;
     about?: string;
     cv_url?: string;
+    latitude?: number | null;
+    longitude?: number | null;
+    location_label?: string | null;
     verification_status?: VerificationStatus;
     is_suspended?: boolean;
     is_deleted?: boolean;
@@ -46,6 +49,17 @@ export interface UpdateProfileData {
     phone_number?: string;
     about?: string;
     cv_url?: string;
+    location_label?: string;
+}
+
+export interface UpdateLocationData {
+    latitude: number;
+    longitude: number;
+}
+
+export interface UpdateLocationResponse {
+    message: string;
+    data: string;
 }
 
 // Job Types
@@ -240,6 +254,9 @@ export interface UserProfile {
     verification_status?: VerificationStatus;
     about?: string | null;
     cv_url?: string | null;
+    latitude?: number | null;
+    longitude?: number | null;
+    location_label?: string | null;
     photos?: UserPhoto[];
 }
 

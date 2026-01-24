@@ -8,3 +8,4 @@ export { Avatar } from './Avatar';
 export { Modal, ConfirmDialog } from './Modal';
 export { Skeleton, CardSkeleton, TableRowSkeleton } from './Skeleton';
 export { EmptyState } from './EmptyState';
+export { LocationPicker, LocationDisplay, LocationPickerModal } from './LocationPicker';

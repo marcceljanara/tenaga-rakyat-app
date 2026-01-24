@@ -3,6 +3,8 @@ import type {
     ApiResponse,
     User,
     UpdateProfileData,
+    UpdateLocationData,
+    UpdateLocationResponse,
     UserPhoto,
     UserProfile,
     Application,
@@ -27,9 +29,15 @@ export const usersService = {
         return response.data;
     },
 
-    // Update profile information (full_name, phone_number, about, cv_url)
+    // Update profile information (full_name, phone_number, about, cv_url, location_label)
     updateProfile: async (data: UpdateProfileData): Promise<ApiResponse<User>> => {
         const response = await api.put('/api/users/profile', data);
+        return response.data;
+    },
+
+    // Update user location (latitude, longitude)
+    updateLocation: async (data: UpdateLocationData): Promise<UpdateLocationResponse> => {
+        const response = await api.put('/api/users/profile/location', data);
         return response.data;
     },
 

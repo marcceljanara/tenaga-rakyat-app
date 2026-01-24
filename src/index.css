@@ -132,3 +132,24 @@
     display: none;
   }
 }
+
+/* Leaflet map z-index fix - ensure modals appear above maps */
+.leaflet-container {
+  z-index: 0 !important;
+}
+
+.leaflet-pane,
+.leaflet-tile-pane,
+.leaflet-overlay-pane,
+.leaflet-shadow-pane,
+.leaflet-marker-pane,
+.leaflet-tooltip-pane,
+.leaflet-popup-pane,
+.leaflet-control {
+  z-index: 0 !important;
+}
+
+/* Ensure map controls stay above map tiles */
+.leaflet-control-container .leaflet-control {
+  z-index: 10 !important;
+}

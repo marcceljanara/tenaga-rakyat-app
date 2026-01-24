@@ -5,8 +5,8 @@ import { z } from 'zod';
 import { useMutation } from '@tanstack/react-query';
 import { useAuth } from '../../contexts/AuthContext';
 import { usersService } from '../../api';
-import { Card, CardContent, Button, Input, Textarea, Avatar } from '../../components/ui';
-import { Camera, Trash2, Save, Mail, Phone, Link as LinkIcon, Building2 } from 'lucide-react';
+import { Card, CardContent, Button, Input, Textarea, Avatar, LocationPicker } from '../../components/ui';
+import { Camera, Trash2, Save, Mail, Phone, Link as LinkIcon, Building2, MapPin } from 'lucide-react';
 import { API_BASE_URL } from '../../api/axios';
 import toast from 'react-hot-toast';
 
@@ -14,6 +14,7 @@ const profileSchema = z.object({
     full_name: z.string().min(3, 'Nama minimal 3 karakter'),
     about: z.string().optional(),
     cv_url: z.string().url('URL tidak valid').optional().or(z.literal('')),
+    location_label: z.string().optional(),
 });
 
 type ProfileFormData = z.infer<typeof profileSchema>;
@@ -24,6 +25,7 @@ export const EmployerProfile: React.FC = () => {
     const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
     const [isDeletingPhoto, setIsDeletingPhoto] = useState(false);
     const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+    const [isUpdatingLocation, setIsUpdatingLocation] = useState(false);
 
     const {
         register,
@@ -35,6 +37,7 @@ export const EmployerProfile: React.FC = () => {
             full_name: user?.full_name || '',
             about: user?.about || '',
             cv_url: user?.cv_url || '',
+            location_label: user?.location_label || '',
         },
     });
 
@@ -44,6 +47,7 @@ export const EmployerProfile: React.FC = () => {
                 full_name: data.full_name,
                 about: data.about || undefined,
                 cv_url: data.cv_url || undefined,
+                location_label: data.location_label || undefined,
             }),
         onSuccess: () => {
             toast.success('Profil berhasil diperbarui!');
@@ -109,6 +113,20 @@ export const EmployerProfile: React.FC = () => {
         }
     };
 
+    const handleLocationSelect = async (lat: number, lng: number) => {
+        setIsUpdatingLocation(true);
+        try {
+            await usersService.updateLocation({ latitude: lat, longitude: lng });
+            toast.success('Lokasi berhasil diperbarui!');
+            refreshUser();
+        } catch (error: any) {
+            const message = error.response?.data?.errors || error.response?.data?.message || 'Gagal memperbarui lokasi';
+            toast.error(message);
+        } finally {
+            setIsUpdatingLocation(false);
+        }
+    };
+
     return (
         <div className="max-w-2xl space-y-6 animate-fade-in">
             {/* Header */}
@@ -158,6 +176,30 @@ export const EmployerProfile: React.FC = () => {
                 </CardContent>
             </Card>
 
+            {/* Location */}
+            <Card>
+                <CardContent className="p-6">
+                    <h2 className="text-lg font-semibold text-secondary-900 mb-4">
+                        <div className="flex items-center gap-2">
+                            <MapPin className="w-5 h-5 text-primary-500" />
+                            Lokasi Bisnis
+                        </div>
+                    </h2>
+                    <p className="text-sm text-secondary-500 mb-4">
+                        Lokasi bisnis Anda akan membantu pekerja menemukan pekerjaan terdekat.
+                        Klik tombol di bawah untuk memilih atau memperbarui lokasi Anda.
+                    </p>
+
+                    <LocationPicker
+                        latitude={user?.latitude}
+                        longitude={user?.longitude}
+                        locationLabel={user?.location_label}
+                        onLocationSelect={handleLocationSelect}
+                        isLoading={isUpdatingLocation}
+                    />
+                </CardContent>
+            </Card>
+
             {/* Profile Form */}
             <Card>
                 <CardContent className="p-6">
@@ -190,6 +232,19 @@ export const EmployerProfile: React.FC = () => {
                                 <label className="text-sm font-medium text-secondary-700">Telepon</label>
                             </div>
                             <Input value={user?.phone_number || ''} disabled className="bg-secondary-50" />
+                        </div>
+
+                        <div>
+                            <div className="flex items-center gap-2 mb-1.5">
+                                <MapPin className="w-4 h-4 text-secondary-400" />
+                                <label className="text-sm font-medium text-secondary-700">Label Lokasi</label>
+                            </div>
+                            <Input
+                                {...register('location_label')}
+                                placeholder="cth: Jakarta Selatan, Surabaya Timur"
+                                error={errors.location_label?.message}
+                            />
+                            <p className="text-sm text-secondary-500 mt-1">Deskripsi kasar lokasi bisnis Anda (tidak perlu detail)</p>
                         </div>
 
                         <Textarea
