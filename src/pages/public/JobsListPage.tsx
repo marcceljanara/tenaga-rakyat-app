@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { jobsService } from '../../api';
 import { Card, Badge, Button, Input, Skeleton, EmptyState, getStatusBadgeVariant } from '../../components/ui';
-import { Search, MapPin, Banknote, Clock, Briefcase, ChevronRight, Shield, AlertTriangle } from 'lucide-react';
+import { Search, MapPin, Banknote, Clock, Briefcase, ChevronRight } from 'lucide-react';
 import { formatCurrency, formatRelativeTime } from '../../utils';
 import type { Job } from '../../types';
 
@@ -168,18 +168,11 @@ const JobCard: React.FC<{ job: Job }> = ({ job }) => {
                                 <Clock className="w-4 h-4" />
                                 {formatRelativeTime(job.posted_at ?? '')}
                             </span>
-                            {/* Payment Method Indicator */}
-                            {job.payment_method === 'ESCROW_SYSTEM' ? (
-                                <span className="flex items-center gap-1 text-success-600">
-                                    <Shield className="w-4 h-4" />
-                                    <span className="text-xs font-medium">🛡️ Escrow</span>
-                                </span>
-                            ) : (
-                                <span className="flex items-center gap-1 text-warning-600">
-                                    <AlertTriangle className="w-4 h-4" />
-                                    <span className="text-xs font-medium">⚠️ Cash</span>
-                                </span>
-                            )}
+                            {/* Payment Method - Cash Only */}
+                            <span className="flex items-center gap-1 text-secondary-500">
+                                <Banknote className="w-4 h-4" />
+                                <span className="text-xs font-medium">Cash</span>
+                            </span>
                         </div>
                     </div>
 

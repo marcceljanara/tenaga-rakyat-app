@@ -14,8 +14,6 @@ import {
     Play,
     CheckCircle,
     AlertCircle,
-    Shield,
-    AlertTriangle,
     Mail,
     Phone,
     Home,
@@ -236,20 +234,13 @@ export const WorkerApplicationDetail: React.FC = () => {
                             <Badge variant={getStatusBadgeVariant(job?.status || '')}>{job?.status}</Badge>
                         </div>
 
-                        {/* Payment Method Badge */}
+                        {/* Payment Method - Cash Only */}
                         <div className="flex items-center gap-2">
                             <span className="text-sm text-secondary-500">Metode Pembayaran:</span>
-                            {job?.payment_method === 'ESCROW_SYSTEM' ? (
-                                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-success-50 border border-success-200">
-                                    <Shield className="w-3.5 h-3.5 text-success-600" />
-                                    <span className="text-xs font-medium text-success-700">🛡️ Escrow</span>
-                                </div>
-                            ) : (
-                                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-warning-50 border border-warning-200">
-                                    <AlertTriangle className="w-3.5 h-3.5 text-warning-600" />
-                                    <span className="text-xs font-medium text-warning-700">⚠️ Cash</span>
-                                </div>
-                            )}
+                            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary-50 border border-secondary-200">
+                                <Banknote className="w-3.5 h-3.5 text-secondary-600" />
+                                <span className="text-xs font-medium text-secondary-700">💵 Cash</span>
+                            </div>
                         </div>
                     </div>
                 </CardContent>

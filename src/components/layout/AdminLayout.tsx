@@ -9,9 +9,9 @@ import {
     Briefcase,
     LayoutDashboard,
     Users,
-    CreditCard,
+    // CreditCard, // DISABLED: Wallet/Escrow features - Cash only mode
     Shield,
-    Wallet,
+    // Wallet, // DISABLED: Wallet/Escrow features - Cash only mode
     LogOut,
     ChevronDown,
     Settings,
@@ -30,11 +30,13 @@ export const AdminLayout: React.FC = () => {
     const adminNavItems = [
         { href: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
         { href: '/admin/users', label: 'Pengguna', icon: Users },
-        { href: '/admin/withdrawals', label: 'Penarikan', icon: CreditCard },
+        // DISABLED: Wallet/Escrow features - Cash only mode
+        // { href: '/admin/withdrawals', label: 'Penarikan', icon: CreditCard },
         ...(isSuperAdmin
             ? [
                 { href: '/admin/admins', label: 'Manajemen Admin', icon: Shield },
-                { href: '/admin/wallets', label: 'Inisialisasi Wallet', icon: Wallet },
+                // DISABLED: Wallet/Escrow features - Cash only mode
+                // { href: '/admin/wallets', label: 'Inisialisasi Wallet', icon: Wallet },
             ]
             : []),
     ];
@@ -61,7 +63,7 @@ export const AdminLayout: React.FC = () => {
                         </div>
                         <span className="text-lg font-bold text-secondary-900">Admin Panel</span>
                     </Link>
-                    <Avatar src={API_BASE_URL +user?.profile_picture_url} size="sm" />
+                    <Avatar src={API_BASE_URL + user?.profile_picture_url} size="sm" />
                 </div>
             </header>
 

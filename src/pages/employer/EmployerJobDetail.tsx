@@ -5,7 +5,7 @@ import { jobsService, applicationsService } from '../../api';
 import { Card, CardContent, Badge, Button, Skeleton, Avatar, Modal, getStatusBadgeVariant } from '../../components/ui';
 import {
     MapPin, Banknote, Clock, ArrowLeft, Briefcase, Users,
-    CheckCircle, XCircle, Award, Trash2, Shield, AlertTriangle, Mail, Phone, Home, Navigation
+    CheckCircle, XCircle, Award, Trash2, Mail, Phone, Home, Navigation
 } from 'lucide-react';
 import { formatCurrency, formatRelativeTime } from '../../utils';
 import toast from 'react-hot-toast';
@@ -207,19 +207,12 @@ export const EmployerJobDetail: React.FC = () => {
                                 </div>
                             )}
 
-                            {/* Payment Method Badge */}
+                            {/* Payment Method - Cash Only */}
                             <div className="mb-4">
-                                {job.payment_method === 'ESCROW_SYSTEM' ? (
-                                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-success-50 border border-success-200">
-                                        <Shield className="w-4 h-4 text-success-600" />
-                                        <span className="text-sm font-medium text-success-700">🛡️ Escrow - Aman & Dijamin</span>
-                                    </div>
-                                ) : (
-                                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-warning-50 border border-warning-200">
-                                        <AlertTriangle className="w-4 h-4 text-warning-600" />
-                                        <span className="text-sm font-medium text-warning-700">⚠️ Cash - Tanpa Perlindungan</span>
-                                    </div>
-                                )}
+                                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary-50 border border-secondary-200">
+                                    <Banknote className="w-4 h-4 text-secondary-600" />
+                                    <span className="text-sm font-medium text-secondary-700">💵 Cash - Pembayaran Langsung</span>
+                                </div>
                             </div>
 
                             <div className="prose prose-secondary max-w-none">

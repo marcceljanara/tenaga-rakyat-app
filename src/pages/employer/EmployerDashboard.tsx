@@ -2,9 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '../../contexts/AuthContext';
-import { jobsService, walletsService } from '../../api';
+import { jobsService } from '../../api';
 import { Card, CardContent, Badge, Button, Skeleton, getStatusBadgeVariant } from '../../components/ui';
-import { Briefcase, Users, Wallet, Clock, CheckCircle, PlusCircle } from 'lucide-react';
+import { Briefcase, Users, Clock, CheckCircle, PlusCircle } from 'lucide-react';
 import { formatCurrency } from '../../utils';
 
 export const EmployerDashboard: React.FC = () => {
@@ -20,21 +20,22 @@ export const EmployerDashboard: React.FC = () => {
         queryFn: () => jobsService.getProviderHistory(),
     });
 
-    const { data: walletData, isLoading: walletLoading } = useQuery({
-        queryKey: ['employer-wallet'],
-        queryFn: () => walletsService.getWallet(),
-    });
+    // DISABLED: Wallet/Escrow features - Cash only mode
+    // const { data: walletData, isLoading: walletLoading } = useQuery({
+    //     queryKey: ['employer-wallet'],
+    //     queryFn: () => walletsService.getWallet(),
+    // });
 
     const activeJobs = activeJobsData?.data.jobs || [];
     const allJobs = historyData?.data.jobs || [];
     console.log(allJobs);
-    const wallet = walletData?.data;
+    // const wallet = walletData?.data; // DISABLED: Wallet
 
     const stats = {
         total: allJobs.length,
         active: activeJobs.length,
         completed: allJobs.filter((j) => j.status === 'COMPLETED').length,
-        balance: wallet?.balance || 0,
+        // balance: wallet?.balance || 0, // DISABLED: Wallet
     };
 
     return (
@@ -74,14 +75,6 @@ export const EmployerDashboard: React.FC = () => {
                     value={stats.completed}
                     color="secondary"
                     isLoading={historyLoading}
-                />
-                <StatCard
-                    icon={Wallet}
-                    label="Saldo"
-                    value={formatCurrency(stats.balance)}
-                    color="accent"
-                    isLoading={walletLoading}
-                    isText
                 />
             </div>
 
@@ -165,13 +158,13 @@ export const EmployerDashboard: React.FC = () => {
                     </Card>
                 </Link>
 
-                <Link to="/employer/wallet">
+                <Link to="/employer/jobs">
                     <Card interactive className="p-6 text-center">
                         <div className="w-12 h-12 rounded-xl bg-accent-100 flex items-center justify-center mx-auto mb-3">
-                            <Wallet className="w-6 h-6 text-accent-600" />
+                            <Briefcase className="w-6 h-6 text-accent-600" />
                         </div>
-                        <p className="font-medium text-secondary-900">Top Up Saldo</p>
-                        <p className="text-sm text-secondary-500">Tambah saldo</p>
+                        <p className="font-medium text-secondary-900">Semua Lowongan</p>
+                        <p className="text-sm text-secondary-500">Kelola lowongan</p>
                     </Card>
                 </Link>
             </div>

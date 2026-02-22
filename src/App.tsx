@@ -25,11 +25,12 @@ import {
   WorkerProfile,
   WorkerApplications,
   WorkerApplicationDetail,
-  WorkerWallet,
-  WorkerWithdraw,
-  WorkerWithdrawMethods,
-  WorkerWithdrawals,
-  WorkerWithdrawalDetail,
+  // DISABLED: Wallet/Escrow features - Cash only mode
+  // WorkerWallet,
+  // WorkerWithdraw,
+  // WorkerWithdrawMethods,
+  // WorkerWithdrawals,
+  // WorkerWithdrawalDetail,
   WorkerActiveJobs,
   WorkerPhotos,
 } from './pages/worker';
@@ -40,13 +41,15 @@ import {
   EmployerJobs,
   EmployerJobDetail,
   CreateJob,
-  EmployerWallet,
-  EmployerTopUp,
+  // DISABLED: Wallet/Escrow features - Cash only mode
+  // EmployerWallet,
+  // EmployerTopUp,
   EmployerProfile,
 } from './pages/employer';
 
 // Admin Pages
-import { AdminDashboard, AdminUsers, AdminUserDetail, AdminWithdrawals, AdminWithdrawDetail, AdminManagement } from './pages/admin';
+// DISABLED: AdminWithdrawals, AdminWithdrawDetail - Wallet/Escrow features disabled (Cash only mode)
+import { AdminDashboard, AdminUsers, AdminUserDetail, /* AdminWithdrawals, AdminWithdrawDetail, */ AdminManagement } from './pages/admin';
 
 // Shared Pages
 import { UserProfilePage } from './pages/shared';
@@ -114,11 +117,13 @@ const App: React.FC = () => {
               <Route path="active-jobs" element={<WorkerActiveJobs />} />
               <Route path="applications" element={<WorkerApplications />} />
               <Route path="applications/:id" element={<WorkerApplicationDetail />} />
+              {/* DISABLED: Wallet/Escrow features - Cash only mode
               <Route path="wallet" element={<WorkerWallet />} />
               <Route path="wallet/withdraw" element={<WorkerWithdraw />} />
               <Route path="wallet/methods" element={<WorkerWithdrawMethods />} />
               <Route path="wallet/withdrawals" element={<WorkerWithdrawals />} />
               <Route path="wallet/withdrawals/:id" element={<WorkerWithdrawalDetail />} />
+              */}
               <Route path="photos" element={<WorkerPhotos />} />
               <Route path="users/:userId" element={<UserProfilePage />} />
             </Route>
@@ -138,8 +143,10 @@ const App: React.FC = () => {
               <Route path="jobs" element={<EmployerJobs />} />
               <Route path="jobs/new" element={<CreateJob />} />
               <Route path="jobs/:id" element={<EmployerJobDetail />} />
+              {/* DISABLED: Wallet/Escrow features - Cash only mode
               <Route path="wallet" element={<EmployerWallet />} />
               <Route path="wallet/topup" element={<EmployerTopUp />} />
+              */}
               <Route path="users/:userId" element={<UserProfilePage />} />
             </Route>
 
@@ -156,8 +163,10 @@ const App: React.FC = () => {
               <Route path="dashboard" element={<AdminDashboard />} />
               <Route path="users" element={<AdminUsers />} />
               <Route path="users/:userId" element={<AdminUserDetail />} />
+              {/* DISABLED: Wallet/Escrow features - Cash only mode
               <Route path="withdrawals" element={<AdminWithdrawals />} />
               <Route path="withdrawals/:withdrawId" element={<AdminWithdrawDetail />} />
+              */}
               <Route path="admins" element={<AdminManagement />} />
             </Route>
 

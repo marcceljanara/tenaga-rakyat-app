@@ -12,7 +12,7 @@ import {
     Image,
     Search,
     FileText,
-    Wallet,
+    // Wallet,
     LogOut,
     ChevronDown,
     Settings,
@@ -25,7 +25,7 @@ const workerNavItems = [
     { href: '/worker/photos', label: 'Foto Pekerjaan', icon: Image },
     { href: '/worker/jobs', label: 'Cari Kerja', icon: Search },
     { href: '/worker/applications', label: 'Lamaran Saya', icon: FileText },
-    { href: '/worker/wallet', label: 'Dompet', icon: Wallet },
+    // { href: '/worker/wallet', label: 'Dompet', icon: Wallet },
 ];
 
 export const WorkerLayout: React.FC = () => {

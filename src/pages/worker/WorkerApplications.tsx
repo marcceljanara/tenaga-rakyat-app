@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { usersService } from '../../api';
 import { Card, CardContent, Badge, Skeleton, EmptyState, getStatusBadgeVariant } from '../../components/ui';
-import { FileText, MapPin, Banknote, Clock, ChevronRight, Briefcase, AlertTriangle, CheckCircle2, Zap, XCircle, Shield } from 'lucide-react';
+import { FileText, MapPin, Banknote, Clock, ChevronRight, Briefcase, AlertTriangle, CheckCircle2, Zap, XCircle } from 'lucide-react';
 import { formatCurrency, formatRelativeTime } from '../../utils';
 
 // Fungsi untuk menentukan urgensi berdasarkan job.status
@@ -200,18 +200,11 @@ export const WorkerApplications: React.FC = () => {
                                                     <Clock className="w-4 h-4" />
                                                     Dilamar {formatRelativeTime(app.created_at)}
                                                 </span>
-                                                {/* Payment Method Indicator */}
-                                                {app.job.payment_method === 'ESCROW_SYSTEM' ? (
-                                                    <span className="flex items-center gap-1 text-success-600">
-                                                        <Shield className="w-4 h-4" />
-                                                        <span className="text-xs font-medium">Escrow</span>
-                                                    </span>
-                                                ) : (
-                                                    <span className="flex items-center gap-1 text-warning-600">
-                                                        <AlertTriangle className="w-4 h-4" />
-                                                        <span className="text-xs font-medium">Cash</span>
-                                                    </span>
-                                                )}
+                                                {/* Payment Method - Cash Only */}
+                                                <span className="flex items-center gap-1 text-secondary-500">
+                                                    <Banknote className="w-4 h-4" />
+                                                    <span className="text-xs font-medium">Cash</span>
+                                                </span>
                                             </div>
                                         </div>
 
