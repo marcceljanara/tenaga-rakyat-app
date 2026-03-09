@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { jobsService } from '../../api';
 import { Card, CardContent, Badge, Button, Skeleton, EmptyState, getStatusBadgeVariant } from '../../components/ui';
-import { Briefcase, MapPin, Banknote, Clock, PlusCircle, ChevronRight, Shield, AlertTriangle } from 'lucide-react';
+import { Briefcase, MapPin, Banknote, Clock, PlusCircle, ChevronRight } from 'lucide-react';
 import { formatCurrency, formatRelativeTime } from '../../utils';
 
 export const EmployerJobs: React.FC = () => {
@@ -86,18 +86,11 @@ export const EmployerJobs: React.FC = () => {
                                                 <Clock className="w-4 h-4" />
                                                 {formatRelativeTime(job.posted_at ?? '')}
                                             </span>
-                                            {/* Payment Method Indicator */}
-                                            {job.payment_method === 'ESCROW_SYSTEM' ? (
-                                                <span className="flex items-center gap-1 text-success-600">
-                                                    <Shield className="w-4 h-4" />
-                                                    <span className="text-xs font-medium">Escrow</span>
-                                                </span>
-                                            ) : (
-                                                <span className="flex items-center gap-1 text-warning-600">
-                                                    <AlertTriangle className="w-4 h-4" />
-                                                    <span className="text-xs font-medium">Cash</span>
-                                                </span>
-                                            )}
+                                            {/* Payment Method - Cash Only */}
+                                            <span className="flex items-center gap-1 text-secondary-500">
+                                                <Banknote className="w-4 h-4" />
+                                                <span className="text-xs font-medium">Cash</span>
+                                            </span>
                                         </div>
                                     </div>
 

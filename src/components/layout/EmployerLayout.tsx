@@ -9,7 +9,7 @@ import {
     Briefcase,
     LayoutDashboard,
     PlusCircle,
-    Wallet,
+    // Wallet, // DISABLED: Wallet/Escrow features - Cash only mode
     LogOut,
     ChevronDown,
     Settings,
@@ -22,7 +22,8 @@ const employerNavItems = [
     { href: '/employer/jobs', label: 'Lowongan Saya', icon: Briefcase },
     { href: '/employer/jobs/new', label: 'Buat Lowongan', icon: PlusCircle },
     { href: '/employer/applications', label: 'Lamaran Masuk', icon: ClipboardList },
-    { href: '/employer/wallet', label: 'Dompet', icon: Wallet },
+    // DISABLED: Wallet/Escrow features - Cash only mode
+    // { href: '/employer/wallet', label: 'Dompet', icon: Wallet },
 ];
 
 export const EmployerLayout: React.FC = () => {
@@ -54,7 +55,7 @@ export const EmployerLayout: React.FC = () => {
                         </div>
                         <span className="text-lg font-bold text-secondary-900">TenagaRakyat</span>
                     </Link>
-                    <Avatar src={API_BASE_URL +user?.profile_picture_url} size="sm" />
+                    <Avatar src={API_BASE_URL + user?.profile_picture_url} size="sm" />
                 </div>
             </header>
 

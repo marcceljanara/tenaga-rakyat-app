@@ -2,10 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '../../contexts/AuthContext';
-import { usersService, walletsService } from '../../api';
+import { usersService } from '../../api';
 import { Card, CardContent, Badge, Button, Skeleton, Avatar } from '../../components/ui';
-import { Briefcase, FileText, Wallet, ArrowRight, Clock, CheckCircle, AlertCircle, RefreshCw } from 'lucide-react';
-import { formatCurrency, formatRelativeTime } from '../../utils';
+import { Briefcase, FileText, ArrowRight, Clock, CheckCircle, AlertCircle, RefreshCw } from 'lucide-react';
+import { formatRelativeTime } from '../../utils';
 import { API_BASE_URL } from '../../api/axios';
 
 export const WorkerDashboard: React.FC = () => {
@@ -22,51 +22,21 @@ export const WorkerDashboard: React.FC = () => {
         retry: 2,
     });
 
-    const {
-        data: walletData,
-        isLoading: walletLoading,
-        isError: walletError,
-        refetch: refetchWallet,
-    } = useQuery({
-        queryKey: ['worker-wallet'],
-        queryFn: () => walletsService.getWallet(),
-        retry: 2,
-    });
+    // DISABLED: Wallet/Escrow features - Cash only mode
+    // const {
+    //     data: walletData,
+    //     isLoading: walletLoading,
+    //     isError: walletError,
+    //     refetch: refetchWallet,
+    // } = useQuery({
+    //     queryKey: ['worker-wallet'],
+    //     queryFn: () => walletsService.getWallet(),
+    //     retry: 2,
+    // });
 
     const applications = applicationsData?.data.applications || [];
-    const wallet = walletData?.data;
+    // const wallet = walletData?.data; // DISABLED: Wallet
 
-    // Handle critical errors - show error state if both queries fail
-    const hasCriticalError = appsError && walletError;
-
-    if (hasCriticalError) {
-        return (
-            <div className="min-h-[60vh] flex items-center justify-center animate-fade-in">
-                <Card className="max-w-md w-full">
-                    <CardContent className="p-8 text-center">
-                        <div className="w-16 h-16 rounded-full bg-danger-100 flex items-center justify-center mx-auto mb-4">
-                            <AlertCircle className="w-8 h-8 text-danger-600" />
-                        </div>
-                        <h2 className="text-xl font-semibold text-secondary-900 mb-2">
-                            Gagal Memuat Data
-                        </h2>
-                        <p className="text-secondary-600 mb-6">
-                            Terjadi kesalahan saat mengambil data. Pastikan koneksi internet Anda stabil dan coba lagi.
-                        </p>
-                        <Button
-                            onClick={() => {
-                                refetchApps();
-                                refetchWallet();
-                            }}
-                            leftIcon={RefreshCw}
-                        >
-                            Coba Lagi
-                        </Button>
-                    </CardContent>
-                </Card>
-            </div>
-        );
-    }
     const recentApplications = applications.slice(0, 5);
 
     const stats = {
@@ -117,6 +87,7 @@ export const WorkerDashboard: React.FC = () => {
                     isLoading={appsLoading}
                     hasError={appsError}
                 />
+                {/* DISABLED: Wallet stat card - Cash only mode
                 <StatCard
                     icon={Wallet}
                     label="Saldo"
@@ -126,6 +97,7 @@ export const WorkerDashboard: React.FC = () => {
                     isText
                     hasError={walletError}
                 />
+                */}
             </div>
 
             {/* Main Content Grid */}
@@ -250,9 +222,16 @@ export const WorkerDashboard: React.FC = () => {
                                         Lihat Lamaran
                                     </Button>
                                 </Link>
+                                {/* DISABLED: Wallet/Escrow features - Cash only mode
                                 <Link to="/worker/wallet" className="block">
                                     <Button variant="ghost" className="w-full justify-start" leftIcon={Wallet}>
                                         Kelola Dompet
+                                    </Button>
+                                </Link>
+                                */}
+                                <Link to="/worker/active-jobs" className="block">
+                                    <Button variant="ghost" className="w-full justify-start" leftIcon={Briefcase}>
+                                        Pekerjaan Aktif
                                     </Button>
                                 </Link>
                             </div>

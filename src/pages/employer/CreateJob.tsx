@@ -6,7 +6,7 @@ import { z } from 'zod';
 import { useMutation } from '@tanstack/react-query';
 import { jobsService } from '../../api';
 import { Card, CardContent, Button, Input, Textarea } from '../../components/ui';
-import { Briefcase, MapPin, Banknote, ArrowLeft, Save, Shield, AlertTriangle, Navigation } from 'lucide-react';
+import { Briefcase, MapPin, Banknote, ArrowLeft, Save, Navigation } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 
@@ -17,7 +17,7 @@ const jobSchema = z.object({
     location_label: z.string().min(3, 'Label lokasi minimal 3 karakter'),
     address_detail: z.string().min(10, 'Alamat lengkap minimal 10 karakter'),
     compensation_amount: z.number().min(10000, 'Kompensasi minimal Rp 10.000'),
-    payment_method: z.enum(['ESCROW_SYSTEM', 'CASH_OFFLINE']),
+    payment_method: z.literal('CASH_OFFLINE'), // DISABLED: Escrow - Cash only mode
     job_latitude: z.number().min(-90).max(90),
     job_longitude: z.number().min(-180).max(180),
 });
@@ -38,13 +38,14 @@ export const CreateJob: React.FC = () => {
         resolver: zodResolver(jobSchema),
         defaultValues: {
             compensation_amount: 50000,
-            payment_method: 'ESCROW_SYSTEM',
+            payment_method: 'CASH_OFFLINE', // DISABLED: Escrow - Cash only mode
             job_latitude: 0,
             job_longitude: 0,
         },
     });
 
-    const selectedPaymentMethod = watch('payment_method');
+    // DISABLED: Escrow - Cash only mode
+    // const selectedPaymentMethod = watch('payment_method');
     const currentLat = watch('job_latitude');
     const currentLng = watch('job_longitude');
 
@@ -214,76 +215,23 @@ export const CreateJob: React.FC = () => {
                             </p>
                         </div>
 
-                        {/* Payment Method Selection */}
+                        {/* Payment Method - Cash Only (Escrow disabled) */}
                         <div className="space-y-3">
                             <label className="block text-sm font-medium text-secondary-700">
                                 Metode Pembayaran
                             </label>
-                            <div className="space-y-3">
-                                {/* Escrow Option */}
-                                <label
-                                    className={`flex items-start gap-4 p-4 rounded-xl border-2 cursor-pointer transition-all ${selectedPaymentMethod === 'ESCROW_SYSTEM'
-                                        ? 'border-success-500 bg-success-50'
-                                        : 'border-secondary-200 hover:border-secondary-300'
-                                        }`}
-                                >
-                                    <input
-                                        type="radio"
-                                        value="ESCROW_SYSTEM"
-                                        {...register('payment_method')}
-                                        className="mt-1 w-4 h-4 text-success-600 focus:ring-success-500"
-                                    />
-                                    <div className="flex-1">
-                                        <div className="flex items-center gap-2">
-                                            <Shield className="w-5 h-5 text-success-600" />
-                                            <span className="font-semibold text-secondary-900">
-                                                🛡️ Escrow - Aman & Dijamin
-                                            </span>
-                                        </div>
-                                        <ul className="mt-2 text-sm text-secondary-600 space-y-1">
-                                            <li>✅ Dana diamankan sistem</li>
-                                            <li>✅ Perlindungan dispute</li>
-                                            <li>✅ Rating & Reputasi publik</li>
-                                            <li>✅ Pembayaran otomatis setelah selesai</li>
-                                        </ul>
-                                    </div>
-                                </label>
-
-                                {/* Cash Option */}
-                                <label
-                                    className={`flex items-start gap-4 p-4 rounded-xl border-2 cursor-pointer transition-all ${selectedPaymentMethod === 'CASH_OFFLINE'
-                                        ? 'border-warning-500 bg-warning-50'
-                                        : 'border-secondary-200 hover:border-secondary-300'
-                                        }`}
-                                >
-                                    <input
-                                        type="radio"
-                                        value="CASH_OFFLINE"
-                                        {...register('payment_method')}
-                                        className="mt-1 w-4 h-4 text-warning-600 focus:ring-warning-500"
-                                    />
-                                    <div className="flex-1">
-                                        <div className="flex items-center gap-2">
-                                            <AlertTriangle className="w-5 h-5 text-warning-600" />
-                                            <span className="font-semibold text-secondary-900">
-                                                ⚠️ Cash - Tanpa Perlindungan
-                                            </span>
-                                        </div>
-                                        <ul className="mt-2 text-sm text-secondary-600 space-y-1">
-                                            <li>❌ Tanpa escrow (dana tidak diamankan)</li>
-                                            <li>❌ Tanpa proteksi & dispute</li>
-                                            <li>❌ Tanpa rating resmi</li>
-                                            <li>❌ Tanpa reputasi publik</li>
-                                        </ul>
-                                        <p className="mt-2 text-xs text-warning-700 font-medium">
-                                            Pembayaran dilakukan langsung di luar sistem.
-                                        </p>
-                                    </div>
-                                </label>
+                            <input type="hidden" {...register('payment_method')} value="CASH_OFFLINE" />
+                            <div className="p-4 rounded-xl border-2 border-secondary-200 bg-secondary-50">
+                                <div className="flex items-center gap-2 mb-2">
+                                    <Banknote className="w-5 h-5 text-primary-600" />
+                                    <span className="font-semibold text-secondary-900">
+                                        💵 Cash - Pembayaran Langsung
+                                    </span>
+                                </div>
+                                <p className="text-sm text-secondary-600">
+                                    Pembayaran dilakukan secara langsung antara pemberi kerja dan pekerja di luar sistem.
+                                </p>
                             </div>
-                            {errors.payment_method && (
-                                <p className="text-sm text-danger-600">{errors.payment_method.message}</p>
-                            )}
                         </div>
 
                         <div className="flex gap-4 pt-4">

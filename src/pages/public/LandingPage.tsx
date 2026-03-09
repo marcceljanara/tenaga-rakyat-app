@@ -5,7 +5,7 @@ import {
     Search,
     Users,
     Shield,
-    Wallet,
+    Banknote,
     ArrowRight,
     CheckCircle,
     TrendingUp,
@@ -148,9 +148,9 @@ export const LandingPage: React.FC = () => {
                                 color: 'success',
                             },
                             {
-                                icon: Wallet,
-                                title: 'Pembayaran Mudah',
-                                description: 'Sistem pembayaran terintegrasi dengan berbagai metode pembayaran',
+                                icon: Banknote,
+                                title: 'Pembayaran Cash',
+                                description: 'Pembayaran langsung antara pemberi kerja dan pekerja, mudah dan cepat',
                                 color: 'accent',
                             },
                             {
