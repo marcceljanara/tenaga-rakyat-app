@@ -31,6 +31,15 @@ export const adminService = {
         return response.data;
     },
 
+    // Export reports to CSV
+    exportCsv: async (from: string, to: string): Promise<Blob> => {
+        const response = await api.get('/api/admin/report/export-csv', {
+            params: { from, to },
+            responseType: 'blob',
+        });
+        return response.data;
+    },
+
     // ========================================
     // User Management (Admin)
     // ========================================

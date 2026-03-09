@@ -15,6 +15,7 @@ import {
     LogOut,
     ChevronDown,
     Settings,
+    Coins,
 } from 'lucide-react';
 import { API_BASE_URL } from '../../api/axios';
 
@@ -32,6 +33,7 @@ export const AdminLayout: React.FC = () => {
         { href: '/admin/users', label: 'Pengguna', icon: Users },
         // DISABLED: Wallet/Escrow features - Cash only mode
         // { href: '/admin/withdrawals', label: 'Penarikan', icon: CreditCard },
+        { href: '/admin/credits', label: 'Paket Kredit', icon: Coins },
         ...(isSuperAdmin
             ? [
                 { href: '/admin/admins', label: 'Manajemen Admin', icon: Shield },

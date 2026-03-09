@@ -21,11 +21,13 @@ import {
 } from 'lucide-react';
 import { formatCurrency, formatRelativeTime } from '../../utils';
 import toast from 'react-hot-toast';
+import { ReviewModal } from '../../components/ReviewModal';
 
 export const WorkerApplicationDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const queryClient = useQueryClient();
     const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
+    const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
     const [pendingStatus, setPendingStatus] = useState<'IN_PROGRESS' | 'COMPLETED' | null>(null);
 
     // Fetch application detail
@@ -314,6 +316,9 @@ export const WorkerApplicationDetail: React.FC = () => {
                                             <p className="text-sm text-success-600 mt-1">
                                                 Pembayaran sebesar {formatCurrency(job?.compensation_amount || 0)} telah ditransfer ke dompet Anda. Terima kasih atas kerja keras Anda!
                                             </p>
+                                            <div className="mt-3">
+                                                <Button size="sm" onClick={() => setIsReviewModalOpen(true)}>Berikan Review</Button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -428,6 +433,15 @@ export const WorkerApplicationDetail: React.FC = () => {
                     </Button>
                 </div>
             </Modal>
+
+            {job?.provider && (
+                <ReviewModal
+                    isOpen={isReviewModalOpen}
+                    onClose={() => setIsReviewModalOpen(false)}
+                    jobId={job.id}
+                    revieweeId={job.provider.id.toString()}
+                />
+            )}
         </div>
     );
 };

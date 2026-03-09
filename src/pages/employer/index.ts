@@ -6,3 +6,4 @@ export { CreateJob } from './CreateJob';
 // export { EmployerWallet } from './EmployerWallet';
 // export { EmployerTopUp } from './EmployerTopUp';
 export { EmployerProfile } from './EmployerProfile';
+export { EmployerCredits } from './EmployerCredits';

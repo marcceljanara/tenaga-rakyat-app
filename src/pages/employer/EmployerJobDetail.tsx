@@ -10,6 +10,7 @@ import {
 import { formatCurrency, formatRelativeTime } from '../../utils';
 import toast from 'react-hot-toast';
 import { API_BASE_URL } from '../../api/axios';
+import { ReviewModal } from '../../components/ReviewModal';
 
 
 export const EmployerJobDetail: React.FC = () => {
@@ -18,6 +19,7 @@ export const EmployerJobDetail: React.FC = () => {
     const queryClient = useQueryClient();
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
+    const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
     const [pendingStatus, setPendingStatus] = useState<'CANCELLED' | 'APPROVED' | 'REJECTED' | null>(null);
 
     // Fetch job details
@@ -283,10 +285,15 @@ export const EmployerJobDetail: React.FC = () => {
                                 )}
 
                                 {job.status === 'APPROVED' && (
-                                    <Badge variant="success">
-                                        <Award className="w-4 h-4 mr-1" />
-                                        Selesai
-                                    </Badge>
+                                    <div className="flex gap-2">
+                                        <Badge variant="success">
+                                            <Award className="w-4 h-4 mr-1" />
+                                            Selesai
+                                        </Badge>
+                                        <Button size="sm" variant="ghost" className="text-secondary-600 border border-secondary-200" onClick={() => setIsReviewModalOpen(true)}>
+                                            Berikan Review
+                                        </Button>
+                                    </div>
                                 )}
                             </div>
                         </div>
@@ -457,6 +464,15 @@ export const EmployerJobDetail: React.FC = () => {
                     </Button>
                 </div>
             </Modal>
+
+            {job.worker && (
+                <ReviewModal
+                    isOpen={isReviewModalOpen}
+                    onClose={() => setIsReviewModalOpen(false)}
+                    jobId={job.id}
+                    revieweeId={job.worker.id.toString()}
+                />
+            )}
         </div>
     );
 };

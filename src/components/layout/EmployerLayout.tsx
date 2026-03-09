@@ -14,6 +14,7 @@ import {
     ChevronDown,
     Settings,
     ClipboardList,
+    Coins,
 } from 'lucide-react';
 import { API_BASE_URL } from '../../api/axios';
 
@@ -24,6 +25,7 @@ const employerNavItems = [
     { href: '/employer/applications', label: 'Lamaran Masuk', icon: ClipboardList },
     // DISABLED: Wallet/Escrow features - Cash only mode
     // { href: '/employer/wallet', label: 'Dompet', icon: Wallet },
+    { href: '/employer/credits', label: 'Kredit Posting', icon: Coins },
 ];
 
 export const EmployerLayout: React.FC = () => {
