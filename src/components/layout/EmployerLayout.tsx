@@ -13,7 +13,7 @@ import {
     LogOut,
     ChevronDown,
     Settings,
-    ClipboardList,
+    // ClipboardList,
     Coins,
 } from 'lucide-react';
 import { API_BASE_URL } from '../../api/axios';
@@ -22,7 +22,7 @@ const employerNavItems = [
     { href: '/employer/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/employer/jobs', label: 'Lowongan Saya', icon: Briefcase },
     { href: '/employer/jobs/new', label: 'Buat Lowongan', icon: PlusCircle },
-    { href: '/employer/applications', label: 'Lamaran Masuk', icon: ClipboardList },
+    // { href: '/employer/applications', label: 'Lamaran Masuk', icon: ClipboardList },
     // DISABLED: Wallet/Escrow features - Cash only mode
     // { href: '/employer/wallet', label: 'Dompet', icon: Wallet },
     { href: '/employer/credits', label: 'Kredit Posting', icon: Coins },
