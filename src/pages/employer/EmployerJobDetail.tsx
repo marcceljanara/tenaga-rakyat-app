@@ -470,7 +470,6 @@ export const EmployerJobDetail: React.FC = () => {
                     isOpen={isReviewModalOpen}
                     onClose={() => setIsReviewModalOpen(false)}
                     jobId={job.id}
-                    revieweeId={job.worker.id.toString()}
                 />
             )}
         </div>

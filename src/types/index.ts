@@ -279,6 +279,7 @@ export interface UserProfile {
     longitude?: number | null;
     location_label?: string | null;
     photos?: UserPhoto[];
+    average_rating?: number | null;
 }
 
 // Wallet Types
@@ -651,7 +652,6 @@ export interface ReviewListResponse {
 
 export interface CreateReviewData {
     job_id: number;
-    reviewee_id: string;
     rating: number;
     comment?: string;
     is_anonymous?: boolean;

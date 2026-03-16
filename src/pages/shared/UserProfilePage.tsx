@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { usersService } from '../../api';
+import { usersService, reviewsService } from '../../api';
 import { Card, CardContent, Badge, Button, Skeleton, LocationDisplay } from '../../components/ui';
 import type { UserPhoto } from '../../types';
 import {
@@ -19,6 +19,7 @@ import {
     ChevronRight,
     ZoomIn,
     MapPin,
+    Star,
 } from 'lucide-react';
 import { API_BASE_URL } from '../../api/axios';
 
@@ -58,6 +59,15 @@ export const UserProfilePage: React.FC = () => {
         queryFn: () => usersService.getProfileById(userId!),
         enabled: !!userId,
     });
+
+    // Fetch user reviews
+    const { data: reviewsData, isLoading: isLoadingReviews } = useQuery({
+        queryKey: ['user-reviews', userId],
+        queryFn: () => reviewsService.getUserReviews(userId!),
+        enabled: !!userId,
+    });
+
+    const reviewsList = reviewsData?.data?.reviews || [];
 
     const profile = data?.data;
     const roleInfo = profile ? getRoleDisplay(profile.role) : null;
@@ -135,10 +145,19 @@ export const UserProfilePage: React.FC = () => {
                         <h1 className="text-2xl font-bold text-secondary-900 mb-2">{profile.full_name}</h1>
 
                         {/* Verification Status */}
-                        <Badge variant={verificationInfo?.variant || 'secondary'} className="mb-6">
+                        <Badge variant={verificationInfo?.variant || 'secondary'} className="mb-4">
                             <VerificationIcon className="w-3.5 h-3.5 mr-1" />
                             {verificationInfo?.label}
                         </Badge>
+
+                        {/* Average Rating */}
+                        {profile.average_rating != null && (
+                            <div className="flex items-center gap-1.5 mb-6 text-secondary-700">
+                                <Star className="w-5 h-5 text-warning-500 fill-warning-500" />
+                                <span className="font-semibold text-lg">{Number(profile.average_rating).toFixed(1)}</span>
+                                <span className="text-secondary-500">({reviewsData?.data?.total || 0} Ulasan)</span>
+                            </div>
+                        )}
 
                         {/* About Section */}
                         {profile.about && (
@@ -374,6 +393,78 @@ export const UserProfilePage: React.FC = () => {
                     </CardContent>
                 </Card>
             )}
+
+            {/* Reviews Section */}
+            <Card>
+                <CardContent className="p-6">
+                    <div className="flex items-center gap-3 mb-6">
+                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-warning-100 to-warning-200 flex items-center justify-center">
+                            <Star className="w-6 h-6 text-warning-600" />
+                        </div>
+                        <div>
+                            <h3 className="font-semibold text-secondary-900">Ulasan</h3>
+                            <p className="text-sm text-secondary-500">
+                                Ulasan dari pekerjaan yang telah diselesaikan
+                            </p>
+                        </div>
+                    </div>
+
+                    {isLoadingReviews ? (
+                        <div className="space-y-4">
+                            <Skeleton className="h-20 w-full rounded-xl" />
+                            <Skeleton className="h-20 w-full rounded-xl" />
+                        </div>
+                    ) : reviewsList.length === 0 ? (
+                        <div className="text-center py-8 text-secondary-500 bg-secondary-50 rounded-xl">
+                            <Star className="w-8 h-8 mx-auto mb-2 text-secondary-300" />
+                            <p>Belum ada ulasan</p>
+                        </div>
+                    ) : (
+                        <div className="space-y-4">
+                            {reviewsList.map((review) => (
+                                <div key={review.id} className="p-4 rounded-xl border border-secondary-200">
+                                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+                                        <div className="flex items-center gap-2">
+                                            {review.reviewer?.profile_picture_url ? (
+                                                <img 
+                                                    src={API_BASE_URL + review.reviewer.profile_picture_url} 
+                                                    alt="Reviewer" 
+                                                    className="w-8 h-8 object-cover rounded-full"
+                                                />
+                                            ) : (
+                                                <div className="w-8 h-8 rounded-full bg-secondary-200 flex items-center justify-center">
+                                                    <User className="w-4 h-4 text-secondary-500" />
+                                                </div>
+                                            )}
+                                            <span className="font-medium text-secondary-900">
+                                                {review.is_anonymous ? 'Anonim' : review.reviewer?.full_name || 'Pengguna'}
+                                            </span>
+                                        </div>
+                                        <div className="flex items-center gap-1.5">
+                                            <span className="text-xs text-secondary-500">
+                                                {new Date(review.created_at).toLocaleDateString('id-ID', {
+                                                    day: 'numeric', month: 'short', year: 'numeric'
+                                                })}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-1 mb-2">
+                                        {[1, 2, 3, 4, 5].map((star) => (
+                                            <Star 
+                                                key={star} 
+                                                className={`w-4 h-4 ${review.rating >= star ? 'text-warning-500 fill-warning-500' : 'text-secondary-300'}`} 
+                                            />
+                                        ))}
+                                    </div>
+                                    {review.comment && (
+                                        <p className="text-sm text-secondary-700 whitespace-pre-wrap">{review.comment}</p>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </CardContent>
+            </Card>
         </div>
     );
 };
