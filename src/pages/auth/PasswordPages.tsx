@@ -6,8 +6,9 @@ import { z } from 'zod';
 import { authService } from '../../api';
 import { useAuth } from '../../contexts/AuthContext';
 import { Button, Input } from '../../components/ui';
-import { Briefcase, Mail, ArrowLeft, CheckCircle, XCircle, Lock, Eye, EyeOff } from 'lucide-react';
+import { Mail, ArrowLeft, CheckCircle, XCircle, Lock, Eye, EyeOff } from 'lucide-react';
 import toast from 'react-hot-toast';
+import logoTenagaRakyat from '../../assets/logo_tenaga_rakyat.png';
 
 // Forgot Password Schema
 const forgotPasswordSchema = z.object({
@@ -33,7 +34,7 @@ export const ForgotPasswordPage: React.FC = () => {
             setIsSubmitted(true);
             toast.success('Email reset password telah dikirim!');
         } catch (error: any) {
-            const message = error.response?.data?.message || 'Gagal mengirim email. Silakan coba lagi.';
+            const message = error.response?.data?.errors || 'Gagal mengirim email. Silakan coba lagi.';
             toast.error(message);
         }
     };
@@ -68,11 +69,8 @@ export const ForgotPasswordPage: React.FC = () => {
                     Kembali ke Login
                 </Link>
 
-                <div className="flex items-center gap-2 mb-8">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center">
-                        <Briefcase className="w-5 h-5 text-white" />
-                    </div>
-                    <span className="text-2xl font-bold text-secondary-900">TenagaRakyat</span>
+                <div className="flex items-center mb-8">
+                    <img src={logoTenagaRakyat} alt="TenagaRakyat" className="h-24 w-auto object-contain" />
                 </div>
 
                 <h1 className="text-3xl font-bold text-secondary-900 mb-2">Lupa Password</h1>
@@ -142,7 +140,7 @@ export const ResetPasswordPage: React.FC = () => {
             setIsSuccess(true);
             toast.success('Password berhasil direset!');
         } catch (error: any) {
-            const message = error.response?.data?.message || 'Gagal reset password.';
+            const message = error.response?.data?.errors || 'Gagal reset password.';
             toast.error(message);
         }
     };
@@ -188,11 +186,8 @@ export const ResetPasswordPage: React.FC = () => {
     return (
         <div className="min-h-screen flex items-center justify-center px-4 bg-secondary-50">
             <div className="max-w-md w-full">
-                <div className="flex items-center gap-2 mb-8">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center">
-                        <Briefcase className="w-5 h-5 text-white" />
-                    </div>
-                    <span className="text-2xl font-bold text-secondary-900">TenagaRakyat</span>
+                <div className="flex items-center mb-8">
+                    <img src={logoTenagaRakyat} alt="TenagaRakyat" className="h-24 w-auto object-contain" />
                 </div>
 
                 <h1 className="text-3xl font-bold text-secondary-900 mb-2">Reset Password</h1>
@@ -365,7 +360,7 @@ export const VerifyEmailRequiredPage: React.FC = () => {
             setEmailSent(true);
             toast.success('Email verifikasi telah dikirim ulang!');
         } catch (error: any) {
-            const message = error.response?.data?.errors || error.response?.data?.message || 'Gagal mengirim email.';
+            const message = error.response?.data?.errors || 'Gagal mengirim email.';
             toast.error(message);
         } finally {
             setIsResending(false);
@@ -388,11 +383,8 @@ export const VerifyEmailRequiredPage: React.FC = () => {
         <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-primary-50 via-white to-accent-50">
             <div className="max-w-md w-full">
                 {/* Logo */}
-                <div className="flex items-center justify-center gap-2 mb-8">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center shadow-lg shadow-primary-500/25">
-                        <Briefcase className="w-6 h-6 text-white" />
-                    </div>
-                    <span className="text-2xl font-bold text-secondary-900">TenagaRakyat</span>
+                <div className="flex items-center justify-center mb-8">
+                    <img src={logoTenagaRakyat} alt="TenagaRakyat" className="h-24 w-auto object-contain" />
                 </div>
 
                 {/* Card */}

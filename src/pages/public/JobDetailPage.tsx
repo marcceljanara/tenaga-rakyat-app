@@ -52,7 +52,7 @@ export const JobDetailPage: React.FC = () => {
             setIsApplyModalOpen(false);
             reset();
         } catch (error: any) {
-            const message = error.response?.data?.message || 'Gagal mengirim lamaran.';
+            const message = error.response?.data?.errors || 'Gagal mengirim lamaran.';
             toast.error(message);
         }
     };

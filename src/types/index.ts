@@ -279,6 +279,7 @@ export interface UserProfile {
     longitude?: number | null;
     location_label?: string | null;
     photos?: UserPhoto[];
+    average_rating?: number | null;
 }
 
 // Wallet Types
@@ -571,6 +572,18 @@ export interface PaginatedResponse<T> {
     message?: string;
 }
 
+export interface Paging {
+    size: number;
+    total_page: number;
+    current_page: number;
+    total_data: number;
+}
+
+export interface PagingResponse<T> {
+    data: T;
+    paging: Paging;
+}
+
 // Error Response Type
 export interface ApiError {
     errors: string;
@@ -605,3 +618,93 @@ export const EWALLET_PROVIDERS = [
 
 export type BankProvider = typeof BANK_PROVIDERS[number];
 export type EWalletProvider = typeof EWALLET_PROVIDERS[number];
+
+// Review Types
+export interface ReviewerInfo {
+    id: string;
+    full_name?: string | null;
+    profile_picture_url?: string | null;
+}
+
+export interface ReviewResponse {
+    id: number;
+    job_id: number;
+    review_type: string;
+    rating: number;
+    comment: string | null;
+    is_anonymous: boolean;
+    reviewer?: ReviewerInfo;
+    reviewee?: ReviewerInfo;
+    job?: {
+        id: number;
+        title: string;
+    };
+    created_at: string;
+    updated_at: string;
+}
+
+export interface ReviewListResponse {
+    reviews: ReviewResponse[];
+    total: number;
+    page: number;
+    limit: number;
+}
+
+export interface CreateReviewData {
+    job_id: number;
+    rating: number;
+    comment?: string;
+    is_anonymous?: boolean;
+}
+
+export interface UpdateReviewData {
+    rating?: number;
+    comment?: string;
+    is_anonymous?: boolean;
+}
+
+// Posting Credit Types
+export interface CreditBalanceResponse {
+    free_quota: number;
+    paid_credit: number;
+}
+
+export interface PostingPackageResponse {
+    id: number;
+    name: string;
+    credit_amount: number;
+    price: string | number;
+    is_active?: boolean;
+    created_at?: string;
+    updated_at?: string;
+}
+
+export interface ListPostingPackageResponse {
+    packages: PostingPackageResponse[];
+}
+
+export interface AddPostingCreditPackageRequest {
+    name: string;
+    credit_amount: number;
+    price: number;
+}
+
+export interface EditPostingCreditPackageRequest {
+    name: string;
+    credit_amount: number;
+    price: number;
+    is_active: boolean;
+}
+
+export interface PostingCreditPurchaseResponse {
+    paid_at: string | null;
+    payment_reference: string;
+    status: string;
+    credit_amount: number;
+    total_price: string | number;
+}
+
+export interface TopupCreditRequest {
+    package_id: number;
+}
+

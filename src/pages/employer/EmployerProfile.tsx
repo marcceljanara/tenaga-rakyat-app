@@ -54,7 +54,7 @@ export const EmployerProfile: React.FC = () => {
             refreshUser();
         },
         onError: (error: any) => {
-            const message = error.response?.data?.message || 'Gagal memperbarui profil';
+            const message = error.response?.data?.errors || 'Gagal memperbarui profil';
             toast.error(message);
         },
     });
@@ -86,7 +86,7 @@ export const EmployerProfile: React.FC = () => {
             toast.success('Foto profil berhasil diperbarui!');
             refreshUser();
         } catch (error: any) {
-            const message = error.response?.data?.message || 'Gagal mengunggah foto';
+            const message = error.response?.data?.errors || 'Gagal mengunggah foto';
             toast.error(message);
         } finally {
             setIsUploadingPhoto(false);
@@ -106,7 +106,7 @@ export const EmployerProfile: React.FC = () => {
             toast.success('Foto profil berhasil dihapus');
             refreshUser();
         } catch (error: any) {
-            const message = error.response?.data?.message || 'Gagal menghapus foto';
+            const message = error.response?.data?.errors || 'Gagal menghapus foto';
             toast.error(message);
         } finally {
             setIsDeletingPhoto(false);
@@ -120,7 +120,7 @@ export const EmployerProfile: React.FC = () => {
             toast.success('Lokasi berhasil diperbarui!');
             refreshUser();
         } catch (error: any) {
-            const message = error.response?.data?.errors || error.response?.data?.message || 'Gagal memperbarui lokasi';
+            const message = error.response?.data?.errors || 'Gagal memperbarui lokasi';
             toast.error(message);
         } finally {
             setIsUpdatingLocation(false);

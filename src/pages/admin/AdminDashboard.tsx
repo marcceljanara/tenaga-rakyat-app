@@ -1,8 +1,8 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { adminService } from '../../api';
-import { Card, CardContent, Skeleton } from '../../components/ui';
-import { Users, Briefcase, FileText, CreditCard, TrendingUp, ArrowUpRight, ArrowDownRight } from 'lucide-react';
+import { Card, CardContent, Skeleton, Button } from '../../components/ui';
+import { Users, Briefcase, FileText, CreditCard, TrendingUp, ArrowUpRight, ArrowDownRight, Download } from 'lucide-react';
 
 export const AdminDashboard: React.FC = () => {
     const { data, isLoading } = useQuery({
@@ -14,9 +14,29 @@ export const AdminDashboard: React.FC = () => {
 
     return (
         <div className="space-y-6 animate-fade-in">
-            <div>
-                <h1 className="text-2xl font-bold text-secondary-900">Dashboard Admin</h1>
-                <p className="text-secondary-600">Ringkasan data platform TenagaRakyat</p>
+            <div className="flex justify-between items-center flex-col sm:flex-row gap-4">
+                <div>
+                    <h1 className="text-2xl font-bold text-secondary-900">Dashboard Admin</h1>
+                    <p className="text-secondary-600">Ringkasan data platform TenagaRakyat</p>
+                </div>
+                <Button
+                    leftIcon={Download}
+                    onClick={() => {
+                        const today = new Date().toISOString().split('T')[0];
+                        const lastMonth = new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().split('T')[0];
+                        adminService.exportCsv(lastMonth, today)
+                            .then((blob) => {
+                                const url = window.URL.createObjectURL(blob);
+                                const a = document.createElement('a');
+                                a.href = url;
+                                a.download = `report-${today}.csv`;
+                                a.click();
+                            })
+                            .catch(() => alert('Gagal mengunduh CSV'));
+                    }}
+                >
+                    Export CSV
+                </Button>
             </div>
 
             {/* Stats Grid */}

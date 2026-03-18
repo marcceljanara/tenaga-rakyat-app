@@ -45,11 +45,12 @@ import {
   // EmployerWallet,
   // EmployerTopUp,
   EmployerProfile,
+  EmployerCredits,
 } from './pages/employer';
 
 // Admin Pages
 // DISABLED: AdminWithdrawals, AdminWithdrawDetail - Wallet/Escrow features disabled (Cash only mode)
-import { AdminDashboard, AdminUsers, AdminUserDetail, /* AdminWithdrawals, AdminWithdrawDetail, */ AdminManagement } from './pages/admin';
+import { AdminDashboard, AdminUsers, AdminUserDetail, /* AdminWithdrawals, AdminWithdrawDetail, */ AdminManagement, AdminPostingCredits } from './pages/admin';
 
 // Shared Pages
 import { UserProfilePage } from './pages/shared';
@@ -143,6 +144,7 @@ const App: React.FC = () => {
               <Route path="jobs" element={<EmployerJobs />} />
               <Route path="jobs/new" element={<CreateJob />} />
               <Route path="jobs/:id" element={<EmployerJobDetail />} />
+              <Route path="credits" element={<EmployerCredits />} />
               {/* DISABLED: Wallet/Escrow features - Cash only mode
               <Route path="wallet" element={<EmployerWallet />} />
               <Route path="wallet/topup" element={<EmployerTopUp />} />
@@ -168,6 +170,7 @@ const App: React.FC = () => {
               <Route path="withdrawals/:withdrawId" element={<AdminWithdrawDetail />} />
               */}
               <Route path="admins" element={<AdminManagement />} />
+              <Route path="credits" element={<AdminPostingCredits />} />
             </Route>
 
             {/* 404 - Catch all */}

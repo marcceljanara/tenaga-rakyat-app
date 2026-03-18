@@ -5,8 +5,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { authService } from '../../api';
 import { Button, Input, Select } from '../../components/ui';
-import { Briefcase, Mail, Lock, Eye, EyeOff, User, Phone, ArrowLeft } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, User, Phone, ArrowLeft } from 'lucide-react';
 import toast from 'react-hot-toast';
+import logoTenagaRakyat from '../../assets/logo_tenaga_rakyat.png';
 
 const registerSchema = z.object({
     full_name: z.string().min(3, 'Nama minimal 3 karakter'),
@@ -49,7 +50,7 @@ export const RegisterPage: React.FC = () => {
             toast.success('Registrasi berhasil! Silakan cek email untuk verifikasi.');
             navigate('/login');
         } catch (error: any) {
-            const message = error.response?.data?.message || 'Registrasi gagal. Silakan coba lagi.';
+            const message = error.response?.data?.errors || 'Registrasi gagal. Silakan coba lagi.';
             toast.error(message);
         }
     };
@@ -86,11 +87,8 @@ export const RegisterPage: React.FC = () => {
                     </Link>
 
                     {/* Logo */}
-                    <div className="flex items-center gap-2 mb-8">
-                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center">
-                            <Briefcase className="w-5 h-5 text-white" />
-                        </div>
-                        <span className="text-2xl font-bold text-secondary-900">TenagaRakyat</span>
+                    <div className="flex items-center mb-8">
+                        <img src={logoTenagaRakyat} alt="TenagaRakyat" className="h-24 w-auto object-contain" />
                     </div>
 
                     {/* Header */}

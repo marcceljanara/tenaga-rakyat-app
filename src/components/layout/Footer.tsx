@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Briefcase, Facebook, Twitter, Instagram, Mail, Phone } from 'lucide-react';
+import { Facebook, Twitter, Instagram, Mail, Phone } from 'lucide-react';
+import logoTenagaRakyat from '../../assets/logo_tenaga_rakyat.png';
 
 export const Footer: React.FC = () => {
     return (
@@ -9,13 +10,8 @@ export const Footer: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                     {/* Brand */}
                     <div className="col-span-1 md:col-span-2">
-                        <Link to="/" className="flex items-center gap-2 mb-4">
-                            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center">
-                                <Briefcase className="w-5 h-5 text-white" />
-                            </div>
-                            <span className="text-xl font-bold">
-                                Tenaga<span className="text-primary-400">Rakyat</span>
-                            </span>
+                        <Link to="/" className="flex items-center mb-4">
+                            <img src={logoTenagaRakyat} alt="TenagaRakyat" className="h-16 w-auto object-contain" />
                         </Link>
                         <p className="text-secondary-400 mb-4 max-w-md">
                             Platform marketplace kerja terpercaya yang menghubungkan pekerja dengan pemberi kerja di seluruh Indonesia.
