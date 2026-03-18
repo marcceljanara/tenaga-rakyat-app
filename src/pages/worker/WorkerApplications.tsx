@@ -64,6 +64,7 @@ export const WorkerApplications: React.FC = () => {
     const { data, isLoading } = useQuery({
         queryKey: ['worker-applications'],
         queryFn: () => usersService.getApplications(),
+        refetchInterval: 10000,
     });
 
     const applications = data?.data.applications || [];

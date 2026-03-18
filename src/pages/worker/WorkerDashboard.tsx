@@ -20,6 +20,7 @@ export const WorkerDashboard: React.FC = () => {
         queryKey: ['worker-applications'],
         queryFn: () => usersService.getApplications(),
         retry: 2,
+        refetchInterval: 15000,
     });
 
     // DISABLED: Wallet/Escrow features - Cash only mode

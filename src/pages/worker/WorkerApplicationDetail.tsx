@@ -35,6 +35,7 @@ export const WorkerApplicationDetail: React.FC = () => {
         queryKey: ['worker-application-detail', id],
         queryFn: () => applicationsService.getWorkerDetail(id!),
         enabled: !!id,
+        refetchInterval: 5000,
     });
 
     const application = data?.data;

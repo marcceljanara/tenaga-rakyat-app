@@ -27,6 +27,7 @@ export const EmployerJobDetail: React.FC = () => {
         queryKey: ['job', id],
         queryFn: () => jobsService.getPrivateDetail(id!),
         enabled: !!id,
+        refetchInterval: 5000,
     });
 
     // Fetch applications for this job
@@ -34,6 +35,7 @@ export const EmployerJobDetail: React.FC = () => {
         queryKey: ['job-applications', id],
         queryFn: () => applicationsService.getJobApplications(id!),
         enabled: !!id,
+        refetchInterval: 5000,
     });
 
     const job = jobData?.data;

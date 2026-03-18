@@ -16,6 +16,7 @@ export const EmployerWallet: React.FC = () => {
     const { data: walletData, isLoading: walletLoading } = useQuery({
         queryKey: ['employer-wallet'],
         queryFn: () => walletsService.getWallet(),
+        refetchInterval: 10000,
     });
 
     const wallet = walletData?.data;
@@ -24,6 +25,7 @@ export const EmployerWallet: React.FC = () => {
         queryKey: ['employer-transactions', wallet?.id],
         queryFn: () => walletsService.getTransactions(wallet!.id),
         enabled: !!wallet?.id,
+        refetchInterval: 10000,
     });
 
     const transactions = transactionsData?.data.transactions || [];
