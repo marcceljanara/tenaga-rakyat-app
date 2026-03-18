@@ -56,7 +56,7 @@ export const CreateJob: React.FC = () => {
             navigate(`/employer/jobs/${response.data.id}`);
         },
         onError: (error: any) => {
-            const message = error.response?.data?.message || error.response?.data?.errors || 'Gagal membuat lowongan';
+            const message = error.response?.data?.errors || 'Gagal membuat lowongan';
             toast.error(message);
         },
     });

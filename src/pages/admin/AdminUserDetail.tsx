@@ -62,7 +62,7 @@ export const AdminUserDetail: React.FC = () => {
             navigate('/admin/users');
         },
         onError: (error: any) => {
-            toast.error(error.response?.data?.message || 'Gagal menghapus user');
+            toast.error(error.response?.data?.errors || 'Gagal menghapus user');
         },
     });
 
@@ -74,7 +74,7 @@ export const AdminUserDetail: React.FC = () => {
             setConfirmAction(null);
         },
         onError: (error: any) => {
-            toast.error(error.response?.data?.message || 'Gagal menangguhkan akun');
+            toast.error(error.response?.data?.errors || 'Gagal menangguhkan akun');
         },
     });
 
@@ -86,7 +86,7 @@ export const AdminUserDetail: React.FC = () => {
             setConfirmAction(null);
         },
         onError: (error: any) => {
-            toast.error(error.response?.data?.message || 'Gagal mengaktifkan akun');
+            toast.error(error.response?.data?.errors || 'Gagal mengaktifkan akun');
         },
     });
 
@@ -99,7 +99,7 @@ export const AdminUserDetail: React.FC = () => {
             setWalletSuspendReason('');
         },
         onError: (error: any) => {
-            toast.error(error.response?.data?.message || 'Gagal menangguhkan wallet');
+            toast.error(error.response?.data?.errors || 'Gagal menangguhkan wallet');
         },
     });
 
@@ -111,7 +111,7 @@ export const AdminUserDetail: React.FC = () => {
             setConfirmAction(null);
         },
         onError: (error: any) => {
-            toast.error(error.response?.data?.message || 'Gagal mengaktifkan wallet');
+            toast.error(error.response?.data?.errors || 'Gagal mengaktifkan wallet');
         },
     });
 
@@ -123,7 +123,7 @@ export const AdminUserDetail: React.FC = () => {
             setConfirmAction(null);
         },
         onError: (error: any) => {
-            toast.error(error.response?.data?.message || 'Gagal memperbarui status verifikasi');
+            toast.error(error.response?.data?.errors || 'Gagal memperbarui status verifikasi');
         },
     });
 
