@@ -17,6 +17,7 @@ import {
     Coins,
 } from 'lucide-react';
 import { API_BASE_URL } from '../../api/axios';
+import logoTenagaRakyat from '../../assets/logo_tenaga_rakyat.png';
 
 const employerNavItems = [
     { href: '/employer/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -51,11 +52,8 @@ export const EmployerLayout: React.FC = () => {
                     >
                         <Menu className="w-6 h-6" />
                     </button>
-                    <Link to="/" className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center">
-                            <Briefcase className="w-4 h-4 text-white" />
-                        </div>
-                        <span className="text-lg font-bold text-secondary-900">TenagaRakyat</span>
+                    <Link to="/" className="flex items-center">
+                        <img src={logoTenagaRakyat} alt="TenagaRakyat" className="h-10 w-auto object-contain" />
                     </Link>
                     <Avatar src={API_BASE_URL + user?.profile_picture_url} size="sm" />
                 </div>
@@ -79,11 +77,8 @@ export const EmployerLayout: React.FC = () => {
             >
                 {/* Sidebar Header */}
                 <div className="flex items-center justify-between px-4 h-16 border-b border-secondary-100">
-                    <Link to="/" className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center">
-                            <Briefcase className="w-4 h-4 text-white" />
-                        </div>
-                        <span className="text-lg font-bold text-secondary-900">TenagaRakyat</span>
+                    <Link to="/" className="flex items-center">
+                        <img src={logoTenagaRakyat} alt="TenagaRakyat" className="h-10 w-auto object-contain" />
                     </Link>
                     <button
                         onClick={() => setIsSidebarOpen(false)}
