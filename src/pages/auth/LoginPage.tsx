@@ -5,8 +5,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useAuth } from '../../contexts/AuthContext';
 import { Button, Input } from '../../components/ui';
-import { Briefcase, Mail, Lock, Eye, EyeOff, ArrowLeft } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import toast from 'react-hot-toast';
+import logoTenagaRakyat from '../../assets/logo_tenaga_rakyat.png';
 
 const loginSchema = z.object({
     email: z.string().email('Email tidak valid'),
@@ -43,7 +44,7 @@ export const LoginPage: React.FC = () => {
             console.error('❌ [LoginPage] login() failed:', error);
             console.error('❌ [LoginPage] Error response:', error.response);
             console.error('❌ [LoginPage] Error response data:', error.response?.data);
-            const message = error.response?.data?.message || 'Login gagal. Silakan coba lagi.';
+            const message = error.response?.data?.errors || 'Login gagal. Silakan coba lagi.';
             toast.error(message);
         }
     };
@@ -64,10 +65,7 @@ export const LoginPage: React.FC = () => {
 
                     {/* Logo */}
                     <div className="flex items-center gap-2 mb-8">
-                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center">
-                            <Briefcase className="w-5 h-5 text-white" />
-                        </div>
-                        <span className="text-2xl font-bold text-secondary-900">TenagaRakyat</span>
+                        <img src={logoTenagaRakyat} alt="TenagaRakyat" className="h-24 w-auto object-contain" />
                     </div>
 
                     {/* Header */}

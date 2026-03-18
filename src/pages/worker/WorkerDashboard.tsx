@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '../../contexts/AuthContext';
 import { usersService } from '../../api';
 import { Card, CardContent, Badge, Button, Skeleton, Avatar } from '../../components/ui';
-import { Briefcase, FileText, ArrowRight, Clock, CheckCircle, AlertCircle, RefreshCw } from 'lucide-react';
+import { Briefcase, FileText, ArrowRight, Clock, CheckCircle, AlertCircle, RefreshCw, CircleX } from 'lucide-react';
 import { formatRelativeTime } from '../../utils';
 import { API_BASE_URL } from '../../api/axios';
 
@@ -84,6 +84,14 @@ export const WorkerDashboard: React.FC = () => {
                     label="Diterima"
                     value={appsError ? '-' : stats.accepted}
                     color="success"
+                    isLoading={appsLoading}
+                    hasError={appsError}
+                />
+                <StatCard
+                    icon={CircleX}
+                    label="Ditolak"
+                    value={appsError ? '-' : stats.rejected}
+                    color="danger"
                     isLoading={appsLoading}
                     hasError={appsError}
                 />

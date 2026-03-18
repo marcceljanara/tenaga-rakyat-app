@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { clsx } from '../../utils/clsx';
 import { API_BASE_URL } from '../../api/axios';
+import logoTenagaRakyat from '../../assets/logo_tenaga_rakyat.png';
 
 export const PublicNavbar: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -51,13 +52,8 @@ export const PublicNavbar: React.FC = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16">
                     {/* Logo */}
-                    <Link to="/" className="flex items-center gap-2">
-                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center">
-                            <Briefcase className="w-5 h-5 text-white" />
-                        </div>
-                        <span className="text-xl font-bold text-secondary-900">
-                            Tenaga<span className="text-primary-600">Rakyat</span>
-                        </span>
+                    <Link to="/" className="flex items-center">
+                        <img src={logoTenagaRakyat} alt="TenagaRakyat" className="h-12 w-auto object-contain" />
                     </Link>
 
                     {/* Desktop Navigation */}

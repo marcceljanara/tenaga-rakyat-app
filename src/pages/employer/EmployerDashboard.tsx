@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '../../contexts/AuthContext';
 import { jobsService } from '../../api';
 import { Card, CardContent, Badge, Button, Skeleton, getStatusBadgeVariant } from '../../components/ui';
-import { Briefcase, Users, Clock, CheckCircle, PlusCircle } from 'lucide-react';
+import { Briefcase, CircleX, Clock, CheckCircle, PlusCircle } from 'lucide-react';
 import { formatCurrency } from '../../utils';
 
 export const EmployerDashboard: React.FC = () => {
@@ -34,7 +34,8 @@ export const EmployerDashboard: React.FC = () => {
     const stats = {
         total: allJobs.length,
         active: activeJobs.length,
-        completed: allJobs.filter((j) => j.status === 'COMPLETED').length,
+        completed: allJobs.filter((j) => j.status === 'APPROVED').length,
+        cancelled: allJobs.filter((j) => j.status === 'CANCELLED').length,
         // balance: wallet?.balance || 0, // DISABLED: Wallet
     };
 
@@ -74,6 +75,13 @@ export const EmployerDashboard: React.FC = () => {
                     label="Selesai"
                     value={stats.completed}
                     color="secondary"
+                    isLoading={historyLoading}
+                />
+                <StatCard
+                    icon={CircleX}
+                    label="Dibatalkan"
+                    value={stats.cancelled}
+                    color="danger"
                     isLoading={historyLoading}
                 />
             </div>
@@ -147,7 +155,7 @@ export const EmployerDashboard: React.FC = () => {
                         <p className="text-sm text-secondary-500">Posting pekerjaan baru</p>
                     </Card>
                 </Link>
-
+{/* 
                 <Link to="/employer/applications">
                     <Card interactive className="p-6 text-center">
                         <div className="w-12 h-12 rounded-xl bg-success-100 flex items-center justify-center mx-auto mb-3">
@@ -156,7 +164,7 @@ export const EmployerDashboard: React.FC = () => {
                         <p className="font-medium text-secondary-900">Lamaran Masuk</p>
                         <p className="text-sm text-secondary-500">Kelola pelamar</p>
                     </Card>
-                </Link>
+                </Link> */}
 
                 <Link to="/employer/jobs">
                     <Card interactive className="p-6 text-center">
