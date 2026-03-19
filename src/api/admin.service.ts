@@ -24,9 +24,9 @@ export const adminService = {
 
     // Get dashboard summary with financial data
     // Includes: total inflow, outflow, platform fees, balance, escrow, pending withdrawals
-    getDashboardSummary: async (from?: string, to?: string): Promise<ApiResponse<DashboardSummary>> => {
+    getDashboardSummary: async (granularity: string = 'daily'): Promise<ApiResponse<DashboardSummary>> => {
         const response = await api.get('/api/admin/report/dashboard-summary', {
-            params: { from, to },
+            params: { granularity },
         });
         return response.data;
     },

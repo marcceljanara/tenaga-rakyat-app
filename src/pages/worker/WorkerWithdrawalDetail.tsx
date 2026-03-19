@@ -24,6 +24,7 @@ export const WorkerWithdrawalDetail: React.FC = () => {
         queryKey: ['worker-withdrawal-detail', id],
         queryFn: () => walletsService.getWithdrawRequestDetail(id!),
         enabled: !!id,
+        refetchInterval: 10000,
     });
 
     const withdrawal = data?.data;

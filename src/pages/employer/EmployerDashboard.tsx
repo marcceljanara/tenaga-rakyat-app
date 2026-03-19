@@ -13,11 +13,13 @@ export const EmployerDashboard: React.FC = () => {
     const { data: activeJobsData, isLoading: activeLoading } = useQuery({
         queryKey: ['employer-active-jobs'],
         queryFn: () => jobsService.getProviderActive(),
+        refetchInterval: 15000,
     });
 
     const { data: historyData, isLoading: historyLoading } = useQuery({
         queryKey: ['employer-jobs-history'],
         queryFn: () => jobsService.getProviderHistory(),
+        refetchInterval: 15000,
     });
 
     // DISABLED: Wallet/Escrow features - Cash only mode

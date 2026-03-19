@@ -17,6 +17,7 @@ export const WorkerActiveJobs: React.FC = () => {
     const { data, isLoading } = useQuery({
         queryKey: ['worker-applications'],
         queryFn: () => usersService.getApplications({ status: 'ACCEPTED' as any }),
+        refetchInterval: 5000,
     });
 
     const applications = data?.data.applications || [];
