@@ -508,19 +508,35 @@ export interface UserStats {
     job_providers: number;
 }
 
+export interface TimeseriesData {
+    period: string;
+    total_transactions: number;
+    total_revenue: number;
+    total_credits: number;
+    total_users: number;
+    total_jobs: number;
+    total_applications: number;
+}
+
 export interface DashboardSummary {
-    total_inflow: number;
-    total_outflow: number;
-    platform_fees: number;
-    platform_balance: number;
-    escrow_held: number;
-    pending_withdrawals: number;
-    pending_withdrawals_count: number;
-    // Legacy fields for backward compatibility
-    total_users?: number;
-    total_jobs?: number;
-    total_applications?: number;
-    total_transactions?: number;
+    total_transactions: number;
+    total_revenue: number;
+    total_credits_sold: number;
+    paid_transactions: number;
+    pending_transactions: number;
+    failed_transactions: number;
+    total_users: number;
+    total_jobs: number;
+    total_applications: number;
+    timeseries: TimeseriesData[];
+    // Financial fields (backward compatibility - can be removed later if not needed)
+    total_inflow?: number;
+    total_outflow?: number;
+    platform_fees?: number;
+    platform_balance?: number;
+    escrow_held?: number;
+    pending_withdrawals?: number;
+    pending_withdrawals_count?: number;
 }
 
 export interface ApplicationStatistics {
