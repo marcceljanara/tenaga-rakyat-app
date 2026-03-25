@@ -12,6 +12,37 @@ const api = axios.create({
     },
 });
 
+// CSRF Token Global State
+let csrfToken: string | null = null;
+let isFetchingCsrf = false;
+let csrfQueue: Array<{
+    resolve: (token: string) => void;
+    reject: (error: any) => void;
+}> = [];
+
+export const fetchCsrfToken = async (): Promise<string> => {
+    if (isFetchingCsrf) {
+        return new Promise((resolve, reject) => {
+            csrfQueue.push({ resolve, reject });
+        });
+    }
+
+    isFetchingCsrf = true;
+    try {
+        const response = await api.get('/api/users/csrf-token');
+        csrfToken = response.data?.csrfToken || response.data?.data?.csrfToken;
+        csrfQueue.forEach(prom => prom.resolve(csrfToken as string));
+        csrfQueue = [];
+        return csrfToken as string;
+    } catch (error) {
+        csrfQueue.forEach(prom => prom.reject(error));
+        csrfQueue = [];
+        throw error;
+    } finally {
+        isFetchingCsrf = false;
+    }
+};
+
 // Flag to prevent multiple refresh attempts
 let isRefreshing = false;
 let failedQueue: Array<{
@@ -40,20 +71,48 @@ const noRefreshUrls = [
     '/api/auth/verify-email',
 ];
 
-// Response interceptor for handling 401 errors
+// Request interceptor to attach CSRF token
+api.interceptors.request.use(
+    (config) => {
+        if (config.method && ['post', 'put', 'patch', 'delete'].includes(config.method.toLowerCase())) {
+            if (csrfToken) {
+                config.headers['x-csrf-token'] = csrfToken;
+            }
+        }
+        return config;
+    },
+    (error) => Promise.reject(error)
+);
+
+// Response interceptor for handling errors
 api.interceptors.response.use(
     (response) => response,
     async (error: AxiosError) => {
-        const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
+        const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean; _csrfRetry?: boolean };
 
-        // Skip refresh logic for certain URLs (login, refresh itself, etc.)
+        // Handle CSRF Token expiration (403)
+        if (error.response?.status === 403 && !originalRequest._csrfRetry) {
+            const data = error.response.data as any;
+            if (data && data.message === "invalid csrf token") {
+                originalRequest._csrfRetry = true;
+                try {
+                    const newToken = await fetchCsrfToken();
+                    if (originalRequest.headers) {
+                        originalRequest.headers['x-csrf-token'] = newToken;
+                    }
+                    return api(originalRequest);
+                } catch (csrfError) {
+                    return Promise.reject(csrfError);
+                }
+            }
+        }
+
+        // Handle 401 Unauthorized errors
         const requestUrl = originalRequest?.url || '';
         const shouldSkipRefresh = noRefreshUrls.some((url) => requestUrl.includes(url));
 
-        // If error is 401 and we haven't already tried to refresh and it's not a no-refresh URL
         if (error.response?.status === 401 && !originalRequest._retry && !shouldSkipRefresh) {
             if (isRefreshing) {
-                // If already refreshing, queue this request
                 return new Promise((resolve, reject) => {
                     failedQueue.push({ resolve, reject });
                 })
@@ -65,13 +124,11 @@ api.interceptors.response.use(
             isRefreshing = true;
 
             try {
-                // Attempt to refresh the token
                 await api.post('/api/users/refresh');
                 processQueue(null);
                 return api(originalRequest);
             } catch (refreshError) {
                 processQueue(refreshError as Error);
-                // Dispatch logout event to clear auth state
                 window.dispatchEvent(new CustomEvent('auth:logout'));
                 return Promise.reject(refreshError);
             } finally {

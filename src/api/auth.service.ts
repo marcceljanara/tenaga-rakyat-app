@@ -1,4 +1,4 @@
-import api from './axios';
+import api, { fetchCsrfToken } from './axios';
 import type {
     ApiResponse,
     User,
@@ -14,9 +14,21 @@ export const authService = {
     login: async (credentials: LoginCredentials): Promise<ApiResponse<{ message: string }>> => {
         console.log('🔵 [authService] login() called to:', '/api/users/login');
         console.log('🔵 [authService] Request payload:', { email: credentials.email, password: '***' });
+        
+        // Fetch CSRF token first
+        console.log('🔵 [authService] Fetching CSRF token...');
+        await fetchCsrfToken();
+        console.log('✅ [authService] CSRF token received');
+
         const response = await api.post('/api/users/login', credentials);
         console.log('✅ [authService] Login response status:', response.status);
         console.log('✅ [authService] Login response data:', response.data);
+
+        // Fetch new CSRF token after login since session rotation invalidates the old one
+        console.log('🔵 [authService] Fetching new CSRF token after login...');
+        await fetchCsrfToken();
+        console.log('✅ [authService] New CSRF token received and cookies updated');
+
         return response.data;
     },
 
