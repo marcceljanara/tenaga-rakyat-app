@@ -7,10 +7,11 @@ import {
     Shield,
     Banknote,
     ArrowRight,
-    CheckCircle,
-    TrendingUp,
-    Star,
+    Wrench,
+    Leaf,
+    Truck,
 } from 'lucide-react';
+import LandingImage from '../../assets/landing_page_village.webp';
 
 export const LandingPage: React.FC = () => {
     return (
@@ -27,18 +28,17 @@ export const LandingPage: React.FC = () => {
                     <div className="grid lg:grid-cols-2 gap-12 items-center">
                         <div className="text-center lg:text-left">
                             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-100 text-primary-700 text-sm font-medium mb-6 animate-fade-in">
-                                <Star className="w-4 h-4" />
-                                Platform Kerja #1 di Indonesia
+                                <Users className="w-4 h-4" />
+                                Dari Warga, Untuk Warga
                             </div>
 
                             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-secondary-900 mb-6 animate-fade-in-up">
-                                Temukan <span className="text-primary-600">Pekerjaan</span> Impian atau{' '}
-                                <span className="text-accent-600">Pekerja</span> Terbaik
+                                Cari <span className="text-primary-600">Tambahan Penghasilan</span> atau{' '}
+                                Butuh <span className="text-accent-600">Bantuan Tenaga</span> di Sekitar Anda?
                             </h1>
 
                             <p className="text-lg text-secondary-600 mb-8 max-w-xl mx-auto lg:mx-0 animate-fade-in-up">
-                                TenagaRakyat menghubungkan pekerja terampil dengan pemberi kerja terpercaya.
-                                Mulai perjalanan karir Anda atau temukan talenta terbaik untuk bisnis Anda.
+                                TenagaRakyat hadir membantu menghubungkan Anda dengan tetangga atau warga sekitar yang butuh jasa pertukangan, kebersihan, pertanian, dan pekerjaan harian lainnya.
                             </p>
 
                             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-fade-in-up">
@@ -54,66 +54,67 @@ export const LandingPage: React.FC = () => {
                                 </Link>
                             </div>
 
-                            <div className="flex items-center gap-8 mt-12 justify-center lg:justify-start">
-                                <div className="text-center">
-                                    <p className="text-3xl font-bold text-secondary-900">10K+</p>
-                                    <p className="text-sm text-secondary-500">Pekerja Aktif</p>
+                            <div className="flex flex-wrap gap-4 mt-12 justify-center lg:justify-start">
+                                <div className="flex items-center gap-2 text-secondary-600 bg-secondary-50 px-4 py-2 rounded-full text-sm font-medium border border-secondary-200">
+                                    <Shield className="w-4 h-4 text-success-500" />
+                                    <span>Aman & Saling Percaya</span>
                                 </div>
-                                <div className="w-px h-12 bg-secondary-200" />
-                                <div className="text-center">
-                                    <p className="text-3xl font-bold text-secondary-900">5K+</p>
-                                    <p className="text-sm text-secondary-500">Lowongan</p>
-                                </div>
-                                <div className="w-px h-12 bg-secondary-200" />
-                                <div className="text-center">
-                                    <p className="text-3xl font-bold text-secondary-900">98%</p>
-                                    <p className="text-sm text-secondary-500">Kepuasan</p>
+                                <div className="flex items-center gap-2 text-secondary-600 bg-secondary-50 px-4 py-2 rounded-full text-sm font-medium border border-secondary-200">
+                                    <Banknote className="w-4 h-4 text-success-500" />
+                                    <span>Langsung Bayar Cash</span>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="relative hidden lg:block">
-                            <div className="relative w-full aspect-square max-w-lg mx-auto">
-                                {/* Decorative Cards */}
-                                <div className="absolute top-0 left-0 p-6 bg-white rounded-2xl shadow-soft-lg animate-fade-in-up">
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 rounded-xl bg-success-100 flex items-center justify-center">
-                                            <CheckCircle className="w-6 h-6 text-success-600" />
-                                        </div>
-                                        <div>
-                                            <p className="font-semibold text-secondary-900">Pekerjaan Selesai</p>
-                                            <p className="text-sm text-secondary-500">+2,450 bulan ini</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="absolute top-1/3 right-0 p-6 bg-white rounded-2xl shadow-soft-lg animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 rounded-xl bg-primary-100 flex items-center justify-center">
-                                            <TrendingUp className="w-6 h-6 text-primary-600" />
-                                        </div>
-                                        <div>
-                                            <p className="font-semibold text-secondary-900">Pendapatan Naik</p>
-                                            <p className="text-sm text-success-600">+35% bulan ini</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="absolute bottom-10 left-10 p-6 bg-white rounded-2xl shadow-soft-lg animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 rounded-xl bg-accent-100 flex items-center justify-center">
-                                            <Users className="w-6 h-6 text-accent-600" />
-                                        </div>
-                                        <div>
-                                            <p className="font-semibold text-secondary-900">Pengguna Baru</p>
-                                            <p className="text-sm text-secondary-500">+150 hari ini</p>
-                                        </div>
-                                    </div>
-                                </div>
-
+                        <div className="relative block mt-12 lg:mt-0">
+                            <div className="relative w-full aspect-square max-w-[320px] sm:max-w-lg mx-auto">
                                 {/* Central Image */}
                                 <div className="absolute inset-0 flex items-center justify-center">
-                                    <div className="w-64 h-64 rounded-3xl bg-gradient-to-br from-primary-500 to-accent-500 opacity-20 blur-2xl" />
+                                    <div className="absolute w-48 h-48 sm:w-64 sm:h-64 rounded-full bg-gradient-to-br from-primary-500 to-accent-500 opacity-20 blur-2xl" />
+                                    <div className="w-[85%] h-[85%] rounded-full overflow-hidden border-4 sm:border-8 border-white shadow-soft-xl relative z-0">
+                                        <img 
+                                            src={LandingImage} 
+                                            alt="Ilustrasi Pekerja Desa" 
+                                            className="w-full h-full object-cover"
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* Decorative Cards */}
+                                <div className="absolute -top-4 -left-4 sm:top-0 sm:left-0 p-3 sm:p-6 bg-white rounded-xl sm:rounded-2xl shadow-soft-lg animate-fade-in-up z-10 scale-75 sm:scale-100 origin-top-left">
+                                    <div className="flex items-center gap-3 sm:gap-4">
+                                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-orange-100 flex items-center justify-center">
+                                            <Wrench className="w-6 h-6 text-orange-600" />
+                                        </div>
+                                        <div>
+                                            <p className="font-semibold text-secondary-900">Tukang Bangunan</p>
+                                            <p className="text-sm text-secondary-500">Renovasi & Perbaikan</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="absolute top-1/4 -right-4 sm:top-1/3 sm:right-0 p-3 sm:p-6 bg-white rounded-xl sm:rounded-2xl shadow-soft-lg animate-fade-in-up z-10 scale-75 sm:scale-100 origin-top-right" style={{ animationDelay: '0.2s' }}>
+                                    <div className="flex items-center gap-3 sm:gap-4">
+                                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-green-100 flex items-center justify-center">
+                                            <Leaf className="w-6 h-6 text-green-600" />
+                                        </div>
+                                        <div>
+                                            <p className="font-semibold text-secondary-900">Pekerja Kebun</p>
+                                            <p className="text-sm text-green-600">Siap bantu panen</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="absolute -bottom-4 -left-4 sm:bottom-10 sm:left-10 p-3 sm:p-6 bg-white rounded-xl sm:rounded-2xl shadow-soft-lg animate-fade-in-up z-10 scale-75 sm:scale-100 origin-bottom-left" style={{ animationDelay: '0.4s' }}>
+                                    <div className="flex items-center gap-3 sm:gap-4">
+                                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-blue-100 flex items-center justify-center">
+                                            <Truck className="w-6 h-6 text-blue-600" />
+                                        </div>
+                                        <div>
+                                            <p className="font-semibold text-secondary-900">Pekerja Serabutan</p>
+                                            <p className="text-sm text-secondary-500">Angkat barang, kurir</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -126,10 +127,10 @@ export const LandingPage: React.FC = () => {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-16">
                         <h2 className="text-3xl sm:text-4xl font-bold text-secondary-900 mb-4">
-                            Mengapa Memilih TenagaRakyat?
+                            Kenapa Pakai TenagaRakyat?
                         </h2>
                         <p className="text-lg text-secondary-600 max-w-2xl mx-auto">
-                            Platform terpercaya dengan fitur lengkap untuk memudahkan pencarian kerja dan rekrutmen
+                            Aplikasi karya anak bangsa untuk memudahkan warga saling membantu dan berbagi rezeki.
                         </p>
                     </div>
 
@@ -137,26 +138,26 @@ export const LandingPage: React.FC = () => {
                         {[
                             {
                                 icon: Search,
-                                title: 'Pencarian Mudah',
-                                description: 'Temukan pekerjaan atau pekerja sesuai kebutuhan dengan filter lengkap',
+                                title: 'Praktis & Mudah',
+                                description: 'Cepat dapat info pekerjaan dan tenaga bantuan terdekat dari lokasi Anda.',
                                 color: 'primary',
                             },
                             {
                                 icon: Shield,
-                                title: 'Aman & Terpercaya',
-                                description: 'Verifikasi pengguna dan sistem keamanan untuk melindungi transaksi',
+                                title: 'Saling Percaya',
+                                description: 'Kenali tetangga dan warga sekitar untuk membangun sistem yang aman.',
                                 color: 'success',
                             },
                             {
                                 icon: Banknote,
-                                title: 'Pembayaran Cash',
-                                description: 'Pembayaran langsung antara pemberi kerja dan pekerja, mudah dan cepat',
+                                title: 'Sistem Bayar Tunai (Cash)',
+                                description: 'Upah diberikan langsung setelah pekerjaan selesai, mudah dipahami masyarakat.',
                                 color: 'accent',
                             },
                             {
                                 icon: Users,
-                                title: 'Komunitas Aktif',
-                                description: 'Bergabung dengan ribuan pekerja dan pemberi kerja di seluruh Indonesia',
+                                title: 'Kekeluargaan',
+                                description: 'Meningkatkan kerukunan warga dan saling memberi peluang satu sama lain.',
                                 color: 'warning',
                             },
                         ].map((feature, index) => (
@@ -182,10 +183,10 @@ export const LandingPage: React.FC = () => {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-16">
                         <h2 className="text-3xl sm:text-4xl font-bold text-secondary-900 mb-4">
-                            Cara Kerja TenagaRakyat
+                            Cara Pakai yang Sangat Gampang
                         </h2>
                         <p className="text-lg text-secondary-600 max-w-2xl mx-auto">
-                            Proses sederhana untuk memulai perjalanan Anda
+                            Cuma 3 langkah gampang untuk mulai cari tambahan pendapatan atau cari bantuan
                         </p>
                     </div>
 
@@ -193,18 +194,18 @@ export const LandingPage: React.FC = () => {
                         {[
                             {
                                 step: '01',
-                                title: 'Daftar Akun',
-                                description: 'Buat akun gratis sebagai pekerja atau pemberi kerja dalam hitungan menit',
+                                title: 'Daftar Gratis',
+                                description: 'Bikin akun pakai HP Anda. Bebas pilih jadi Pekerja atau yang Cari Bantuan.',
                             },
                             {
                                 step: '02',
-                                title: 'Lengkapi Profil',
-                                description: 'Tambahkan informasi dan portofolio untuk meningkatkan kredibilitas',
+                                title: 'Isi Keahlian',
+                                description: 'Masukin keahlian apa yang Anda bisa, misal: Tukang Kayu, Bersih-bersih, dll.',
                             },
                             {
                                 step: '03',
-                                title: 'Mulai Bekerja',
-                                description: 'Cari pekerjaan atau posting lowongan dan mulai berkolaborasi',
+                                title: 'Mulai Dapat Rezeki',
+                                description: 'Cari lowongan di sekitar rumah Anda, kerja, dan langsung terima upah tunai.',
                             },
                         ].map((item, index) => (
                             <div key={index} className="relative text-center">
@@ -227,10 +228,10 @@ export const LandingPage: React.FC = () => {
             <section className="py-20 bg-gradient-to-r from-primary-600 to-primary-700">
                 <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                     <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
-                        Siap Untuk Memulai?
+                        Mari Bergabung Bersama Kami
                     </h2>
                     <p className="text-lg text-primary-100 mb-8 max-w-2xl mx-auto">
-                        Bergabunglah dengan ribuan pekerja dan pemberi kerja yang sudah merasakan kemudahan TenagaRakyat
+                        Mari hidupkan budaya gotong royong dan saling bantu untuk lingkungan sekitar yang lebih sejahtera.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <Link to="/register">
@@ -238,7 +239,7 @@ export const LandingPage: React.FC = () => {
                                 size="lg"
                                 className="bg-white text-primary-600 hover:bg-primary-50 shadow-lg"
                             >
-                                Daftar Sebagai Pekerja
+                                Butuh Pekerjaan (Pekerja)
                             </Button>
                         </Link>
                         <Link to="/register">
@@ -247,7 +248,7 @@ export const LandingPage: React.FC = () => {
                                 size="lg"
                                 className="text-white border-2 border-white/30 hover:bg-white/10"
                             >
-                                Daftar Sebagai Pemberi Kerja
+                                Butuh Bantuan (Pemberi Kerja)
                             </Button>
                         </Link>
                     </div>
