@@ -63,7 +63,12 @@ export const AdminLayout: React.FC = () => {
                         <img src={logoTenagaRakyat} alt="TenagaRakyat" className="h-10 w-auto object-contain" />
                         <span className="text-lg font-bold text-secondary-900">Admin Panel</span>
                     </Link>
-                    <Avatar src={API_BASE_URL + user?.profile_picture_url} size="sm" />
+                    <button
+                        onClick={() => setIsSidebarOpen(true)}
+                        className="p-1 rounded-full hover:ring-2 hover:ring-primary-300 transition-all"
+                    >
+                        <Avatar src={API_BASE_URL + user?.profile_picture_url} size="sm" />
+                    </button>
                 </div>
             </header>
 
@@ -130,11 +135,24 @@ export const AdminLayout: React.FC = () => {
                     ))}
                 </nav>
 
-                {/* Logout */}
-                <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-secondary-800">
+                {/* Settings & Logout */}
+                <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-secondary-800 space-y-1">
+                    <Link
+                        to="/admin/profile"
+                        onClick={() => setIsSidebarOpen(false)}
+                        className={clsx(
+                            'lg:hidden flex items-center gap-3 px-4 py-3 rounded-xl transition-colors',
+                            location.pathname === '/admin/profile'
+                                ? 'bg-primary-600 text-white'
+                                : 'text-secondary-300 hover:bg-secondary-800 hover:text-white'
+                        )}
+                    >
+                        <Settings className="w-5 h-5" />
+                        <span className="font-medium">Pengaturan</span>
+                    </Link>
                     <button
                         onClick={handleLogout}
-                        className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-secondary-300 hover:bg-secondary-800 hover:text-white transition-colors"
+                        className="lg:hidden w-full flex items-center gap-3 px-4 py-3 rounded-xl text-secondary-300 hover:bg-secondary-800 hover:text-white transition-colors"
                     >
                         <LogOut className="w-5 h-5" />
                         <span className="font-medium">Keluar</span>
