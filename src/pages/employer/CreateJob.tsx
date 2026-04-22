@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useMutation } from '@tanstack/react-query';
 import { jobsService } from '../../api';
-import { Card, CardContent, Button, Input, Textarea } from '../../components/ui';
-import { Briefcase, MapPin, Banknote, ArrowLeft, Save, Navigation } from 'lucide-react';
+import { Card, CardContent, Button, Input, Textarea, LocationPicker } from '../../components/ui';
+import { Briefcase, MapPin, Banknote, ArrowLeft, Save } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { Link } from 'react-router-dom';
 
 
 const jobSchema = z.object({
@@ -26,7 +25,6 @@ type JobFormData = z.infer<typeof jobSchema>;
 
 export const CreateJob: React.FC = () => {
     const navigate = useNavigate();
-    const [isGettingLocation, setIsGettingLocation] = useState(false);
 
     const {
         register,
@@ -38,14 +36,12 @@ export const CreateJob: React.FC = () => {
         resolver: zodResolver(jobSchema),
         defaultValues: {
             compensation_amount: 50000,
-            payment_method: 'CASH_OFFLINE', // DISABLED: Escrow - Cash only mode
+            payment_method: 'CASH_OFFLINE',
             job_latitude: 0,
             job_longitude: 0,
         },
     });
 
-    // DISABLED: Escrow - Cash only mode
-    // const selectedPaymentMethod = watch('payment_method');
     const currentLat = watch('job_latitude');
     const currentLng = watch('job_longitude');
 
@@ -65,39 +61,6 @@ export const CreateJob: React.FC = () => {
         createMutation.mutate(data);
     };
 
-    const getCurrentLocation = () => {
-        if (!navigator.geolocation) {
-            toast.error('Geolocation tidak didukung oleh browser Anda');
-            return;
-        }
-
-        setIsGettingLocation(true);
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                setValue('job_latitude', position.coords.latitude);
-                setValue('job_longitude', position.coords.longitude);
-                toast.success('Lokasi berhasil didapatkan!');
-                setIsGettingLocation(false);
-            },
-            (error) => {
-                let message = 'Gagal mendapatkan lokasi';
-                switch (error.code) {
-                    case error.PERMISSION_DENIED:
-                        message = 'Akses lokasi ditolak. Silakan izinkan akses lokasi.';
-                        break;
-                    case error.POSITION_UNAVAILABLE:
-                        message = 'Informasi lokasi tidak tersedia.';
-                        break;
-                    case error.TIMEOUT:
-                        message = 'Waktu permintaan lokasi habis.';
-                        break;
-                }
-                toast.error(message);
-                setIsGettingLocation(false);
-            },
-            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-        );
-    };
 
     return (
         <div className="max-w-2xl animate-fade-in">
@@ -149,56 +112,28 @@ export const CreateJob: React.FC = () => {
                             error={errors.address_detail?.message}
                         />
 
-                        {/* Location Coordinates Section */}
-                        <div className="space-y-3">
+                        {/* Location Picker Section */}
+                        <div className="space-y-2">
                             <label className="block text-sm font-medium text-secondary-700">
-                                Koordinat Lokasi Pekerjaan
+                                Lokasi Pekerjaan
                             </label>
-                            <div className="p-4 bg-secondary-50 rounded-xl border border-secondary-200">
-                                <div className="flex flex-col sm:flex-row gap-4 mb-4">
-                                    <div className="flex-1">
-                                        <Input
-                                            {...register('job_latitude', { valueAsNumber: true })}
-                                            type="number"
-                                            step="any"
-                                            label="Latitude"
-                                            placeholder="-6.180084"
-                                            error={errors.job_latitude?.message}
-                                        />
-                                    </div>
-                                    <div className="flex-1">
-                                        <Input
-                                            {...register('job_longitude', { valueAsNumber: true })}
-                                            type="number"
-                                            step="any"
-                                            label="Longitude"
-                                            placeholder="106.78973"
-                                            error={errors.job_longitude?.message}
-                                        />
-                                    </div>
-                                </div>
-                                <div className="flex items-center justify-between">
-                                    <Button
-                                        type="button"
-                                        variant="secondary"
-                                        size="sm"
-                                        onClick={getCurrentLocation}
-                                        isLoading={isGettingLocation}
-                                        leftIcon={Navigation}
-                                    >
-                                        Gunakan Lokasi Saat Ini
-                                    </Button>
-                                    {currentLat !== 0 && currentLng !== 0 && (
-                                        <span className="text-xs text-success-600 flex items-center gap-1">
-                                            <MapPin className="w-3 h-3" />
-                                            Koordinat terisi
-                                        </span>
-                                    )}
-                                </div>
-                                <p className="text-xs text-secondary-500 mt-2">
-                                    Koordinat digunakan untuk menghitung jarak dengan pekerja terdekat
+                            <LocationPicker
+                                latitude={currentLat !== 0 ? currentLat : null}
+                                longitude={currentLng !== 0 ? currentLng : null}
+                                onLocationSelect={(lat, lng) => {
+                                    setValue('job_latitude', lat, { shouldValidate: true });
+                                    setValue('job_longitude', lng, { shouldValidate: true });
+                                }}
+                            />
+                            {(errors.job_latitude || errors.job_longitude) && (
+                                <p className="text-sm text-danger-600 flex items-center gap-1">
+                                    <MapPin className="w-3.5 h-3.5" />
+                                    Lokasi wajib dipilih
                                 </p>
-                            </div>
+                            )}
+                            <p className="text-xs text-secondary-500">
+                                Klik pada peta atau gunakan GPS perangkat untuk menentukan lokasi pekerjaan.
+                            </p>
                         </div>
 
                         <div>
