@@ -20,6 +20,7 @@ import {
     Check,
     ChevronLeft,
     ChevronRight,
+    ArrowLeft,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import type { UserPhoto } from '../../types';
