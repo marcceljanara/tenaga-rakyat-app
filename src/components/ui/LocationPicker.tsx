@@ -70,6 +70,7 @@ export const LocationDisplay: React.FC<{
         <div className={`rounded-xl overflow-hidden border border-secondary-200 ${className}`} style={{ position: 'relative', zIndex: 0 }}>
             <div className="h-48 relative" style={{ zIndex: 0 }}>
                 <MapContainer
+                    key={`preview-${latitude.toFixed(6)}-${longitude.toFixed(6)}`}
                     center={[latitude, longitude]}
                     zoom={15}
                     scrollWheelZoom={false}
