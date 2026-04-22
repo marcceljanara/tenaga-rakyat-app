@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '../../contexts/AuthContext';
 import { Avatar } from '../ui';
 import { clsx } from '../../utils/clsx';
+import { usersService } from '../../api';
 import {
     Menu,
     X,
@@ -11,6 +13,7 @@ import {
     Image,
     Search,
     FileText,
+    HardHat,
     // Wallet,
     LogOut,
     ChevronDown,
@@ -25,6 +28,7 @@ const workerNavItems = [
     { href: '/worker/photos', label: 'Foto Pekerjaan', icon: Image },
     { href: '/worker/jobs', label: 'Cari Kerja', icon: Search },
     { href: '/worker/applications', label: 'Lamaran Saya', icon: FileText },
+    { href: '/worker/active-jobs', label: 'Pekerjaan Aktif', icon: HardHat },
     // { href: '/worker/wallet', label: 'Dompet', icon: Wallet },
 ];
 
@@ -34,6 +38,19 @@ export const WorkerLayout: React.FC = () => {
     const { user, logout } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
+
+    // Fetch aplikasi untuk hitung badge "Pekerjaan Aktif"
+    const { data: appsData } = useQuery({
+        queryKey: ['worker-applications-badge'],
+        queryFn: () => usersService.getApplications(),
+        refetchInterval: 30000,
+        staleTime: 20000,
+    });
+
+    // Hitung pekerjaan aktif: lamaran ACCEPTED dengan job belum APPROVED
+    const activeJobCount = (appsData?.data.applications ?? []).filter(
+        (app) => app.status === 'ACCEPTED' && app.job.status !== 'APPROVED'
+    ).length;
 
     const handleLogout = async () => {
         await logout();
@@ -105,22 +122,32 @@ export const WorkerLayout: React.FC = () => {
 
                 {/* Navigation */}
                 <nav className="p-4 space-y-1">
-                    {workerNavItems.map((item) => (
-                        <Link
-                            key={item.href}
-                            to={item.href}
-                            onClick={() => setIsSidebarOpen(false)}
-                            className={clsx(
-                                'flex items-center gap-3 px-4 py-3 rounded-xl transition-colors',
-                                location.pathname === item.href
-                                    ? 'bg-primary-50 text-primary-600'
-                                    : 'text-secondary-600 hover:bg-secondary-50'
-                            )}
-                        >
-                            <item.icon className="w-5 h-5" />
-                            <span className="font-medium">{item.label}</span>
-                        </Link>
-                    ))}
+                    {workerNavItems.map((item) => {
+                        const isActive = location.pathname === item.href;
+                        const showBadge = item.href === '/worker/active-jobs' && activeJobCount > 0;
+
+                        return (
+                            <Link
+                                key={item.href}
+                                to={item.href}
+                                onClick={() => setIsSidebarOpen(false)}
+                                className={clsx(
+                                    'flex items-center gap-3 px-4 py-3 rounded-xl transition-colors',
+                                    isActive
+                                        ? 'bg-primary-50 text-primary-600'
+                                        : 'text-secondary-600 hover:bg-secondary-50'
+                                )}
+                            >
+                                <item.icon className="w-5 h-5 flex-shrink-0" />
+                                <span className="font-medium flex-1">{item.label}</span>
+                                {showBadge && (
+                                    <span className="ml-auto min-w-[20px] h-5 px-1.5 rounded-full bg-danger-500 text-white text-xs font-bold flex items-center justify-center animate-pulse">
+                                        {activeJobCount > 9 ? '9+' : activeJobCount}
+                                    </span>
+                                )}
+                            </Link>
+                        );
+                    })}
                 </nav>
 
                 {/* Settings & Logout */}
