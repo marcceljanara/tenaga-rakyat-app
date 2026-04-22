@@ -7,7 +7,6 @@ import { z } from 'zod';
 import { usersService } from '../../api';
 import { Card, CardContent, Button, Textarea, Skeleton, EmptyState, Modal } from '../../components/ui';
 import {
-    ArrowLeft,
     Image,
     Plus,
     Trash2,
@@ -253,15 +252,6 @@ export const WorkerPhotos: React.FC = () => {
 
     return (
         <div className="space-y-6 animate-fade-in">
-            {/* Back Button */}
-            <Link
-                to="/worker/profile"
-                className="inline-flex items-center gap-2 text-secondary-600 hover:text-primary-600 transition-colors"
-            >
-                <ArrowLeft className="w-4 h-4" />
-                Kembali ke Profil
-            </Link>
-
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
