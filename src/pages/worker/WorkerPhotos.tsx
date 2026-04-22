@@ -235,7 +235,7 @@ export const WorkerPhotos: React.FC = () => {
                     className="inline-flex items-center gap-2 text-secondary-600 hover:text-primary-600 transition-colors"
                 >
                     <ArrowLeft className="w-4 h-4" />
-                    Kembali ke Profil
+                    Kembali
                 </Link>
                 <EmptyState
                     icon={AlertTriangle}
