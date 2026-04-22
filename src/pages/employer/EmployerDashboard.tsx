@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '../../contexts/AuthContext';
 import { jobsService } from '../../api';
 import { Card, CardContent, Badge, Button, Skeleton, getStatusBadgeVariant } from '../../components/ui';
-import { Briefcase, CircleX, Clock, CheckCircle, PlusCircle } from 'lucide-react';
+import { Briefcase, CircleX, Clock, CheckCircle, ArrowRight } from 'lucide-react';
 import { formatCurrency } from '../../utils';
 
 export const EmployerDashboard: React.FC = () => {
@@ -44,16 +44,11 @@ export const EmployerDashboard: React.FC = () => {
     return (
         <div className="space-y-6 animate-fade-in">
             {/* Welcome Section */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                <div>
-                    <h1 className="text-2xl font-bold text-secondary-900">
-                        Selamat datang, {user?.full_name?.split(' ')[0]}! 👋
-                    </h1>
-                    <p className="text-secondary-600">Kelola lowongan dan aplikasi Anda</p>
-                </div>
-                <Link to="/employer/jobs/new">
-                    <Button leftIcon={PlusCircle}>Buat Lowongan</Button>
-                </Link>
+            <div>
+                <h1 className="text-2xl font-bold text-secondary-900">
+                    Selamat datang, {user?.full_name?.split(' ')[0]}! 👋
+                </h1>
+                <p className="text-secondary-600">Kelola lowongan dan aplikasi Anda</p>
             </div>
 
             {/* Stats Grid */}
@@ -88,28 +83,30 @@ export const EmployerDashboard: React.FC = () => {
                 />
             </div>
 
-            {/* Active Jobs */}
+            {/* Active Jobs - Full Width */}
             <Card>
                 <CardContent className="p-6">
                     <div className="flex items-center justify-between mb-4">
                         <h2 className="text-lg font-semibold text-secondary-900">Lowongan Aktif</h2>
                         <Link
                             to="/employer/jobs"
-                            className="text-sm text-primary-600 hover:text-primary-700 font-medium"
+                            className="text-sm text-primary-600 hover:text-primary-700 font-medium flex items-center gap-1"
                         >
                             Lihat Semua
+                            <ArrowRight className="w-3.5 h-3.5" />
                         </Link>
                     </div>
 
                     {activeLoading ? (
-                        <div className="space-y-4">
+                        <div className="divide-y divide-secondary-100">
                             {[...Array(3)].map((_, i) => (
-                                <div key={i} className="flex items-center gap-4">
-                                    <Skeleton className="w-10 h-10 rounded-lg" />
+                                <div key={i} className="flex items-center gap-4 py-4">
+                                    <Skeleton className="w-10 h-10 rounded-lg flex-shrink-0" />
                                     <div className="flex-1">
                                         <Skeleton className="h-5 w-3/4 mb-1" />
                                         <Skeleton className="h-4 w-1/2" />
                                     </div>
+                                    <Skeleton className="h-6 w-20 rounded-full" />
                                 </div>
                             ))}
                         </div>
@@ -122,62 +119,33 @@ export const EmployerDashboard: React.FC = () => {
                             </Link>
                         </div>
                     ) : (
-                        <div className="space-y-4">
-                            {activeJobs.slice(0, 5).map((job) => (
+                        <div className="divide-y divide-secondary-100">
+                            {activeJobs.map((job) => (
                                 <Link
                                     key={job.id}
                                     to={`/employer/jobs/${job.id}`}
-                                    className="flex items-center gap-4 p-3 rounded-xl hover:bg-secondary-50 transition-colors"
+                                    className="flex items-center gap-4 py-3.5 px-2 -mx-2 rounded-xl hover:bg-secondary-50 transition-colors"
                                 >
-                                    <div className="w-10 h-10 rounded-lg bg-primary-100 flex items-center justify-center">
+                                    <div className="w-10 h-10 rounded-lg bg-primary-100 flex items-center justify-center flex-shrink-0">
                                         <Briefcase className="w-5 h-5 text-primary-600" />
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <p className="font-medium text-secondary-900 truncate">{job.title}</p>
-                                        <p className="text-sm text-secondary-500">
-                                            {job.location} • {formatCurrency(job.compensation_amount)}
+                                        <p className="text-sm text-secondary-500 flex items-center gap-1 mt-0.5">
+                                            <Clock className="w-3.5 h-3.5" />
+                                            {job.location_label || job.location} · {formatCurrency(job.compensation_amount)}
                                         </p>
                                     </div>
-                                    <Badge variant={getStatusBadgeVariant(job.status)}>{job.status}</Badge>
+                                    <div className="flex items-center gap-2 flex-shrink-0">
+                                        <Badge variant={getStatusBadgeVariant(job.status)}>{job.status}</Badge>
+                                        <ArrowRight className="w-4 h-4 text-secondary-300" />
+                                    </div>
                                 </Link>
                             ))}
                         </div>
                     )}
                 </CardContent>
             </Card>
-
-            {/* Quick Actions */}
-            <div className="grid sm:grid-cols-3 gap-4">
-                <Link to="/employer/jobs/new">
-                    <Card interactive className="p-6 text-center">
-                        <div className="w-12 h-12 rounded-xl bg-primary-100 flex items-center justify-center mx-auto mb-3">
-                            <PlusCircle className="w-6 h-6 text-primary-600" />
-                        </div>
-                        <p className="font-medium text-secondary-900">Buat Lowongan</p>
-                        <p className="text-sm text-secondary-500">Posting pekerjaan baru</p>
-                    </Card>
-                </Link>
-{/* 
-                <Link to="/employer/applications">
-                    <Card interactive className="p-6 text-center">
-                        <div className="w-12 h-12 rounded-xl bg-success-100 flex items-center justify-center mx-auto mb-3">
-                            <Users className="w-6 h-6 text-success-600" />
-                        </div>
-                        <p className="font-medium text-secondary-900">Lamaran Masuk</p>
-                        <p className="text-sm text-secondary-500">Kelola pelamar</p>
-                    </Card>
-                </Link> */}
-
-                <Link to="/employer/jobs">
-                    <Card interactive className="p-6 text-center">
-                        <div className="w-12 h-12 rounded-xl bg-accent-100 flex items-center justify-center mx-auto mb-3">
-                            <Briefcase className="w-6 h-6 text-accent-600" />
-                        </div>
-                        <p className="font-medium text-secondary-900">Semua Lowongan</p>
-                        <p className="text-sm text-secondary-500">Kelola lowongan</p>
-                    </Card>
-                </Link>
-            </div>
         </div>
     );
 };

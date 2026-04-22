@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '../../contexts/AuthContext';
 import { usersService } from '../../api';
-import { Card, CardContent, Badge, Button, Skeleton, Avatar } from '../../components/ui';
+import { Card, CardContent, Badge, Button, Skeleton } from '../../components/ui';
 import { Briefcase, FileText, ArrowRight, Clock, CheckCircle, AlertCircle, RefreshCw, CircleX } from 'lucide-react';
 import { formatRelativeTime } from '../../utils';
-import { API_BASE_URL } from '../../api/axios';
+
 
 export const WorkerDashboard: React.FC = () => {
     const { user } = useAuth();
@@ -109,145 +109,96 @@ export const WorkerDashboard: React.FC = () => {
                 */}
             </div>
 
-            {/* Main Content Grid */}
-            <div className="grid lg:grid-cols-3 gap-6">
-                {/* Recent Applications */}
-                <div className="lg:col-span-2">
-                    <Card>
-                        <CardContent className="p-6">
-                            <div className="flex items-center justify-between mb-4">
-                                <h2 className="text-lg font-semibold text-secondary-900">Lamaran Terbaru</h2>
-                                <Link
-                                    to="/worker/applications"
-                                    className="text-sm text-primary-600 hover:text-primary-700 font-medium"
-                                >
-                                    Lihat Semua
-                                </Link>
-                            </div>
+            {/* Recent Applications - Full Width */}
+            <Card>
+                <CardContent className="p-6">
+                    <div className="flex items-center justify-between mb-4">
+                        <h2 className="text-lg font-semibold text-secondary-900">Lamaran Terbaru</h2>
+                        <Link
+                            to="/worker/applications"
+                            className="text-sm text-primary-600 hover:text-primary-700 font-medium flex items-center gap-1"
+                        >
+                            Lihat Semua
+                            <ArrowRight className="w-3.5 h-3.5" />
+                        </Link>
+                    </div>
 
-                            {appsLoading ? (
-                                <div className="space-y-4">
-                                    {[...Array(3)].map((_, i) => (
-                                        <div key={i} className="flex items-center gap-4">
-                                            <Skeleton className="w-10 h-10 rounded-lg" />
-                                            <div className="flex-1">
-                                                <Skeleton className="h-5 w-3/4 mb-1" />
-                                                <Skeleton className="h-4 w-1/2" />
-                                            </div>
-                                        </div>
-                                    ))}
+                    {appsLoading ? (
+                        <div className="divide-y divide-secondary-100">
+                            {[...Array(3)].map((_, i) => (
+                                <div key={i} className="flex items-center gap-4 py-4">
+                                    <Skeleton className="w-10 h-10 rounded-lg flex-shrink-0" />
+                                    <div className="flex-1">
+                                        <Skeleton className="h-5 w-3/4 mb-1" />
+                                        <Skeleton className="h-4 w-1/2" />
+                                    </div>
+                                    <Skeleton className="h-6 w-20 rounded-full" />
                                 </div>
-                            ) : appsError ? (
-                                <div className="text-center py-8">
-                                    <AlertCircle className="w-12 h-12 text-danger-300 mx-auto mb-3" />
-                                    <p className="text-secondary-600 mb-3">Gagal memuat lamaran</p>
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        onClick={() => refetchApps()}
-                                        leftIcon={RefreshCw}
-                                    >
-                                        Coba Lagi
-                                    </Button>
-                                </div>
-                            ) : recentApplications.length === 0 ? (
-                                <div className="text-center py-8">
-                                    <Briefcase className="w-12 h-12 text-secondary-300 mx-auto mb-3" />
-                                    <p className="text-secondary-600">Belum ada lamaran</p>
-                                    <Link to="/worker/jobs">
-                                        <Button variant="ghost" size="sm" className="mt-2">
-                                            Cari Pekerjaan
-                                        </Button>
-                                    </Link>
-                                </div>
-                            ) : (
-                                <div className="space-y-4">
-                                    {recentApplications.map((app) => (
-                                        <Link
-                                            key={app.id}
-                                            to={`/worker/applications/${app.id}`}
-                                            className="flex items-center gap-4 p-3 rounded-xl hover:bg-secondary-50 transition-colors"
-                                        >
-                                            <div className="w-10 h-10 rounded-lg bg-primary-100 flex items-center justify-center">
-                                                <Briefcase className="w-5 h-5 text-primary-600" />
-                                            </div>
-                                            <div className="flex-1 min-w-0">
-                                                <p className="font-medium text-secondary-900 truncate">{app.job.title}</p>
-                                                <p className="text-sm text-secondary-500">{formatRelativeTime(app.created_at)}</p>
-                                            </div>
-                                            <Badge
-                                                variant={
-                                                    app.status === 'ACCEPTED'
-                                                        ? 'success'
-                                                        : app.status === 'REJECTED'
-                                                            ? 'danger'
-                                                            : app.status === 'PENDING'
-                                                                ? 'warning'
-                                                                : 'secondary'
-                                                }
-                                            >
-                                                {app.status}
-                                            </Badge>
-                                        </Link>
-                                    ))}
-                                </div>
-                            )}
-                        </CardContent>
-                    </Card>
-                </div>
-
-                {/* Quick Actions & Profile */}
-                <div className="space-y-6">
-                    {/* Profile Card */}
-                    <Card>
-                        <CardContent className="p-6">
-                            <div className="flex items-center gap-4 mb-4">
-                                <Avatar src={API_BASE_URL + user?.profile_picture_url} size="lg" />
-                                <div className="flex-1 min-w-0">
-                                    <p className="font-semibold text-secondary-900 truncate">{user?.full_name}</p>
-                                    <p className="text-sm text-secondary-500 truncate">{user?.email}</p>
-                                </div>
-                            </div>
-                            <Link to="/worker/profile">
-                                <Button variant="secondary" className="w-full" size="sm">
-                                    Edit Profil
+                            ))}
+                        </div>
+                    ) : appsError ? (
+                        <div className="text-center py-8">
+                            <AlertCircle className="w-12 h-12 text-danger-300 mx-auto mb-3" />
+                            <p className="text-secondary-600 mb-3">Gagal memuat lamaran</p>
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => refetchApps()}
+                                leftIcon={RefreshCw}
+                            >
+                                Coba Lagi
+                            </Button>
+                        </div>
+                    ) : recentApplications.length === 0 ? (
+                        <div className="text-center py-8">
+                            <Briefcase className="w-12 h-12 text-secondary-300 mx-auto mb-3" />
+                            <p className="text-secondary-600">Belum ada lamaran</p>
+                            <Link to="/worker/jobs">
+                                <Button variant="ghost" size="sm" className="mt-2">
+                                    Cari Pekerjaan
                                 </Button>
                             </Link>
-                        </CardContent>
-                    </Card>
-
-                    {/* Quick Actions */}
-                    <Card>
-                        <CardContent className="p-6">
-                            <h2 className="text-lg font-semibold text-secondary-900 mb-4">Aksi Cepat</h2>
-                            <div className="space-y-2">
-                                <Link to="/worker/jobs" className="block">
-                                    <Button variant="ghost" className="w-full justify-start" leftIcon={Briefcase}>
-                                        Cari Pekerjaan
-                                    </Button>
+                        </div>
+                    ) : (
+                        <div className="divide-y divide-secondary-100">
+                            {recentApplications.map((app) => (
+                                <Link
+                                    key={app.id}
+                                    to={`/worker/applications/${app.id}`}
+                                    className="flex items-center gap-4 py-3.5 px-2 -mx-2 rounded-xl hover:bg-secondary-50 transition-colors"
+                                >
+                                    <div className="w-10 h-10 rounded-lg bg-primary-100 flex items-center justify-center flex-shrink-0">
+                                        <Briefcase className="w-5 h-5 text-primary-600" />
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                        <p className="font-medium text-secondary-900 truncate">{app.job.title}</p>
+                                        <p className="text-sm text-secondary-500 flex items-center gap-1 mt-0.5">
+                                            <Clock className="w-3.5 h-3.5" />
+                                            {formatRelativeTime(app.created_at)}
+                                        </p>
+                                    </div>
+                                    <div className="flex items-center gap-2 flex-shrink-0">
+                                        <Badge
+                                            variant={
+                                                app.status === 'ACCEPTED'
+                                                    ? 'success'
+                                                    : app.status === 'REJECTED'
+                                                        ? 'danger'
+                                                        : app.status === 'PENDING'
+                                                            ? 'warning'
+                                                            : 'secondary'
+                                            }
+                                        >
+                                            {app.status}
+                                        </Badge>
+                                        <ArrowRight className="w-4 h-4 text-secondary-300" />
+                                    </div>
                                 </Link>
-                                <Link to="/worker/applications" className="block">
-                                    <Button variant="ghost" className="w-full justify-start" leftIcon={FileText}>
-                                        Lihat Lamaran
-                                    </Button>
-                                </Link>
-                                {/* DISABLED: Wallet/Escrow features - Cash only mode
-                                <Link to="/worker/wallet" className="block">
-                                    <Button variant="ghost" className="w-full justify-start" leftIcon={Wallet}>
-                                        Kelola Dompet
-                                    </Button>
-                                </Link>
-                                */}
-                                <Link to="/worker/active-jobs" className="block">
-                                    <Button variant="ghost" className="w-full justify-start" leftIcon={Briefcase}>
-                                        Pekerjaan Aktif
-                                    </Button>
-                                </Link>
-                            </div>
-                        </CardContent>
-                    </Card>
-                </div>
-            </div>
+                            ))}
+                        </div>
+                    )}
+                </CardContent>
+            </Card>
         </div>
     );
 };
