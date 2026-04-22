@@ -152,11 +152,7 @@ export const EmployerLayout: React.FC = () => {
             {/* Main Content */}
             <div className="lg:pl-64">
                 {/* Desktop Header */}
-                <header className="hidden lg:flex items-center justify-between px-8 h-16 bg-white border-b border-secondary-100 sticky top-0 z-30">
-                    <h1 className="text-xl font-semibold text-secondary-900">
-                        {employerNavItems.find((item) => item.href === location.pathname)?.label || 'Dashboard'}
-                    </h1>
-
+                <header className="hidden lg:flex items-center justify-end px-8 h-16 bg-white border-b border-secondary-100 sticky top-0 z-30">
                     <div className="relative">
                         <button
                             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
