@@ -58,46 +58,46 @@ export const EmployerJobs: React.FC = () => {
                     }
                 />
             ) : (
-                <div className="space-y-4">
+                <div className="space-y-3">
                     {jobs.map((job) => (
                         <Link key={job.id} to={`/employer/jobs/${job.id}`}>
-                            <Card interactive className="p-6">
-                                <div className="flex flex-col sm:flex-row gap-4">
-                                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center flex-shrink-0">
-                                        <Briefcase className="w-7 h-7 text-primary-600" />
-                                    </div>
-
-                                    <div className="flex-1 min-w-0">
-                                        <div className="flex items-start justify-between gap-4 mb-2">
-                                            <h3 className="text-lg font-semibold text-secondary-900">{job.title}</h3>
-                                            <Badge variant={getStatusBadgeVariant(job.status)}>{job.status}</Badge>
+                            <Card interactive>
+                                <CardContent className="p-4 sm:p-5">
+                                    <div className="flex items-start gap-4">
+                                        {/* Icon */}
+                                        <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center flex-shrink-0">
+                                            <Briefcase className="w-6 h-6 sm:w-7 sm:h-7 text-primary-600" />
                                         </div>
 
-                                        <div className="flex flex-wrap gap-4 text-sm text-secondary-500">
-                                            <span className="flex items-center gap-1.5">
-                                                <MapPin className="w-4 h-4" />
-                                                {job.location_label || job.location}
-                                            </span>
-                                            <span className="flex items-center gap-1.5">
-                                                <Banknote className="w-4 h-4" />
-                                                {formatCurrency(job.compensation_amount)}
-                                            </span>
-                                            <span className="flex items-center gap-1.5">
-                                                <Clock className="w-4 h-4" />
-                                                {formatRelativeTime(job.posted_at ?? '')}
-                                            </span>
-                                            {/* Payment Method - Cash Only */}
-                                            <span className="flex items-center gap-1 text-secondary-500">
-                                                <Banknote className="w-4 h-4" />
-                                                <span className="text-xs font-medium">Cash</span>
-                                            </span>
-                                        </div>
-                                    </div>
+                                        {/* Content */}
+                                        <div className="flex-1 min-w-0">
+                                            {/* Title + Badge */}
+                                            <div className="flex items-start justify-between gap-2 mb-1.5">
+                                                <h3 className="text-base sm:text-lg font-semibold text-secondary-900 leading-snug">{job.title}</h3>
+                                                <Badge variant={getStatusBadgeVariant(job.status)} className="flex-shrink-0 text-xs">{job.status}</Badge>
+                                            </div>
 
-                                    <div className="hidden sm:flex items-center">
-                                        <ChevronRight className="w-5 h-5 text-secondary-400" />
+                                            {/* Meta info */}
+                                            <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-xs sm:text-sm text-secondary-500">
+                                                <span className="flex items-center gap-1">
+                                                    <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
+                                                    <span className="truncate max-w-[140px] sm:max-w-none">{job.location_label || job.location}</span>
+                                                </span>
+                                                <span className="flex items-center gap-1">
+                                                    <Banknote className="w-3.5 h-3.5 flex-shrink-0" />
+                                                    {formatCurrency(job.compensation_amount)} · Cash
+                                                </span>
+                                                <span className="flex items-center gap-1">
+                                                    <Clock className="w-3.5 h-3.5 flex-shrink-0" />
+                                                    {formatRelativeTime(job.posted_at ?? '')}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        {/* Chevron */}
+                                        <ChevronRight className="w-5 h-5 text-secondary-300 flex-shrink-0 mt-1" />
                                     </div>
-                                </div>
+                                </CardContent>
                             </Card>
                         </Link>
                     ))}
