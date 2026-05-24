@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { creditsService } from '../../api';
 import { Card, CardContent, Button, Modal, Input, Skeleton } from '../../components/ui';
 import { PlusCircle, Edit2, Trash2 } from 'lucide-react';
-import { formatCurrency } from '../../utils';
+import { formatCurrency, handleApiError } from '../../utils';
 import toast from 'react-hot-toast';
 
 export const AdminPostingCredits: React.FC = () => {
@@ -35,7 +35,7 @@ export const AdminPostingCredits: React.FC = () => {
       setIsCreateModalOpen(false);
       resetForm();
     },
-    onError: (err: any) => toast.error(err.response?.data?.errors || 'Gagal menambahkan paket'),
+    onError: (err: any) => handleApiError(err, 'Gagal menambahkan paket'),
   });
 
   const editMutation = useMutation({
@@ -45,7 +45,7 @@ export const AdminPostingCredits: React.FC = () => {
       queryClient.invalidateQueries({ queryKey: ['admin-posting-credits'] });
       setIsEditModalOpen(false);
     },
-    onError: (err: any) => toast.error(err.response?.data?.errors || 'Gagal memperbarui paket'),
+    onError: (err: any) => handleApiError(err, 'Gagal memperbarui paket'),
   });
 
   const deleteMutation = useMutation({
@@ -55,7 +55,7 @@ export const AdminPostingCredits: React.FC = () => {
       queryClient.invalidateQueries({ queryKey: ['admin-posting-credits'] });
       setIsDeleteModalOpen(false);
     },
-    onError: (err: any) => toast.error(err.response?.data?.errors || 'Gagal menghapus paket'),
+    onError: (err: any) => handleApiError(err, 'Gagal menghapus paket'),
   });
 
   const resetForm = () => {

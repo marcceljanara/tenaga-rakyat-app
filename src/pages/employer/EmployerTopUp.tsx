@@ -7,7 +7,7 @@ import { z } from 'zod';
 import { walletsService } from '../../api';
 import { Card, CardContent, Button, Input, Skeleton, Modal } from '../../components/ui';
 import { ArrowLeft, Wallet, CreditCard, CheckCircle, AlertCircle, ExternalLink } from 'lucide-react';
-import { formatCurrency } from '../../utils';
+import { formatCurrency, handleApiError } from '../../utils';
 import toast from 'react-hot-toast';
 
 const topUpSchema = z.object({
@@ -32,6 +32,7 @@ export const EmployerTopUp: React.FC = () => {
     const {
         register,
         handleSubmit,
+        setError,
         formState: { errors },
         reset,
     } = useForm<TopUpFormData>({
@@ -53,8 +54,7 @@ export const EmployerTopUp: React.FC = () => {
             setIsPaymentModalOpen(true);
         },
         onError: (error: any) => {
-            const message = error.response?.data?.errors || 'Gagal membuat permintaan top up';
-            toast.error(message);
+            handleApiError(error, 'Gagal membuat permintaan top up', setError);
         },
     });
 

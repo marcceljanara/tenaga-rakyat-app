@@ -9,6 +9,7 @@ import { Button, Input } from '../../components/ui';
 import { Mail, ArrowLeft, CheckCircle, XCircle, Lock, Eye, EyeOff } from 'lucide-react';
 import toast from 'react-hot-toast';
 import logoTenagaRakyat from '../../assets/logo_tenaga_rakyat.png';
+import { handleApiError } from '../../utils';
 
 // Forgot Password Schema
 const forgotPasswordSchema = z.object({
@@ -23,6 +24,7 @@ export const ForgotPasswordPage: React.FC = () => {
     const {
         register,
         handleSubmit,
+        setError,
         formState: { errors, isSubmitting },
     } = useForm<ForgotPasswordFormData>({
         resolver: zodResolver(forgotPasswordSchema),
@@ -34,8 +36,7 @@ export const ForgotPasswordPage: React.FC = () => {
             setIsSubmitted(true);
             toast.success('Email reset password telah dikirim!');
         } catch (error: any) {
-            const message = error.response?.data?.errors || 'Gagal mengirim email. Silakan coba lagi.';
-            toast.error(message);
+            handleApiError(error, 'Gagal mengirim email. Silakan coba lagi.', setError);
         }
     };
 
@@ -120,6 +121,7 @@ export const ResetPasswordPage: React.FC = () => {
     const {
         register,
         handleSubmit,
+        setError,
         formState: { errors, isSubmitting },
     } = useForm<ResetPasswordFormData>({
         resolver: zodResolver(resetPasswordSchema),
@@ -140,8 +142,7 @@ export const ResetPasswordPage: React.FC = () => {
             setIsSuccess(true);
             toast.success('Password berhasil direset!');
         } catch (error: any) {
-            const message = error.response?.data?.errors || 'Gagal reset password.';
-            toast.error(message);
+            handleApiError(error, 'Gagal reset password.', setError);
         }
     };
 
@@ -360,8 +361,7 @@ export const VerifyEmailRequiredPage: React.FC = () => {
             setEmailSent(true);
             toast.success('Email verifikasi telah dikirim ulang!');
         } catch (error: any) {
-            const message = error.response?.data?.errors || 'Gagal mengirim email.';
-            toast.error(message);
+            handleApiError(error, 'Gagal mengirim email.');
         } finally {
             setIsResending(false);
         }

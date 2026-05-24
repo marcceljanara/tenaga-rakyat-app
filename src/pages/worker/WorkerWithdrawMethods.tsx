@@ -8,6 +8,7 @@ import { walletsService } from '../../api';
 import { Card, CardContent, Button, Input, Select, Skeleton, EmptyState, Modal } from '../../components/ui';
 import { ArrowLeft, CreditCard, Building2, Plus, Trash2, AlertTriangle } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { handleApiError } from '../../utils';
 import type { WithdrawMethodData, CreateWithdrawMethodData } from '../../types';
 import { BANK_PROVIDERS, EWALLET_PROVIDERS } from '../../types';
 
@@ -39,6 +40,7 @@ export const WorkerWithdrawMethods: React.FC = () => {
         handleSubmit,
         watch,
         reset,
+        setError,
         formState: { errors },
     } = useForm<MethodFormData>({
         resolver: zodResolver(methodSchema),
@@ -60,8 +62,7 @@ export const WorkerWithdrawMethods: React.FC = () => {
             reset();
         },
         onError: (error: any) => {
-            const message = error.response?.data?.errors || 'Gagal menambahkan metode';
-            toast.error(message);
+            handleApiError(error, 'Gagal menambahkan metode', setError);
         },
     });
 
@@ -74,8 +75,7 @@ export const WorkerWithdrawMethods: React.FC = () => {
             setDeleteMethod(null);
         },
         onError: (error: any) => {
-            const message = error.response?.data?.errors || 'Gagal menghapus metode';
-            toast.error(message);
+            handleApiError(error, 'Gagal menghapus metode');
         },
     });
 

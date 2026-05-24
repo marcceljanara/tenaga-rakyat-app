@@ -9,6 +9,7 @@ import { Card, CardContent, Button, Input, Textarea, Avatar, LocationPicker } fr
 import { Camera, Trash2, Save, User, Mail, Phone, Link as LinkIcon, MapPin } from 'lucide-react';
 import { API_BASE_URL } from '../../api/axios';
 import toast from 'react-hot-toast';
+import { handleApiError } from '../../utils';
 
 const profileSchema = z.object({
     full_name: z.string().min(3, 'Nama minimal 3 karakter'),
@@ -30,6 +31,7 @@ export const WorkerProfile: React.FC = () => {
     const {
         register,
         handleSubmit,
+        setError,
         formState: { errors, isSubmitting, isDirty },
     } = useForm<ProfileFormData>({
         resolver: zodResolver(profileSchema),
@@ -54,8 +56,7 @@ export const WorkerProfile: React.FC = () => {
             refreshUser();
         },
         onError: (error: any) => {
-            const message = error.response?.data?.errors || 'Gagal memperbarui profil';
-            toast.error(message);
+            handleApiError(error, 'Gagal memperbarui profil', setError);
         },
     });
 
@@ -86,8 +87,7 @@ export const WorkerProfile: React.FC = () => {
             toast.success('Foto profil berhasil diperbarui!');
             refreshUser();
         } catch (error: any) {
-            const message = error.response?.data?.errors || 'Gagal mengunggah foto';
-            toast.error(message);
+            handleApiError(error, 'Gagal mengunggah foto');
         } finally {
             setIsUploadingPhoto(false);
             // Reset input file agar bisa upload file yang sama
@@ -106,8 +106,7 @@ export const WorkerProfile: React.FC = () => {
             toast.success('Foto profil berhasil dihapus');
             refreshUser();
         } catch (error: any) {
-            const message = error.response?.data?.errors || 'Gagal menghapus foto';
-            toast.error(message);
+            handleApiError(error, 'Gagal menghapus foto');
         } finally {
             setIsDeletingPhoto(false);
         }
@@ -120,8 +119,7 @@ export const WorkerProfile: React.FC = () => {
             toast.success('Lokasi berhasil diperbarui!');
             refreshUser();
         } catch (error: any) {
-            const message = error.response?.data?.errors || 'Gagal memperbarui lokasi';
-            toast.error(message);
+            handleApiError(error, 'Gagal memperbarui lokasi');
         } finally {
             setIsUpdatingLocation(false);
         }

@@ -4,6 +4,7 @@ import { reviewsService } from '../api';
 import { Modal, Button, Textarea } from './ui';
 import { Star } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { handleApiError } from '../utils';
 import { useAuth } from '../contexts/AuthContext';
 
 interface ReviewModalProps {
@@ -65,7 +66,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({ isOpen, onClose, jobId
       onClose();
     },
     onError: (err: any) => {
-      toast.error(err.response?.data?.errors || 'Gagal mengirim review');
+      handleApiError(err, 'Gagal mengirim review');
     }
   });
 

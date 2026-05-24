@@ -602,8 +602,8 @@ export interface PagingResponse<T> {
 
 // Error Response Type
 export interface ApiError {
-    errors: string;
-    statusCode: number;
+    errors: string | Record<string, string[]>;
+    statusCode?: number;
 }
 
 // Email Verification Types

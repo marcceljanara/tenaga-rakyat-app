@@ -7,7 +7,7 @@ import {
     MapPin, Banknote, Clock, ArrowLeft, Briefcase, Users,
     CheckCircle, XCircle, Award, Trash2, Mail, Phone, Home, Navigation
 } from 'lucide-react';
-import { formatCurrency, formatRelativeTime } from '../../utils';
+import { formatCurrency, formatRelativeTime, handleApiError } from '../../utils';
 import toast from 'react-hot-toast';
 import { API_BASE_URL } from '../../api/axios';
 import { ReviewModal } from '../../components/ReviewModal';
@@ -50,8 +50,7 @@ export const EmployerJobDetail: React.FC = () => {
             navigate('/employer/jobs');
         },
         onError: (error: any) => {
-            const message = error.response?.data?.errors || 'Gagal menghapus lowongan';
-            toast.error(message);
+            handleApiError(error, 'Gagal menghapus lowongan');
         },
     });
 
@@ -70,8 +69,7 @@ export const EmployerJobDetail: React.FC = () => {
             setIsStatusModalOpen(false);
         },
         onError: (error: any) => {
-            const message = error.response?.data?.errors || 'Gagal mengubah status';
-            toast.error(message);
+            handleApiError(error, 'Gagal mengubah status');
         },
     });
 
@@ -85,8 +83,7 @@ export const EmployerJobDetail: React.FC = () => {
             queryClient.invalidateQueries({ queryKey: ['job-applications', id] });
         },
         onError: (error: any) => {
-            const message = error.response?.data?.errors || 'Gagal memproses lamaran';
-            toast.error(message);
+            handleApiError(error, 'Gagal memproses lamaran');
         },
     });
 

@@ -8,6 +8,7 @@ import { Button, Input } from '../../components/ui';
 import { Mail, Lock, Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import toast from 'react-hot-toast';
 import logoTenagaRakyat from '../../assets/logo_tenaga_rakyat.png';
+import { handleApiError } from '../../utils';
 
 const loginSchema = z.object({
     email: z.string().email('Email tidak valid'),
@@ -27,6 +28,7 @@ export const LoginPage: React.FC = () => {
     const {
         register,
         handleSubmit,
+        setError,
         formState: { errors, isSubmitting },
     } = useForm<LoginFormData>({
         resolver: zodResolver(loginSchema),
@@ -42,8 +44,7 @@ export const LoginPage: React.FC = () => {
         } catch (error: any) {
             console.error('❌ [LoginPage] login() failed:', error);
             console.error('❌ [LoginPage] Error response:', error.response);
-            const message = error.response?.data?.errors || 'Login gagal. Silakan coba lagi.';
-            toast.error(message);
+            handleApiError(error, 'Login gagal. Silakan coba lagi.', setError);
         }
     };
 

@@ -7,7 +7,7 @@ import { z } from 'zod';
 import { walletsService } from '../../api';
 import { Card, CardContent, Button, Input, Skeleton } from '../../components/ui';
 import { ArrowLeft, Wallet, AlertCircle } from 'lucide-react';
-import { formatCurrency } from '../../utils';
+import { formatCurrency, handleApiError } from '../../utils';
 import toast from 'react-hot-toast';
 import type { WithdrawMethodData } from '../../types';
 
@@ -43,6 +43,7 @@ export const WorkerWithdraw: React.FC = () => {
         register,
         handleSubmit,
         watch,
+        setError,
         formState: { errors },
     } = useForm<WithdrawFormData>({
         resolver: zodResolver(withdrawSchema),
@@ -69,8 +70,7 @@ export const WorkerWithdraw: React.FC = () => {
             });
         },
         onError: (error: any) => {
-            const message = error.response?.data?.errors || 'Gagal menghitung preview';
-            toast.error(message);
+            handleApiError(error, 'Gagal menghitung preview', setError);
             setPreview(null);
         },
     });
@@ -89,8 +89,7 @@ export const WorkerWithdraw: React.FC = () => {
             navigate('/worker/wallet');
         },
         onError: (error: any) => {
-            const message = error.response?.data?.errors || 'Gagal membuat permintaan penarikan';
-            toast.error(message);
+            handleApiError(error, 'Gagal membuat permintaan penarikan', setError);
         },
     });
 

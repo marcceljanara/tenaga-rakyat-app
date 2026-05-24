@@ -18,7 +18,7 @@ import {
     AlertTriangle
 } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { formatDate } from '../../utils';
+import { formatDate, handleApiError } from '../../utils';
 import type { VerificationStatus } from '../../types';
 
 type ConfirmAction =
@@ -62,7 +62,7 @@ export const AdminUserDetail: React.FC = () => {
             navigate('/admin/users');
         },
         onError: (error: any) => {
-            toast.error(error.response?.data?.errors || 'Gagal menghapus user');
+            handleApiError(error, 'Gagal menghapus user');
         },
     });
 
@@ -74,7 +74,7 @@ export const AdminUserDetail: React.FC = () => {
             setConfirmAction(null);
         },
         onError: (error: any) => {
-            toast.error(error.response?.data?.errors || 'Gagal menangguhkan akun');
+            handleApiError(error, 'Gagal menangguhkan akun');
         },
     });
 
@@ -86,7 +86,7 @@ export const AdminUserDetail: React.FC = () => {
             setConfirmAction(null);
         },
         onError: (error: any) => {
-            toast.error(error.response?.data?.errors || 'Gagal mengaktifkan akun');
+            handleApiError(error, 'Gagal mengaktifkan akun');
         },
     });
 
@@ -99,7 +99,7 @@ export const AdminUserDetail: React.FC = () => {
             setWalletSuspendReason('');
         },
         onError: (error: any) => {
-            toast.error(error.response?.data?.errors || 'Gagal menangguhkan wallet');
+            handleApiError(error, 'Gagal menangguhkan wallet');
         },
     });
 
@@ -111,7 +111,7 @@ export const AdminUserDetail: React.FC = () => {
             setConfirmAction(null);
         },
         onError: (error: any) => {
-            toast.error(error.response?.data?.errors || 'Gagal mengaktifkan wallet');
+            handleApiError(error, 'Gagal mengaktifkan wallet');
         },
     });
 
@@ -123,7 +123,7 @@ export const AdminUserDetail: React.FC = () => {
             setConfirmAction(null);
         },
         onError: (error: any) => {
-            toast.error(error.response?.data?.errors || 'Gagal memperbarui status verifikasi');
+            handleApiError(error, 'Gagal memperbarui status verifikasi');
         },
     });
 
