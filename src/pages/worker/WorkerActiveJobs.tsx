@@ -26,7 +26,7 @@ export const WorkerActiveJobs: React.FC = () => {
     const activeJobs = applications.filter(
         (app: WorkerApplication) =>
             app.status === 'ACCEPTED' &&
-            ['ASSIGNED', 'IN_PROGRESS'].includes(app.job.status)
+            ['ASSIGNED', 'IN_PROGRESS', 'COMPLETED'].includes(app.job.status)
     );
 
     // Update job status mutation
