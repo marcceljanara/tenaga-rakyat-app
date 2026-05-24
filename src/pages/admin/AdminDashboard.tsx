@@ -103,7 +103,7 @@ export const AdminDashboard: React.FC = () => {
             </div>
 
             {/* Top Stat Cards */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 min-[500px]:grid-cols-2 lg:grid-cols-4 gap-4">
                 <StatCard
                     icon={TrendingUp}
                     label="Total Pendapatan"
@@ -136,7 +136,7 @@ export const AdminDashboard: React.FC = () => {
             </div>
 
             {/* Second Tier Stats */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 min-[500px]:grid-cols-2 lg:grid-cols-4 gap-4">
                 <StatCard
                     icon={FileText}
                     label="Total Lamaran"
