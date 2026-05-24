@@ -46,7 +46,6 @@ export const EmployerTopUp: React.FC = () => {
         mutationFn: (data: TopUpFormData) => walletsService.topUp(data.balance),
         onSuccess: (response) => {
             const data = response.data;
-            console.log(data);
             setPaymentData({
                 token: data.token,
                 redirect_url: data.redirectUrl,

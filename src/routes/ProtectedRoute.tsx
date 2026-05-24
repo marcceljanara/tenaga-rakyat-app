@@ -28,8 +28,6 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowe
     }
 
     // Debug: Log user data to see what fields are available
-    console.log('🔵 [ProtectedRoute] User data:', user);
-    console.log('🔵 [ProtectedRoute] email:', user?.email);
     console.log('🔵 [ProtectedRoute] verification_status:', user?.verification_status);
     console.log('🔵 [ProtectedRoute] User role:', user?.role);
 

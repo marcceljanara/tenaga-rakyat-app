@@ -13,7 +13,6 @@ export const authService = {
     // Login user - sets HTTP-only cookies (access_token, refresh_token)
     login: async (credentials: LoginCredentials): Promise<ApiResponse<{ message: string }>> => {
         console.log('🔵 [authService] login() called to:', '/api/users/login');
-        console.log('🔵 [authService] Request payload:', { email: credentials.email, password: '***' });
         
         // Fetch CSRF token first
         console.log('🔵 [authService] Fetching CSRF token...');
@@ -22,7 +21,6 @@ export const authService = {
 
         const response = await api.post('/api/users/login', credentials);
         console.log('✅ [authService] Login response status:', response.status);
-        console.log('✅ [authService] Login response data:', response.data);
 
         // Fetch new CSRF token after login since session rotation invalidates the old one
         console.log('🔵 [authService] Fetching new CSRF token after login...');
