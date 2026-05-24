@@ -44,7 +44,7 @@ export const authService = {
 
     // Register new user - creates user and wallet, sends verification email
     register: async (data: RegisterData): Promise<ApiResponse<User>> => {
-        fetchCsrfToken();
+        await fetchCsrfToken();
         const response = await api.post('/api/users', data);
         return response.data;
     },
