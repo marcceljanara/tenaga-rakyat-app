@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { usersService, jobsService } from '../../api';
 import { Card, CardContent, Badge, Button, Skeleton, EmptyState, Modal, getStatusBadgeVariant } from '../../components/ui';
 import { Briefcase, MapPin, Banknote, Clock, Play, CheckCircle, User } from 'lucide-react';
-import { formatCurrency, formatRelativeTime } from '../../utils';
+import { formatCurrency, formatRelativeTime, handleApiError } from '../../utils';
 import toast from 'react-hot-toast';
 import type { WorkerApplication, WorkerApplicationJob } from '../../types';
 
@@ -43,8 +43,7 @@ export const WorkerActiveJobs: React.FC = () => {
             setIsStatusModalOpen(false);
         },
         onError: (error: any) => {
-            const message = error.response?.data?.errors || 'Gagal mengubah status';
-            toast.error(message);
+            handleApiError(error, 'Gagal mengubah status');
         },
     });
 

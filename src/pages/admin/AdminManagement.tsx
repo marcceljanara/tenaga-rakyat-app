@@ -19,6 +19,7 @@ import {
 import { UserPlus, Users, Trash2, Key, Edit, Shield, ShieldCheck } from 'lucide-react';
 import { formatDateTime } from '../../utils';
 import toast from 'react-hot-toast';
+import { handleApiError } from '../../utils';
 import type { Admin, CreateAdminData, UpdateAdminData } from '../../types';
 
 const createAdminSchema = z.object({
@@ -92,8 +93,7 @@ export const AdminManagement: React.FC = () => {
             createForm.reset();
         },
         onError: (error: any) => {
-            const message = error.response?.data?.errors || 'Gagal membuat admin';
-            toast.error(message);
+            handleApiError(error, 'Gagal membuat admin', createForm.setError);
         },
     });
 
@@ -106,8 +106,7 @@ export const AdminManagement: React.FC = () => {
             setIsEditModalOpen(false);
         },
         onError: (error: any) => {
-            const message = error.response?.data?.errors || 'Gagal memperbarui admin';
-            toast.error(message);
+            handleApiError(error, 'Gagal memperbarui admin', updateForm.setError);
         },
     });
 
@@ -121,8 +120,7 @@ export const AdminManagement: React.FC = () => {
             passwordForm.reset();
         },
         onError: (error: any) => {
-            const message = error.response?.data?.errors || 'Gagal mengubah password';
-            toast.error(message);
+            handleApiError(error, 'Gagal mengubah password', passwordForm.setError);
         },
     });
 
@@ -135,8 +133,7 @@ export const AdminManagement: React.FC = () => {
             setIsDeleteModalOpen(false);
         },
         onError: (error: any) => {
-            const message = error.response?.data?.errors || 'Gagal menghapus admin';
-            toast.error(message);
+            handleApiError(error, 'Gagal menghapus admin');
         },
     });
 

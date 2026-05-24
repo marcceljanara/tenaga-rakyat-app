@@ -17,8 +17,8 @@ import {
     FileText,
     Copy
 } from 'lucide-react';
-import { formatCurrency, formatDateTime } from '../../utils';
 import toast from 'react-hot-toast';
+import { formatCurrency, formatDateTime, handleApiError } from '../../utils';
 
 export const AdminWithdrawDetail: React.FC = () => {
     const { withdrawId } = useParams<{ withdrawId: string }>();
@@ -46,7 +46,7 @@ export const AdminWithdrawDetail: React.FC = () => {
             queryClient.invalidateQueries({ queryKey: ['admin-withdraw-requests'] });
             setAdminNote('');
         },
-        onError: (error: any) => toast.error(error.response?.data?.errors || 'Gagal mengunci request'),
+        onError: (error: any) => handleApiError(error, 'Gagal mengunci request'),
     });
 
     const unlockMutation = useMutation({
@@ -56,7 +56,7 @@ export const AdminWithdrawDetail: React.FC = () => {
             queryClient.invalidateQueries({ queryKey: ['withdraw-detail', withdrawId] });
             queryClient.invalidateQueries({ queryKey: ['admin-withdraw-requests'] });
         },
-        onError: (error: any) => toast.error(error.response?.data?.errors || 'Gagal membuka request'),
+        onError: (error: any) => handleApiError(error, 'Gagal membuka request'),
     });
 
     const approveMutation = useMutation({
@@ -68,7 +68,7 @@ export const AdminWithdrawDetail: React.FC = () => {
             setAdminNote('');
             setIsPaymentModalOpen(true);
         },
-        onError: (error: any) => toast.error(error.response?.data?.errors || 'Gagal menyetujui request'),
+        onError: (error: any) => handleApiError(error, 'Gagal menyetujui request'),
     });
 
     const rejectMutation = useMutation({
@@ -79,7 +79,7 @@ export const AdminWithdrawDetail: React.FC = () => {
             queryClient.invalidateQueries({ queryKey: ['admin-withdraw-requests'] });
             setAdminNote('');
         },
-        onError: (error: any) => toast.error(error.response?.data?.errors || 'Gagal menolak request'),
+        onError: (error: any) => handleApiError(error, 'Gagal menolak request'),
     });
 
     const sendMutation = useMutation({
@@ -91,7 +91,7 @@ export const AdminWithdrawDetail: React.FC = () => {
             setIsPaymentModalOpen(false);
             setTransferReceipt('');
         },
-        onError: (error: any) => toast.error(error.response?.data?.errors || 'Gagal menandai terkirim'),
+        onError: (error: any) => handleApiError(error, 'Gagal menandai terkirim'),
     });
 
     const copyToClipboard = (text: string, label: string) => {

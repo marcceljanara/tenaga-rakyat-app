@@ -19,7 +19,7 @@ import {
     Home,
     Navigation
 } from 'lucide-react';
-import { formatCurrency, formatRelativeTime } from '../../utils';
+import { formatCurrency, formatRelativeTime, handleApiError } from '../../utils';
 import toast from 'react-hot-toast';
 import { ReviewModal } from '../../components/ReviewModal';
 
@@ -66,8 +66,7 @@ export const WorkerApplicationDetail: React.FC = () => {
             setIsStatusModalOpen(false);
         },
         onError: (error: any) => {
-            const message = error.response?.data?.errors || 'Gagal mengubah status';
-            toast.error(message);
+            handleApiError(error, 'Gagal mengubah status');
         },
     });
 

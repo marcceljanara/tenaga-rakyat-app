@@ -8,6 +8,7 @@ import { jobsService } from '../../api';
 import { Card, CardContent, Button, Input, Textarea, LocationPicker } from '../../components/ui';
 import { Briefcase, MapPin, Banknote, ArrowLeft, Save } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { handleApiError } from '../../utils';
 
 
 const jobSchema = z.object({
@@ -31,6 +32,7 @@ export const CreateJob: React.FC = () => {
         handleSubmit,
         watch,
         setValue,
+        setError,
         formState: { errors, isSubmitting },
     } = useForm<JobFormData>({
         resolver: zodResolver(jobSchema),
@@ -52,8 +54,7 @@ export const CreateJob: React.FC = () => {
             navigate(`/employer/jobs/${response.data.id}`);
         },
         onError: (error: any) => {
-            const message = error.response?.data?.errors || 'Gagal membuat lowongan';
-            toast.error(message);
+            handleApiError(error, 'Gagal membuat lowongan', setError);
         },
     });
 

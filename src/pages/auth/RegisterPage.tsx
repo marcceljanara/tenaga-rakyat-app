@@ -8,6 +8,7 @@ import { Button, Input, Select } from '../../components/ui';
 import { Mail, Lock, Eye, EyeOff, User, Phone, ArrowLeft } from 'lucide-react';
 import toast from 'react-hot-toast';
 import logoTenagaRakyat from '../../assets/logo_tenaga_rakyat.png';
+import { handleApiError } from '../../utils';
 
 const registerSchema = z.object({
     full_name: z.string().min(3, 'Nama minimal 3 karakter'),
@@ -30,6 +31,7 @@ export const RegisterPage: React.FC = () => {
     const {
         register,
         handleSubmit,
+        setError,
         formState: { errors, isSubmitting },
     } = useForm<RegisterFormData>({
         resolver: zodResolver(registerSchema),
@@ -50,8 +52,7 @@ export const RegisterPage: React.FC = () => {
             toast.success('Registrasi berhasil! Silakan cek email untuk verifikasi.');
             navigate('/login');
         } catch (error: any) {
-            const message = error.response?.data?.errors || 'Registrasi gagal. Silakan coba lagi.';
-            toast.error(message);
+            handleApiError(error, 'Registrasi gagal. Silakan coba lagi.', setError);
         }
     };
 

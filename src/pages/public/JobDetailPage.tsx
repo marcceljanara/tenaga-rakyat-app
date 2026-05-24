@@ -8,7 +8,7 @@ import { jobsService, applicationsService } from '../../api';
 import { useAuth } from '../../contexts/AuthContext';
 import { Card, CardContent, Button, Badge, Skeleton, Textarea, Modal, Avatar, getStatusBadgeVariant } from '../../components/ui';
 import { MapPin, Banknote, Clock, ArrowLeft, Briefcase, Send, CheckCircle, Navigation, Lock, Users } from 'lucide-react';
-import { formatCurrency, formatRelativeTime } from '../../utils';
+import { formatCurrency, formatRelativeTime, handleApiError } from '../../utils';
 import toast from 'react-hot-toast';
 import { API_BASE_URL } from '../../api/axios';
 
@@ -33,6 +33,7 @@ export const JobDetailPage: React.FC = () => {
     const {
         register,
         handleSubmit,
+        setError,
         formState: { errors, isSubmitting },
         reset,
     } = useForm<ApplyFormData>({
@@ -52,8 +53,7 @@ export const JobDetailPage: React.FC = () => {
             setIsApplyModalOpen(false);
             reset();
         } catch (error: any) {
-            const message = error.response?.data?.errors || 'Gagal mengirim lamaran.';
-            toast.error(message);
+            handleApiError(error, 'Gagal mengirim lamaran.', setError);
         }
     };
 

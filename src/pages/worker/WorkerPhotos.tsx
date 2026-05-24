@@ -23,6 +23,7 @@ import {
     ArrowLeft,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { handleApiError } from '../../utils';
 import type { UserPhoto } from '../../types';
 import { API_BASE_URL } from '../../api/axios';
 
@@ -86,8 +87,7 @@ export const WorkerPhotos: React.FC = () => {
             handleCloseUploadModal();
         },
         onError: (error: any) => {
-            const message = error.response?.data?.errors || 'Gagal mengunggah foto';
-            toast.error(message);
+            handleApiError(error, 'Gagal mengunggah foto', uploadForm.setError);
         },
     });
 
@@ -102,8 +102,7 @@ export const WorkerPhotos: React.FC = () => {
             editForm.reset();
         },
         onError: (error: any) => {
-            const message = error.response?.data?.errors || 'Gagal memperbarui deskripsi';
-            toast.error(message);
+            handleApiError(error, 'Gagal memperbarui deskripsi', editForm.setError);
         },
     });
 
@@ -120,8 +119,7 @@ export const WorkerPhotos: React.FC = () => {
             }
         },
         onError: (error: any) => {
-            const message = error.response?.data?.errors || 'Gagal menghapus foto';
-            toast.error(message);
+            handleApiError(error, 'Gagal menghapus foto');
         },
     });
 
