@@ -1,5 +1,5 @@
 import toast from 'react-hot-toast';
-import { UseFormSetError, FieldValues, Path } from 'react-hook-form';
+import type { UseFormSetError, FieldValues, Path } from 'react-hook-form';
 
 export function handleApiError<TFieldValues extends FieldValues = FieldValues>(
     error: any,

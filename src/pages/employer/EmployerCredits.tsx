@@ -3,7 +3,7 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { creditsService } from '../../api';
 import { Card, CardContent, Button, Skeleton, Badge } from '../../components/ui';
 import { Coins, ShoppingCart, History } from 'lucide-react';
-import { formatCurrency, formatRelativeTime } from '../../utils';
+import { formatCurrency, formatRelativeTime, handleApiError } from '../../utils';
 import toast from 'react-hot-toast';
 
 export const EmployerCredits: React.FC = () => {
@@ -31,7 +31,7 @@ export const EmployerCredits: React.FC = () => {
         toast.success('Berhasil memproses pembelian.');
       }
     },
-    onError: (err: any) => toast.error(err.response?.data?.errors || 'Gagal memulai pembelian'),
+    onError: (err: any) => handleApiError(err, 'Gagal memulai pembelian'),
   });
 
   const balance = balanceData?.data;
