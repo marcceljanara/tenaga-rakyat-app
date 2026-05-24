@@ -38,8 +38,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         // After successful login, fetch the user profile
         console.log('🔵 [AuthContext] Calling usersService.getProfile()...');
         const response = await usersService.getProfile();
-        console.log('✅ [AuthContext] getProfile() response:', response);
-        console.log('✅ [AuthContext] User data:', response.data);
         setUser(response.data);
     }, []);
 

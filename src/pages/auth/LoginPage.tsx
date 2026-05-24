@@ -33,7 +33,6 @@ export const LoginPage: React.FC = () => {
     });
 
     const onSubmit = async (data: LoginFormData) => {
-        console.log('🔵 [LoginPage] onSubmit called with:', { email: data.email, passwordLength: data.password.length });
         try {
             console.log('🔵 [LoginPage] Calling login()...');
             await login(data);
@@ -43,7 +42,6 @@ export const LoginPage: React.FC = () => {
         } catch (error: any) {
             console.error('❌ [LoginPage] login() failed:', error);
             console.error('❌ [LoginPage] Error response:', error.response);
-            console.error('❌ [LoginPage] Error response data:', error.response?.data);
             const message = error.response?.data?.errors || 'Login gagal. Silakan coba lagi.';
             toast.error(message);
         }
