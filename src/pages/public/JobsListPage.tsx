@@ -389,7 +389,7 @@ export const JobsListPage: React.FC = () => {
 const JobCard: React.FC<{ job: Job }> = ({ job }) => {
     return (
         <Link to={`/jobs/${job.id}`}>
-            <Card interactive className="p-6">
+            <Card interactive className={`p-6 ${job.is_applied ? 'opacity-70 bg-secondary-50/50' : ''}`}>
                 <div className="flex flex-col sm:flex-row gap-4">
                     {/* Employer Avatar */}
                     <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center flex-shrink-0">
@@ -405,7 +405,12 @@ const JobCard: React.FC<{ job: Job }> = ({ job }) => {
                                 </h3>
                                 <p className="text-secondary-600">{job.provider?.full_name}</p>
                             </div>
-                            <Badge variant={getStatusBadgeVariant(job.status)}>{job.status}</Badge>
+                            <div className="flex flex-col sm:flex-row items-end sm:items-center gap-2">
+                                {job.is_applied && (
+                                    <Badge variant="success">Sudah Dilamar</Badge>
+                                )}
+                                <Badge variant={getStatusBadgeVariant(job.status)}>{job.status}</Badge>
+                            </div>
                         </div>
 
                         <p className="text-secondary-600 mb-4 line-clamp-2">{job.description}</p>

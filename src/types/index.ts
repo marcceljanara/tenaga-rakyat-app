@@ -109,6 +109,7 @@ export interface Job {
     _count?: {
         jobApplications: number;
     };
+    is_applied?: boolean;
 }
 
 export interface CreateJobData {

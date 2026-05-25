@@ -41,7 +41,8 @@ export const JobDetailPage: React.FC = () => {
     });
 
     const job = data?.data;
-    const canApply = isAuthenticated && hasRole(['PEKERJA']) && job?.status === 'OPEN';
+    const hasApplied = isApplied || !!job?.is_applied;
+    const canApply = isAuthenticated && hasRole(['PEKERJA']) && job?.status === 'OPEN' && !hasApplied;
 
     const onSubmitApplication = async (data: ApplyFormData) => {
         if (!id) return;
@@ -216,7 +217,7 @@ export const JobDetailPage: React.FC = () => {
                                         </Link>
                                     </div>
                                 </div>
-                            ) : isApplied ? (
+                            ) : hasApplied ? (
                                 <div className="flex items-center gap-3 text-success-600">
                                     <CheckCircle className="w-6 h-6" />
                                     <span className="font-medium">Lamaran Anda telah terkirim!</span>
