@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { jobsService } from '../../api';
@@ -22,6 +22,24 @@ export const JobsListPage: React.FC = () => {
     const [maxCompensationInput, setMaxCompensationInput] = useState<number | ''>('');
     const [showAdvanced, setShowAdvanced] = useState(false);
 
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setQueryParams(prev => {
+                const newKeyword = keywordInput || undefined;
+                if (prev.keyword === newKeyword) return prev;
+                return {
+                    ...prev,
+                    keyword: newKeyword,
+                    page: 1
+                };
+            });
+        }, 500);
+
+        return () => {
+            clearTimeout(handler);
+        };
+    }, [keywordInput]);
+
     const { data, isLoading } = useQuery({
         queryKey: ['jobs', queryParams],
         queryFn: () => jobsService.getAll(queryParams),
@@ -42,11 +60,22 @@ export const JobsListPage: React.FC = () => {
     };
 
     const handleApplyFilters = () => {
+        let minComp = minCompensationInput !== '' ? Number(minCompensationInput) : undefined;
+        let maxComp = maxCompensationInput !== '' ? Number(maxCompensationInput) : undefined;
+
+        if (minComp !== undefined && maxComp !== undefined && minComp > maxComp) {
+            const temp = minComp;
+            minComp = maxComp;
+            maxComp = temp;
+            setMinCompensationInput(minComp);
+            setMaxCompensationInput(maxComp);
+        }
+
         setQueryParams(prev => ({
             ...prev,
             location: locationInput || undefined,
-            min_compensation: minCompensationInput !== '' ? Number(minCompensationInput) : undefined,
-            max_compensation: maxCompensationInput !== '' ? Number(maxCompensationInput) : undefined,
+            min_compensation: minComp,
+            max_compensation: maxComp,
             page: 1
         }));
     };
@@ -255,8 +284,8 @@ export const JobsListPage: React.FC = () => {
                                     const [sort_by, sort_order] = e.target.value.split('-');
                                     setQueryParams(prev => ({
                                         ...prev,
-                                        sort_by: sort_by as any,
-                                        sort_order: sort_order as any,
+                                        sort_by: sort_by as JobSearchParams['sort_by'],
+                                        sort_order: sort_order as JobSearchParams['sort_order'],
                                         page: 1
                                     }));
                                 }}
