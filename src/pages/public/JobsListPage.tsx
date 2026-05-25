@@ -2,26 +2,71 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { jobsService } from '../../api';
-import { Card, Badge, Button, Input, Skeleton, EmptyState, getStatusBadgeVariant } from '../../components/ui';
-import { Search, MapPin, Banknote, Clock, Briefcase, ChevronRight } from 'lucide-react';
+import { Card, Badge, Button, Input, Skeleton, EmptyState, getStatusBadgeVariant, Select } from '../../components/ui';
+import { Search, MapPin, Banknote, Clock, Briefcase, ChevronRight, SlidersHorizontal, X } from 'lucide-react';
 import { formatCurrency, formatRelativeTime } from '../../utils';
-import type { Job } from '../../types';
+import type { Job, JobSearchParams } from '../../types';
 
 export const JobsListPage: React.FC = () => {
-    const [searchLocation, setSearchLocation] = useState('');
-    const [appliedFilter, setAppliedFilter] = useState('');
+    const [queryParams, setQueryParams] = useState<JobSearchParams>({
+        page: 1,
+        limit: 10,
+        status: 'OPEN',
+        sort_by: 'posted_at',
+        sort_order: 'desc',
+    });
+
+    const [keywordInput, setKeywordInput] = useState('');
+    const [locationInput, setLocationInput] = useState('');
+    const [minCompensationInput, setMinCompensationInput] = useState<number | ''>('');
+    const [maxCompensationInput, setMaxCompensationInput] = useState<number | ''>('');
+    const [showAdvanced, setShowAdvanced] = useState(false);
 
     const { data, isLoading } = useQuery({
-        queryKey: ['jobs', appliedFilter],
-        queryFn: () => jobsService.getAll(appliedFilter ? { location: appliedFilter } : undefined),
+        queryKey: ['jobs', queryParams],
+        queryFn: () => jobsService.getAll(queryParams),
     });
 
     const jobs = data?.data.jobs || [];
+    const totalJobs = data?.data.total || 0;
+    const limit = queryParams.limit || 10;
+    const totalPages = Math.ceil(totalJobs / limit);
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
-        setAppliedFilter(searchLocation);
+        setQueryParams(prev => ({
+            ...prev,
+            keyword: keywordInput || undefined,
+            page: 1
+        }));
     };
+
+    const handleApplyFilters = () => {
+        setQueryParams(prev => ({
+            ...prev,
+            location: locationInput || undefined,
+            min_compensation: minCompensationInput !== '' ? Number(minCompensationInput) : undefined,
+            max_compensation: maxCompensationInput !== '' ? Number(maxCompensationInput) : undefined,
+            page: 1
+        }));
+    };
+
+    const handleResetFilters = () => {
+        setLocationInput('');
+        setMinCompensationInput('');
+        setMaxCompensationInput('');
+        setQueryParams(prev => ({
+            ...prev,
+            location: undefined,
+            min_compensation: undefined,
+            max_compensation: undefined,
+            page: 1
+        }));
+    };
+
+    const hasActiveFilters = Object.entries(queryParams).some(
+        ([key, val]) => val !== undefined && !['page', 'limit', 'status', 'sort_by', 'sort_order'].includes(key)
+    );
 
     return (
         <div className="min-h-[80vh] bg-secondary-50">
@@ -36,37 +81,160 @@ export const JobsListPage: React.FC = () => {
                     </p>
 
                     {/* Search Form */}
-                    <form onSubmit={handleSearch} className="max-w-2xl mx-auto">
+                    <form onSubmit={handleSearch} className="max-w-2xl mx-auto space-y-4">
                         <div className="flex flex-col sm:flex-row gap-3">
                             <div className="flex-1 relative">
-                                <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-secondary-400" />
+                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-secondary-400" />
                                 <Input
-                                    value={searchLocation}
-                                    onChange={(e) => setSearchLocation(e.target.value)}
-                                    placeholder="Cari berdasarkan lokasi..."
+                                    value={keywordInput}
+                                    onChange={(e) => setKeywordInput(e.target.value)}
+                                    placeholder="Cari posisi atau pekerjaan..."
                                     className="pl-12 bg-white"
                                 />
                             </div>
-                            <Button type="submit" size="lg" leftIcon={Search}>
-                                Cari
-                            </Button>
+                            <div className="flex gap-2">
+                                <Button
+                                    type="button"
+                                    variant="secondary"
+                                    onClick={() => setShowAdvanced(!showAdvanced)}
+                                    leftIcon={SlidersHorizontal}
+                                    className="bg-white/10 text-white border-white/20 hover:bg-white/20 hover:border-white/30"
+                                >
+                                    Filter
+                                </Button>
+                                <Button type="submit" size="lg" leftIcon={Search}>
+                                    Cari
+                                </Button>
+                            </div>
                         </div>
+
+                        {showAdvanced && (
+                            <Card className="p-6 bg-white shadow-xl animate-in fade-in slide-in-from-top-4 duration-200 text-left">
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div>
+                                        <label className="block text-sm font-medium text-secondary-700 mb-1.5">Lokasi</label>
+                                        <div className="relative">
+                                            <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-secondary-400" />
+                                            <Input
+                                                value={locationInput}
+                                                onChange={(e) => setLocationInput(e.target.value)}
+                                                placeholder="Kota atau wilayah..."
+                                                className="pl-9"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-secondary-700 mb-1.5">Gaji Minimum (Rp)</label>
+                                        <Input
+                                            type="number"
+                                            value={minCompensationInput}
+                                            onChange={(e) => setMinCompensationInput(e.target.value ? Number(e.target.value) : '')}
+                                            placeholder="Minimal kompensasi..."
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-secondary-700 mb-1.5">Gaji Maksimum (Rp)</label>
+                                        <Input
+                                            type="number"
+                                            value={maxCompensationInput}
+                                            onChange={(e) => setMaxCompensationInput(e.target.value ? Number(e.target.value) : '')}
+                                            placeholder="Maksimal kompensasi..."
+                                        />
+                                    </div>
+                                </div>
+                                <div className="flex justify-end gap-2 mt-4">
+                                    <Button
+                                        type="button"
+                                        variant="ghost"
+                                        onClick={handleResetFilters}
+                                    >
+                                        Reset Filter
+                                    </Button>
+                                    <Button
+                                        type="button"
+                                        onClick={handleApplyFilters}
+                                    >
+                                        Terapkan
+                                    </Button>
+                                </div>
+                            </Card>
+                        )}
                     </form>
 
-                    {appliedFilter && (
-                        <div className="flex items-center justify-center gap-2 mt-4">
-                            <span className="text-primary-100">Filter aktif:</span>
-                            <Badge variant="primary" className="bg-white/20 text-white">
-                                {appliedFilter}
-                            </Badge>
+                    {hasActiveFilters && (
+                        <div className="flex flex-wrap items-center justify-center gap-2 mt-4">
+                            <span className="text-primary-100 text-sm">Filter aktif:</span>
+                            {queryParams.keyword && (
+                                <Badge variant="primary" className="bg-white/20 text-white flex items-center gap-1.5">
+                                    Kata kunci: "{queryParams.keyword}"
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setKeywordInput('');
+                                            setQueryParams(prev => ({ ...prev, keyword: undefined, page: 1 }));
+                                        }}
+                                        className="hover:text-primary-200 focus:outline-none"
+                                    >
+                                        <X className="w-3.5 h-3.5" />
+                                    </button>
+                                </Badge>
+                            )}
+                            {queryParams.location && (
+                                <Badge variant="primary" className="bg-white/20 text-white flex items-center gap-1.5">
+                                    Lokasi: "{queryParams.location}"
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setLocationInput('');
+                                            setQueryParams(prev => ({ ...prev, location: undefined, page: 1 }));
+                                        }}
+                                        className="hover:text-primary-200 focus:outline-none"
+                                    >
+                                        <X className="w-3.5 h-3.5" />
+                                    </button>
+                                </Badge>
+                            )}
+                            {(queryParams.min_compensation !== undefined || queryParams.max_compensation !== undefined) && (
+                                <Badge variant="primary" className="bg-white/20 text-white flex items-center gap-1.5">
+                                    Gaji: {queryParams.min_compensation ? `Min ${formatCurrency(queryParams.min_compensation)}` : ''} 
+                                    {queryParams.min_compensation && queryParams.max_compensation ? ' - ' : ''}
+                                    {queryParams.max_compensation ? `Max ${formatCurrency(queryParams.max_compensation)}` : ''}
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setMinCompensationInput('');
+                                            setMaxCompensationInput('');
+                                            setQueryParams(prev => ({
+                                                ...prev,
+                                                min_compensation: undefined,
+                                                max_compensation: undefined,
+                                                page: 1
+                                            }));
+                                        }}
+                                        className="hover:text-primary-200 focus:outline-none"
+                                    >
+                                        <X className="w-3.5 h-3.5" />
+                                    </button>
+                                </Badge>
+                            )}
                             <button
+                                type="button"
                                 onClick={() => {
-                                    setSearchLocation('');
-                                    setAppliedFilter('');
+                                    setKeywordInput('');
+                                    setLocationInput('');
+                                    setMinCompensationInput('');
+                                    setMaxCompensationInput('');
+                                    setQueryParams({
+                                        page: 1,
+                                        limit: 10,
+                                        status: 'OPEN',
+                                        sort_by: 'posted_at',
+                                        sort_order: 'desc',
+                                    });
                                 }}
-                                className="text-white/80 hover:text-white text-sm underline"
+                                className="text-white/80 hover:text-white text-sm underline font-medium focus:outline-none"
                             >
-                                Hapus filter
+                                Hapus semua filter
                             </button>
                         </div>
                     )}
@@ -75,10 +243,34 @@ export const JobsListPage: React.FC = () => {
 
             {/* Jobs List */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <div className="flex items-center justify-between mb-6">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                     <h2 className="text-xl font-semibold text-secondary-900">
-                        {isLoading ? 'Memuat...' : `${jobs.length} Lowongan Ditemukan`}
+                        {isLoading ? 'Memuat...' : `${totalJobs} Lowongan Ditemukan`}
                     </h2>
+                    {!isLoading && jobs.length > 0 && (
+                        <div className="w-full sm:w-64">
+                            <Select
+                                value={`${queryParams.sort_by}-${queryParams.sort_order}`}
+                                onChange={(e) => {
+                                    const [sort_by, sort_order] = e.target.value.split('-');
+                                    setQueryParams(prev => ({
+                                        ...prev,
+                                        sort_by: sort_by as any,
+                                        sort_order: sort_order as any,
+                                        page: 1
+                                    }));
+                                }}
+                                options={[
+                                    { value: 'posted_at-desc', label: 'Terbaru' },
+                                    { value: 'posted_at-asc', label: 'Terlama' },
+                                    { value: 'compensation_amount-desc', label: 'Gaji Tertinggi' },
+                                    { value: 'compensation_amount-asc', label: 'Gaji Terendah' },
+                                    { value: 'title-asc', label: 'Judul (A-Z)' },
+                                    { value: 'title-desc', label: 'Judul (Z-A)' },
+                                ]}
+                            />
+                        </div>
+                    )}
                 </div>
 
                 {isLoading ? (
@@ -104,15 +296,24 @@ export const JobsListPage: React.FC = () => {
                         icon={Briefcase}
                         title="Tidak Ada Lowongan"
                         description={
-                            appliedFilter
-                                ? `Tidak ada lowongan ditemukan untuk lokasi "${appliedFilter}"`
+                            hasActiveFilters
+                                ? 'Tidak ada lowongan ditemukan dengan filter aktif saat ini'
                                 : 'Belum ada lowongan tersedia saat ini'
                         }
                         action={
-                            appliedFilter && (
+                            hasActiveFilters && (
                                 <Button variant="secondary" onClick={() => {
-                                    setSearchLocation('');
-                                    setAppliedFilter('');
+                                    setKeywordInput('');
+                                    setLocationInput('');
+                                    setMinCompensationInput('');
+                                    setMaxCompensationInput('');
+                                    setQueryParams({
+                                        page: 1,
+                                        limit: 10,
+                                        status: 'OPEN',
+                                        sort_by: 'posted_at',
+                                        sort_order: 'desc',
+                                    });
                                 }}>
                                     Lihat Semua Lowongan
                                 </Button>
@@ -120,11 +321,36 @@ export const JobsListPage: React.FC = () => {
                         }
                     />
                 ) : (
-                    <div className="grid gap-4">
-                        {jobs.map((job) => (
-                            <JobCard key={job.id} job={job} />
-                        ))}
-                    </div>
+                    <>
+                        <div className="grid gap-4">
+                            {jobs.map((job) => (
+                                <JobCard key={job.id} job={job} />
+                            ))}
+                        </div>
+
+                        {/* Pagination */}
+                        {totalPages > 1 && (
+                            <div className="flex items-center justify-center gap-4 mt-8">
+                                <Button
+                                    variant="secondary"
+                                    disabled={queryParams.page === 1}
+                                    onClick={() => setQueryParams(prev => ({ ...prev, page: (prev.page || 1) - 1 }))}
+                                >
+                                    Sebelumnya
+                                </Button>
+                                <span className="text-secondary-600 text-sm font-medium">
+                                    Halaman {queryParams.page} dari {totalPages}
+                                </span>
+                                <Button
+                                    variant="secondary"
+                                    disabled={queryParams.page === totalPages}
+                                    onClick={() => setQueryParams(prev => ({ ...prev, page: (prev.page || 1) + 1 }))}
+                                >
+                                    Selanjutnya
+                                </Button>
+                            </div>
+                        )}
+                    </>
                 )}
             </div>
         </div>
