@@ -124,7 +124,9 @@ export const AdminLayout: React.FC = () => {
                             onClick={() => setIsSidebarOpen(false)}
                             className={clsx(
                                 'flex items-center gap-3 px-4 py-3 rounded-xl transition-colors',
-                                location.pathname === item.href
+                                (item.href === '/admin/dashboard'
+                                    ? location.pathname === item.href
+                                    : location.pathname === item.href || location.pathname.startsWith(item.href + '/'))
                                     ? 'bg-primary-600 text-white'
                                     : 'text-secondary-300 hover:bg-secondary-800 hover:text-white'
                             )}

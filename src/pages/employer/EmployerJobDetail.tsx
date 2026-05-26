@@ -62,7 +62,7 @@ export const EmployerJobDetail: React.FC = () => {
             const messages = {
                 CANCELLED: 'Lowongan berhasil dibatalkan',
                 APPROVED: 'Pekerjaan berhasil disetujui! Silakan lakukan pembayaran tunai ke pekerja.',
-                REJECTED: 'Pekerjaan ditolak. Worker dapat memperbaiki.',
+                REJECTED: 'Pekerjaan ditolak. Pekerja dapat memperbaiki.',
             };
             toast.success(messages[status]);
             queryClient.invalidateQueries({ queryKey: ['job', id] });

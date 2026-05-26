@@ -108,9 +108,12 @@ export const EmployerLayout: React.FC = () => {
                 <nav className="p-4 space-y-1">
                     {employerNavItems.map((item) => {
                         // For dashboard, use exact match. For other items, use startsWith to highlight sub-routes
+                        // For jobs, exclude /employer/jobs/new which has its own menu item
                         const isActive =
                             item.href === '/employer/dashboard'
                                 ? location.pathname === item.href
+                                : item.href === '/employer/jobs'
+                                ? location.pathname === '/employer/jobs' || (location.pathname.startsWith('/employer/jobs/') && location.pathname !== '/employer/jobs/new')
                                 : location.pathname.startsWith(item.href);
 
                         return (

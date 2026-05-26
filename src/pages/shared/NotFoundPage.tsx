@@ -35,7 +35,13 @@ export const NotFoundPage: React.FC = () => {
                     <Button
                         variant="ghost"
                         leftIcon={ArrowLeft}
-                        onClick={() => navigate(-1)}
+                        onClick={() => {
+                            if (window.history.length > 1) {
+                                navigate(-1);
+                            } else {
+                                navigate('/');
+                            }
+                        }}
                         className="w-full sm:w-auto"
                     >
                         Kembali

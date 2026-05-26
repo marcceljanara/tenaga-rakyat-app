@@ -127,7 +127,7 @@ export const WorkerLayout: React.FC = () => {
                         const isActive =
                             item.href === '/worker/dashboard'
                                 ? location.pathname === item.href
-                                : location.pathname.startsWith(item.href);
+                                : location.pathname === item.href || location.pathname.startsWith(item.href + '/');
                         const showBadge = item.href === '/worker/active-jobs' && activeJobCount > 0;
 
                         return (
