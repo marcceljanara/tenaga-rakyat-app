@@ -30,13 +30,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }, []);
 
     const login = useCallback(async (credentials: LoginCredentials) => {
-        console.log('🔵 [AuthContext] login() called');
-        console.log('🔵 [AuthContext] Calling authService.login()...');
         await authService.login(credentials);
-        console.log('✅ [AuthContext] authService.login() successful');
 
         // After successful login, fetch the user profile
-        console.log('🔵 [AuthContext] Calling usersService.getProfile()...');
         const response = await usersService.getProfile();
         setUser(response.data);
     }, []);
@@ -54,7 +50,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const hasRole = useCallback(
         (roles: string[]) => {
             if (!user) return false;
-            console.log(user.role);
             return roles.includes(user.role);
         },
         [user]

@@ -30,7 +30,6 @@ export const EmployerDashboard: React.FC = () => {
 
     const activeJobs = activeJobsData?.data.jobs || [];
     const allJobs = historyData?.data.jobs || [];
-    console.log(allJobs);
     // const wallet = walletData?.data; // DISABLED: Wallet
 
     const stats = {

@@ -61,8 +61,8 @@ export const EmployerJobDetail: React.FC = () => {
         onSuccess: (_, status) => {
             const messages = {
                 CANCELLED: 'Lowongan berhasil dibatalkan',
-                APPROVED: 'Pekerjaan berhasil disetujui! Pembayaran telah dirilis.',
-                REJECTED: 'Pekerjaan ditolak. Worker dapat memperbaiki.',
+                APPROVED: 'Pekerjaan berhasil disetujui! Silakan lakukan pembayaran tunai ke pekerja.',
+                REJECTED: 'Pekerjaan ditolak. Pekerja dapat memperbaiki.',
             };
             toast.success(messages[status]);
             queryClient.invalidateQueries({ queryKey: ['job', id] });
@@ -278,7 +278,7 @@ export const EmployerJobDetail: React.FC = () => {
                                         </Button>
                                         <Button onClick={() => handleStatusChange('APPROVED')}>
                                             <CheckCircle className="w-4 h-4 mr-2" />
-                                            Setujui & Bayar
+                                            Setujui Selesai
                                         </Button>
                                     </div>
                                 )}
@@ -359,7 +359,7 @@ export const EmployerJobDetail: React.FC = () => {
                                         </Link>
                                         {app.cover_letter && (
                                             <p className="text-sm text-secondary-600 mt-1 line-clamp-2 flex-1">
-                                                "{app.cover_letter}"
+                                                {app.cover_letter}
                                             </p>
                                         )}
                                         <div className="flex items-center gap-2">
@@ -459,7 +459,7 @@ export const EmployerJobDetail: React.FC = () => {
                         onClick={confirmStatusChange}
                         isLoading={statusMutation.isPending}
                     >
-                        {pendingStatus === 'APPROVED' ? 'Setujui & Bayar' : 'Konfirmasi'}
+                        {pendingStatus === 'APPROVED' ? 'Setujui Selesai' : 'Konfirmasi'}
                     </Button>
                 </div>
             </Modal>

@@ -27,10 +27,6 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowe
         return <Navigate to="/login" state={{ from: location }} replace />;
     }
 
-    // Debug: Log user data to see what fields are available
-    console.log('🔵 [ProtectedRoute] verification_status:', user?.verification_status);
-    console.log('🔵 [ProtectedRoute] User role:', user?.role);
-
     // Check if user's email is verified
     // verification_status can be: UNVERIFIED, EMAIL_VERIFIED, FULL_VERIFIED
     const isEmailVerified =
@@ -38,8 +34,6 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowe
         user?.verification_status === 'FULL_VERIFIED';
 
     if (user && !isEmailVerified) {
-        console.log('❌ [ProtectedRoute] Email not verified, redirecting to verification page...');
-        console.log('🔵 [ProtectedRoute] verification_status:', user?.verification_status);
         return <Navigate to="/verify-email-required" state={{ from: location }} replace />;
     }
 
