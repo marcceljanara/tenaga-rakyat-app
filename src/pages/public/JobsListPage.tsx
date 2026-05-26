@@ -102,29 +102,30 @@ export const JobsListPage: React.FC = () => {
             {/* Header */}
             <div className="bg-gradient-to-r from-primary-600 to-primary-700 py-10 sm:py-16">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <h1 className="text-3xl sm:text-4xl font-bold text-white text-center mb-4">
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white text-center mb-4">
                         Temukan Pekerjaan Impian Anda
                     </h1>
-                    <p className="text-primary-100 text-center mb-6 sm:mb-8 max-w-2xl mx-auto text-sm sm:text-base">
+                    <p className="text-primary-100 text-center mb-5 sm:mb-8 max-w-2xl mx-auto text-sm sm:text-base">
                         Ribuan lowongan pekerjaan menanti Anda. Mulai cari dan lamar sekarang!
                     </p>
 
                     {/* Search Form */}
                     <form onSubmit={handleSearch} className="max-w-2xl mx-auto space-y-4">
                         <div className="flex flex-col sm:flex-row gap-3">
-                            <div className="flex-1 relative">
-                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-secondary-400" />
+                            <div className="flex-1">
                                 <Input
                                     value={keywordInput}
                                     onChange={(e) => setKeywordInput(e.target.value)}
                                     placeholder="Cari posisi atau pekerjaan..."
-                                    className="pl-12 bg-white"
+                                    leftIcon={Search}
+                                    className="bg-white"
                                 />
                             </div>
                             <div className="flex gap-2 w-full sm:w-auto">
                                 <Button
                                     type="button"
                                     variant="secondary"
+                                    size="lg"
                                     onClick={() => setShowAdvanced(!showAdvanced)}
                                     leftIcon={SlidersHorizontal}
                                     className="bg-white/10 text-white border-white/20 hover:bg-white/20 hover:border-white/30 flex-1 sm:flex-initial"
@@ -152,23 +153,22 @@ export const JobsListPage: React.FC = () => {
                                             />
                                         </div>
                                     </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-secondary-700 mb-1.5">Gaji Minimum (Rp)</label>
-                                        <Input
-                                            type="number"
-                                            value={minCompensationInput}
-                                            onChange={(e) => setMinCompensationInput(e.target.value ? Number(e.target.value) : '')}
-                                            placeholder="Minimal kompensasi..."
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-secondary-700 mb-1.5">Gaji Maksimum (Rp)</label>
-                                        <Input
-                                            type="number"
-                                            value={maxCompensationInput}
-                                            onChange={(e) => setMaxCompensationInput(e.target.value ? Number(e.target.value) : '')}
-                                            placeholder="Maksimal kompensasi..."
-                                        />
+                                    <div className="md:col-span-2">
+                                        <label className="block text-sm font-medium text-secondary-700 mb-1.5">Rentang Gaji (Rp)</label>
+                                        <div className="grid grid-cols-2 gap-3">
+                                            <Input
+                                                type="number"
+                                                value={minCompensationInput}
+                                                onChange={(e) => setMinCompensationInput(e.target.value ? Number(e.target.value) : '')}
+                                                placeholder="Min..."
+                                            />
+                                            <Input
+                                                type="number"
+                                                value={maxCompensationInput}
+                                                onChange={(e) => setMaxCompensationInput(e.target.value ? Number(e.target.value) : '')}
+                                                placeholder="Max..."
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2 mt-4">
@@ -308,12 +308,12 @@ export const JobsListPage: React.FC = () => {
                     <div className="grid gap-4">
                         {[...Array(5)].map((_, i) => (
                             <Card key={i} className="p-4 sm:p-6">
-                                <div className="flex gap-4 items-start">
-                                    <Skeleton className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl flex-shrink-0" />
+                                <div className="flex gap-3 sm:gap-4 items-start">
+                                    <Skeleton className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl flex-shrink-0" />
                                     <div className="flex-1">
                                         <Skeleton className="h-6 w-3/4 mb-2" />
                                         <Skeleton className="h-4 w-1/2 mb-4" />
-                                        <div className="flex gap-4">
+                                        <div className="flex gap-3 sm:gap-4">
                                             <Skeleton className="h-4 w-24" />
                                             <Skeleton className="h-4 w-24" />
                                         </div>
@@ -398,17 +398,17 @@ const JobCard: React.FC<{ job: Job }> = ({ job }) => {
     return (
         <Link to={`/jobs/${job.id}`}>
             <Card interactive className={`p-4 sm:p-6 ${job.is_applied ? 'opacity-70 bg-secondary-50/50' : ''}`}>
-                <div className="flex gap-4 items-start">
+                <div className="flex gap-3 sm:gap-4 items-start">
                     {/* Employer Avatar */}
-                    <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center flex-shrink-0">
-                        <Briefcase className="w-6 h-6 sm:w-7 sm:h-7 text-primary-600" />
+                    <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center flex-shrink-0">
+                        <Briefcase className="w-5 h-5 sm:w-7 sm:h-7 text-primary-600" />
                     </div>
 
                     {/* Job Info */}
                     <div className="flex-1 min-w-0">
                         <div className="flex flex-col md:flex-row md:items-start justify-between gap-2 mb-2">
                             <div>
-                                <h3 className="text-base sm:text-lg font-semibold text-secondary-900 group-hover:text-primary-600 transition-colors line-clamp-1 sm:line-clamp-none">
+                                <h3 className="text-base sm:text-lg font-semibold text-secondary-900 group-hover:text-primary-600 transition-colors line-clamp-2 sm:line-clamp-none">
                                     {job.title}
                                 </h3>
                                 <p className="text-sm sm:text-base text-secondary-600">{job.provider?.full_name}</p>
