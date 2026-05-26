@@ -8,7 +8,7 @@ import { ProtectedRoute, PublicRoute } from './routes/ProtectedRoute';
 import { PublicLayout, WorkerLayout, EmployerLayout, AdminLayout } from './components/layout';
 
 // Public Pages
-import { LandingPage, JobsListPage, JobDetailPage } from './pages/public';
+import { LandingPage, JobsListPage, JobDetailPage, TermsAndConditionsPage, PrivacyPolicyPage } from './pages/public';
 
 // Auth Pages
 import {
@@ -102,6 +102,8 @@ const App: React.FC = () => {
               <Route path="/" element={<LandingPage />} />
               <Route path="/jobs" element={<JobsListPage />} />
               <Route path="/jobs/:id" element={<JobDetailPage />} />
+              <Route path="/terms-and-conditions" element={<TermsAndConditionsPage />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
             </Route>
 
             {/* Auth Routes (no layout) */}

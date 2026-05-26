@@ -88,12 +88,12 @@ export const Footer: React.FC = () => {
                         © 2024 TenagaRakyat. Hak cipta dilindungi undang-undang.
                     </p>
                     <div className="flex gap-6 text-sm">
-                        <a href="#" className="text-secondary-400 hover:text-white transition-colors">
+                        <Link to="/terms-and-conditions" className="text-secondary-400 hover:text-white transition-colors">
                             Ketentuan Layanan
-                        </a>
-                        <a href="#" className="text-secondary-400 hover:text-white transition-colors">
+                        </Link>
+                        <Link to="/privacy-policy" className="text-secondary-400 hover:text-white transition-colors">
                             Kebijakan Privasi
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </div>
