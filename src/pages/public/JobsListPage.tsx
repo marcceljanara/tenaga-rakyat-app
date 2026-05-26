@@ -100,12 +100,12 @@ export const JobsListPage: React.FC = () => {
     return (
         <div className="min-h-[80vh] bg-secondary-50">
             {/* Header */}
-            <div className="bg-gradient-to-r from-primary-600 to-primary-700 py-16">
+            <div className="bg-gradient-to-r from-primary-600 to-primary-700 py-10 sm:py-16">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <h1 className="text-3xl sm:text-4xl font-bold text-white text-center mb-4">
                         Temukan Pekerjaan Impian Anda
                     </h1>
-                    <p className="text-primary-100 text-center mb-8 max-w-2xl mx-auto">
+                    <p className="text-primary-100 text-center mb-6 sm:mb-8 max-w-2xl mx-auto text-sm sm:text-base">
                         Ribuan lowongan pekerjaan menanti Anda. Mulai cari dan lamar sekarang!
                     </p>
 
@@ -121,24 +121,24 @@ export const JobsListPage: React.FC = () => {
                                     className="pl-12 bg-white"
                                 />
                             </div>
-                            <div className="flex gap-2">
+                            <div className="flex gap-2 w-full sm:w-auto">
                                 <Button
                                     type="button"
                                     variant="secondary"
                                     onClick={() => setShowAdvanced(!showAdvanced)}
                                     leftIcon={SlidersHorizontal}
-                                    className="bg-white/10 text-white border-white/20 hover:bg-white/20 hover:border-white/30"
+                                    className="bg-white/10 text-white border-white/20 hover:bg-white/20 hover:border-white/30 flex-1 sm:flex-initial"
                                 >
                                     Filter
                                 </Button>
-                                <Button type="submit" size="lg" leftIcon={Search}>
+                                <Button type="submit" size="lg" leftIcon={Search} className="flex-1 sm:flex-initial">
                                     Cari
                                 </Button>
                             </div>
                         </div>
 
                         {showAdvanced && (
-                            <Card className="p-6 bg-white shadow-xl animate-in fade-in slide-in-from-top-4 duration-200 text-left">
+                            <Card className="p-4 sm:p-6 bg-white shadow-xl animate-in fade-in slide-in-from-top-4 duration-200 text-left">
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                     <div>
                                         <label className="block text-sm font-medium text-secondary-700 mb-1.5">Lokasi</label>
@@ -171,17 +171,19 @@ export const JobsListPage: React.FC = () => {
                                         />
                                     </div>
                                 </div>
-                                <div className="flex justify-end gap-2 mt-4">
+                                <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2 mt-4">
                                     <Button
                                         type="button"
                                         variant="ghost"
                                         onClick={handleResetFilters}
+                                        className="w-full sm:w-auto"
                                     >
                                         Reset Filter
                                     </Button>
                                     <Button
                                         type="button"
                                         onClick={handleApplyFilters}
+                                        className="w-full sm:w-auto"
                                     >
                                         Terapkan
                                     </Button>
@@ -305,9 +307,9 @@ export const JobsListPage: React.FC = () => {
                 {isLoading ? (
                     <div className="grid gap-4">
                         {[...Array(5)].map((_, i) => (
-                            <Card key={i} className="p-6">
-                                <div className="flex gap-4">
-                                    <Skeleton className="w-14 h-14 rounded-xl" />
+                            <Card key={i} className="p-4 sm:p-6">
+                                <div className="flex gap-4 items-start">
+                                    <Skeleton className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl flex-shrink-0" />
                                     <div className="flex-1">
                                         <Skeleton className="h-6 w-3/4 mb-2" />
                                         <Skeleton className="h-4 w-1/2 mb-4" />
@@ -362,20 +364,26 @@ export const JobsListPage: React.FC = () => {
                             <div className="flex items-center justify-center gap-4 mt-8">
                                 <Button
                                     variant="secondary"
+                                    size="sm"
+                                    className="sm:px-4 sm:py-2.5"
                                     disabled={queryParams.page === 1}
                                     onClick={() => setQueryParams(prev => ({ ...prev, page: (prev.page || 1) - 1 }))}
                                 >
-                                    Sebelumnya
+                                    <span className="hidden sm:inline">Sebelumnya</span>
+                                    <span className="sm:hidden">&larr;</span>
                                 </Button>
                                 <span className="text-secondary-600 text-sm font-medium">
                                     Halaman {queryParams.page} dari {totalPages}
                                 </span>
                                 <Button
                                     variant="secondary"
+                                    size="sm"
+                                    className="sm:px-4 sm:py-2.5"
                                     disabled={queryParams.page === totalPages}
                                     onClick={() => setQueryParams(prev => ({ ...prev, page: (prev.page || 1) + 1 }))}
                                 >
-                                    Selanjutnya
+                                    <span className="hidden sm:inline">Selanjutnya</span>
+                                    <span className="sm:hidden">&rarr;</span>
                                 </Button>
                             </div>
                         )}
@@ -389,55 +397,55 @@ export const JobsListPage: React.FC = () => {
 const JobCard: React.FC<{ job: Job }> = ({ job }) => {
     return (
         <Link to={`/jobs/${job.id}`}>
-            <Card interactive className={`p-6 ${job.is_applied ? 'opacity-70 bg-secondary-50/50' : ''}`}>
-                <div className="flex flex-col sm:flex-row gap-4">
+            <Card interactive className={`p-4 sm:p-6 ${job.is_applied ? 'opacity-70 bg-secondary-50/50' : ''}`}>
+                <div className="flex gap-4 items-start">
                     {/* Employer Avatar */}
-                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center flex-shrink-0">
-                        <Briefcase className="w-7 h-7 text-primary-600" />
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center flex-shrink-0">
+                        <Briefcase className="w-6 h-6 sm:w-7 sm:h-7 text-primary-600" />
                     </div>
 
                     {/* Job Info */}
                     <div className="flex-1 min-w-0">
-                        <div className="flex items-start justify-between gap-4 mb-2">
+                        <div className="flex flex-col md:flex-row md:items-start justify-between gap-2 mb-2">
                             <div>
-                                <h3 className="text-lg font-semibold text-secondary-900 group-hover:text-primary-600 transition-colors">
+                                <h3 className="text-base sm:text-lg font-semibold text-secondary-900 group-hover:text-primary-600 transition-colors line-clamp-1 sm:line-clamp-none">
                                     {job.title}
                                 </h3>
-                                <p className="text-secondary-600">{job.provider?.full_name}</p>
+                                <p className="text-sm sm:text-base text-secondary-600">{job.provider?.full_name}</p>
                             </div>
-                            <div className="flex flex-col sm:flex-row items-end sm:items-center gap-2">
+                            <div className="flex flex-wrap items-center gap-1.5 mt-1 md:mt-0">
                                 {job.is_applied && (
-                                    <Badge variant="success">Sudah Dilamar</Badge>
+                                    <Badge variant="success" className="text-[10px] sm:text-xs">Sudah Dilamar</Badge>
                                 )}
-                                <Badge variant={getStatusBadgeVariant(job.status)}>{job.status}</Badge>
+                                <Badge variant={getStatusBadgeVariant(job.status)} className="text-[10px] sm:text-xs">{job.status}</Badge>
                             </div>
                         </div>
 
-                        <p className="text-secondary-600 mb-4 line-clamp-2">{job.description}</p>
+                        <p className="text-sm sm:text-base text-secondary-600 mb-4 line-clamp-2">{job.description}</p>
 
-                        <div className="flex flex-wrap gap-4 text-sm text-secondary-500">
+                        <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs sm:text-sm text-secondary-500">
                             <span className="flex items-center gap-1.5">
-                                <MapPin className="w-4 h-4" />
+                                <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                                 {job.location_label || job.location}
                             </span>
                             <span className="flex items-center gap-1.5">
-                                <Banknote className="w-4 h-4" />
+                                <Banknote className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                                 {formatCurrency(job.compensation_amount)}
                             </span>
                             <span className="flex items-center gap-1.5">
-                                <Clock className="w-4 h-4" />
+                                <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                                 {formatRelativeTime(job.posted_at ?? '')}
                             </span>
                             {/* Payment Method - Cash Only */}
                             <span className="flex items-center gap-1 text-secondary-500">
-                                <Banknote className="w-4 h-4" />
-                                <span className="text-xs font-medium">Cash</span>
+                                <Banknote className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                                <span className="text-[10px] sm:text-xs font-medium">Cash</span>
                             </span>
                         </div>
                     </div>
 
                     {/* Arrow */}
-                    <div className="hidden sm:flex items-center">
+                    <div className="hidden sm:flex items-center self-center flex-shrink-0">
                         <ChevronRight className="w-5 h-5 text-secondary-400" />
                     </div>
                 </div>
