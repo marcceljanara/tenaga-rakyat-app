@@ -142,8 +142,8 @@ export const PrivacyPolicyPage: React.FC = () => {
                                 <ul className="list-disc list-outside pl-5 space-y-2">
                                     <li>Nama lengkap pengguna.</li>
                                     <li>Alamat email aktif dan nomor telepon seluler.</li>
-                                    <li>Kata sandi (*password*) yang disimpan dalam bentuk terenkripsi satu arah menggunakan algoritma *hashing* yang aman.</li>
-                                    <li>Foto profil dan tautan berkas *Curriculum Vitae* (CV) bagi Pekerja.</li>
+                                    <li>Kata sandi (<i className="italic">password</i>) yang disimpan dalam bentuk terenkripsi satu arah menggunakan algoritma <i className="italic">hashing</i> yang aman.</li>
+                                    <li>Foto profil dan tautan berkas <i className="italic">Curriculum Vitae</i> (CV) bagi Pekerja.</li>
                                     <li>Titik koordinat geografis (Latitude & Longitude) tempat tinggal Pekerja atau lokasi pekerjaan Pemberi Kerja beserta detail alamat lengkapnya.</li>
                                     <li>Nomor Induk Kependudukan / KTP yang disimpan dalam bentuk terenkripsi demi keamanan proses verifikasi identitas resmi.</li>
                                     <li>Informasi dan berkas bukti pembayaran transfer bank/cash manual yang diunggah untuk konfirmasi pembelian kredit posting lowongan kerja.</li>
@@ -159,9 +159,9 @@ export const PrivacyPolicyPage: React.FC = () => {
                                     Sistem kami secara otomatis merekam data aktivitas teknis dan non-pribadi untuk mendukung operasional platform:
                                 </p>
                                 <ul className="list-disc list-outside pl-5 space-y-2">
-                                    <li>Log aktivitas operasional, riwayat pelamaran kerja, riwayat posting lowongan, serta catatan ulasan dan penilaian (*rating/review*) antar pengguna.</li>
+                                    <li>Log aktivitas operasional, riwayat pelamaran kerja, riwayat posting lowongan, serta catatan ulasan dan penilaian (<i className="italic">rating/review</i>) antar pengguna.</li>
                                     <li>Koordinat GPS perangkat ketika melakukan pencarian lowongan kerja terdekat atau ketika mempublikasikan pekerjaan baru.</li>
-                                    <li>Token keamanan otentikasi (termasuk *Refresh Token* terenkripsi) untuk menjaga status masuk akun Anda secara aman.</li>
+                                    <li>Token keamanan otentikasi (termasuk <i className="italic">Refresh Token</i> terenkripsi) untuk menjaga status masuk akun Anda secara aman.</li>
                                 </ul>
                             </section>
 
@@ -189,7 +189,7 @@ export const PrivacyPolicyPage: React.FC = () => {
                                     Aplikasi secara otomatis memproses data yang Anda masukkan untuk menjalankan fungsionalitas berikut:
                                 </p>
                                 <ul className="list-disc list-outside pl-5 space-y-2">
-                                    <li>Melakukan kalkulasi jarak geografis secara *real-time* di latar belakang untuk mencocokkan Pekerja dengan lowongan kerja terdekat yang relevan.</li>
+                                    <li>Melakukan kalkulasi jarak geografis secara <i className="italic">real-time</i> di latar belakang untuk mencocokkan Pekerja dengan lowongan kerja terdekat yang relevan.</li>
                                     <li>Mengirimkan notifikasi push dan email otomatis untuk memberi tahu tentang status lamaran pekerjaan baru atau verifikasi akun.</li>
                                     <li>Melakukan verifikasi keamanan berkala terhadap status login dan hak akses akun.</li>
                                 </ul>
@@ -201,7 +201,7 @@ export const PrivacyPolicyPage: React.FC = () => {
                                     <span className="text-primary-600 font-mono">5.</span> Berbagi Data dengan Pihak Ketiga
                                 </h2>
                                 <p className="text-secondary-600 leading-relaxed">
-                                    Kami menjaga kerahasiaan data Anda dan **tidak memperjualbelikan** atau **membagikan** data pribadi Anda kepada pihak ketiga untuk tujuan pemasaran/iklan eksternal. Kami hanya membagikan data yang sangat terbatas dan diperlukan dalam kondisi berikut:
+                                    Kami menjaga kerahasiaan data Anda dan <strong>tidak memperjualbelikan</strong> atau <strong>membagikan</strong> data pribadi Anda kepada pihak ketiga untuk tujuan pemasaran/iklan eksternal. Kami hanya membagikan data yang sangat terbatas dan diperlukan dalam kondisi berikut:
                                 </p>
                                 <ul className="list-disc list-outside pl-5 space-y-2">
                                     <li>
