@@ -180,11 +180,11 @@ export const RegisterPage: React.FC = () => {
                             />
                             <span className="text-sm text-secondary-600">
                                 Saya menyetujui{' '}
-                                <a href="#" className="text-primary-600 hover:text-primary-700">
+                                <a href="/terms-and-conditions" target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:text-primary-700">
                                     Ketentuan Layanan
                                 </a>{' '}
                                 dan{' '}
-                                <a href="#" className="text-primary-600 hover:text-primary-700">
+                                <a href="/privacy-policy" target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:text-primary-700">
                                     Kebijakan Privasi
                                 </a>
                             </span>
