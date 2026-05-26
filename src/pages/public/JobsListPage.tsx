@@ -353,7 +353,7 @@ export const JobsListPage: React.FC = () => {
                     />
                 ) : (
                     <>
-                        <div className="grid gap-4">
+                        <div className="grid gap-4 w-full max-w-full overflow-hidden">
                             {jobs.map((job) => (
                                 <JobCard key={job.id} job={job} />
                             ))}
@@ -396,8 +396,8 @@ export const JobsListPage: React.FC = () => {
 
 const JobCard: React.FC<{ job: Job }> = ({ job }) => {
     return (
-        <Link to={`/jobs/${job.id}`}>
-            <Card interactive className={`p-4 sm:p-6 ${job.is_applied ? 'opacity-70 bg-secondary-50/50' : ''}`}>
+        <Link to={`/jobs/${job.id}`} className="block w-full min-w-0">
+            <Card interactive className={`p-3 sm:p-6 overflow-hidden ${job.is_applied ? 'opacity-70 bg-secondary-50/50' : ''}`}>
                 <div className="flex gap-3 sm:gap-4 items-start">
                     {/* Employer Avatar */}
                     <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center flex-shrink-0">
@@ -408,7 +408,7 @@ const JobCard: React.FC<{ job: Job }> = ({ job }) => {
                     <div className="flex-1 min-w-0">
                         <div className="flex flex-col md:flex-row md:items-start justify-between gap-2 mb-2">
                             <div>
-                                <h3 className="text-base sm:text-lg font-semibold text-secondary-900 group-hover:text-primary-600 transition-colors line-clamp-2 sm:line-clamp-none">
+                                <h3 className="text-base sm:text-lg font-semibold text-secondary-900 group-hover:text-primary-600 transition-colors line-clamp-2 sm:line-clamp-none break-words">
                                     {job.title}
                                 </h3>
                                 <p className="text-sm sm:text-base text-secondary-600">{job.provider?.full_name}</p>
