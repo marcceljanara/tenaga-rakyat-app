@@ -314,7 +314,7 @@ export const WorkerApplicationDetail: React.FC = () => {
                                                 🎉 Selamat! Pekerjaan Anda telah disetujui!
                                             </p>
                                             <p className="text-sm text-success-600 mt-1">
-                                                Pembayaran sebesar {formatCurrency(job?.compensation_amount || 0)} telah ditransfer ke dompet Anda. Terima kasih atas kerja keras Anda!
+                                                Pekerjaan Anda dinyatakan selesai. Silakan hubungi pemberi kerja untuk menerima pembayaran tunai sebesar {formatCurrency(job?.compensation_amount || 0)}.
                                             </p>
                                             <div className="mt-3">
                                                 <Button size="sm" onClick={() => setIsReviewModalOpen(true)}>Berikan Review</Button>

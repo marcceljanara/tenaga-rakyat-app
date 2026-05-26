@@ -123,7 +123,11 @@ export const WorkerLayout: React.FC = () => {
                 {/* Navigation */}
                 <nav className="p-4 space-y-1">
                     {workerNavItems.map((item) => {
-                        const isActive = location.pathname === item.href;
+                        // For dashboard, use exact match. For other items, use startsWith to highlight sub-routes
+                        const isActive =
+                            item.href === '/worker/dashboard'
+                                ? location.pathname === item.href
+                                : location.pathname.startsWith(item.href);
                         const showBadge = item.href === '/worker/active-jobs' && activeJobCount > 0;
 
                         return (

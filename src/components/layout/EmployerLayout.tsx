@@ -106,22 +106,30 @@ export const EmployerLayout: React.FC = () => {
 
                 {/* Navigation */}
                 <nav className="p-4 space-y-1">
-                    {employerNavItems.map((item) => (
-                        <Link
-                            key={item.href}
-                            to={item.href}
-                            onClick={() => setIsSidebarOpen(false)}
-                            className={clsx(
-                                'flex items-center gap-3 px-4 py-3 rounded-xl transition-colors',
-                                location.pathname === item.href
-                                    ? 'bg-primary-50 text-primary-600'
-                                    : 'text-secondary-600 hover:bg-secondary-50'
-                            )}
-                        >
-                            <item.icon className="w-5 h-5" />
-                            <span className="font-medium">{item.label}</span>
-                        </Link>
-                    ))}
+                    {employerNavItems.map((item) => {
+                        // For dashboard, use exact match. For other items, use startsWith to highlight sub-routes
+                        const isActive =
+                            item.href === '/employer/dashboard'
+                                ? location.pathname === item.href
+                                : location.pathname.startsWith(item.href);
+
+                        return (
+                            <Link
+                                key={item.href}
+                                to={item.href}
+                                onClick={() => setIsSidebarOpen(false)}
+                                className={clsx(
+                                    'flex items-center gap-3 px-4 py-3 rounded-xl transition-colors',
+                                    isActive
+                                        ? 'bg-primary-50 text-primary-600'
+                                        : 'text-secondary-600 hover:bg-secondary-50'
+                                )}
+                            >
+                                <item.icon className="w-5 h-5" />
+                                <span className="font-medium">{item.label}</span>
+                            </Link>
+                        );
+                    })}
                 </nav>
 
                 {/* Settings & Logout */}

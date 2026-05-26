@@ -36,14 +36,10 @@ export const LoginPage: React.FC = () => {
 
     const onSubmit = async (data: LoginFormData) => {
         try {
-            console.log('🔵 [LoginPage] Calling login()...');
             await login(data);
-            console.log('✅ [LoginPage] login() successful!');
             toast.success('Login berhasil!');
             navigate(from, { replace: true });
         } catch (error: any) {
-            console.error('❌ [LoginPage] login() failed:', error);
-            console.error('❌ [LoginPage] Error response:', error.response);
             handleApiError(error, 'Login gagal. Silakan coba lagi.', setError);
         }
     };

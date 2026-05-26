@@ -1,7 +1,8 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import { AuthProvider } from './contexts/AuthContext';
 import { ProtectedRoute, PublicRoute } from './routes/ProtectedRoute';
 import { PublicLayout, WorkerLayout, EmployerLayout, AdminLayout } from './components/layout';
@@ -53,7 +54,7 @@ import {
 import { AdminDashboard, AdminUsers, AdminUserDetail, /* AdminWithdrawals, AdminWithdrawDetail, */ AdminManagement, AdminPostingCredits } from './pages/admin';
 
 // Shared Pages
-import { UserProfilePage } from './pages/shared';
+import { UserProfilePage, NotFoundPage } from './pages/shared';
 
 // Create a client
 const queryClient = new QueryClient({
@@ -67,6 +68,30 @@ const queryClient = new QueryClient({
 });
 
 const App: React.FC = () => {
+  // Bug #8 fix: Deteksi status koneksi jaringan dan tampilkan notifikasi yang informatif
+  useEffect(() => {
+    const handleOffline = () => {
+      toast.error('Koneksi internet terputus. Beberapa fitur mungkin tidak berfungsi.', {
+        id: 'network-offline',
+        duration: Infinity,
+        icon: '📡',
+      });
+    };
+
+    const handleOnline = () => {
+      toast.dismiss('network-offline');
+      toast.success('Koneksi internet kembali!', { duration: 3000, icon: '✅' });
+    };
+
+    window.addEventListener('offline', handleOffline);
+    window.addEventListener('online', handleOnline);
+
+    return () => {
+      window.removeEventListener('offline', handleOffline);
+      window.removeEventListener('online', handleOnline);
+    };
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
@@ -174,7 +199,7 @@ const App: React.FC = () => {
             </Route>
 
             {/* 404 - Catch all */}
-            <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </BrowserRouter>
 

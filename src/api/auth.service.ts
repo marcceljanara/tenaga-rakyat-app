@@ -12,20 +12,13 @@ import type {
 export const authService = {
     // Login user - sets HTTP-only cookies (access_token, refresh_token)
     login: async (credentials: LoginCredentials): Promise<ApiResponse<{ message: string }>> => {
-        console.log('🔵 [authService] login() called to:', '/api/users/login');
-        
         // Fetch CSRF token first
-        console.log('🔵 [authService] Fetching CSRF token...');
         await fetchCsrfToken();
-        console.log('✅ [authService] CSRF token received');
 
         const response = await api.post('/api/users/login', credentials);
-        console.log('✅ [authService] Login response status:', response.status);
 
         // Fetch new CSRF token after login since session rotation invalidates the old one
-        console.log('🔵 [authService] Fetching new CSRF token after login...');
         await fetchCsrfToken();
-        console.log('✅ [authService] New CSRF token received and cookies updated');
 
         return response.data;
     },
